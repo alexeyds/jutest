@@ -9,7 +9,7 @@
     "lib"
   ],
   "scripts": {
-    "test": "echo",
+    "test": "./bin/jutest",
     "lint": "eslint {src,test}/**/*{js,jsx}",
     "test-dist": "echo",
     "prepublishOnly": "yarn test && yarn build && yarn test-dist",
@@ -29,6 +29,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
+    "@babel/register": "^7.12.1",
     "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^7.12.1",
     "rollup": "^2.33.1",
