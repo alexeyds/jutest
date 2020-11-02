@@ -1,0 +1,37 @@
+{
+  "name": "jutest",
+  "version": "0.0.1",
+  "description": "JavaScript Unit-Testing framework",
+  "main": "dist/index.js",
+  "private": false,
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo",
+    "lint": "eslint {src,test}/**/*{js,jsx}",
+    "test-dist": "echo",
+    "prepublishOnly": "yarn test && yarn build && yarn test-dist",
+    "build": "rollup -c && ./test.sh test/dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexeyds/jutest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexeyds/jutest/issues"
+  },
+  "homepage": "https://github.com/alexeyds/jutest",
+  "keywords": [],
+  "author": "Alexey D",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "eslint": "^7.12.1",
+    "rollup": "^2.33.1",
+    "rollup-plugin-babel": "^4.4.0"
+  }
+}
