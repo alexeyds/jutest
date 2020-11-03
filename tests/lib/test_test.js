@@ -15,8 +15,8 @@ function testExecutesBody() {
   assert.equal(wasTestExecuted, true);
 }
 
-function testHasAssertions() {
-  let name = 'Test#run passes assertions to test body';
+function testHasExpectations() {
+  let name = 'Test#run passes expectations object to test body';
   let test = buildTest(name, (t) => {
     t.assert(true);
   });
@@ -44,5 +44,5 @@ function testHasFailures() {
 }
 
 testExecutesBody();
-testHasAssertions();
+testHasExpectations();
 testHasFailures();
