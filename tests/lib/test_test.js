@@ -16,22 +16,27 @@ function testExecutesBody() {
 }
 
 function testHasAssertions() {
-  let test = buildTest('Test#run passes assertions to test body', (t) => {
+  let name = 'Test#run passes assertions to test body';
+  let test = buildTest(name, (t) => {
     t.assert(true);
   });
   let result = test.run();
 
   assert.equal(result.passed, true);
   assert.equal(result.error, null);
+  assert.equal(result.testName, name);
 }
 
 function testHasFailures() {
-  let test = buildTest('Test#run passes assertions to test body', (t) => {
+  let name = 'Test#run can fail';
+  let test = buildTest(name, (t) => {
     t.assert(false);
   });
   let result = test.run();
 
   assert.equal(result.passed, false);
+  assert.equal(result.testName, name);
+
   let error = result.error;
   assert.equal(error.expected, true);
   assert.equal(error.actual, false);
