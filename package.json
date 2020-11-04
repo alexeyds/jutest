@@ -2,7 +2,7 @@
   "name": "jutest",
   "version": "0.0.1",
   "description": "JavaScript Unit-Testing framework",
-  "main": "dist/index.js",
+  "main": "dist/jutest.js",
   "private": false,
   "files": [
     "dist",
@@ -34,5 +34,8 @@
     "eslint": "^7.12.1",
     "rollup": "^2.33.1",
     "rollup-plugin-babel": "^4.4.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0"
   }
 }

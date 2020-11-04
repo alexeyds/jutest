@@ -2,7 +2,10 @@
 
 require('@babel/register');
 
+let jutest = require('../lib/jutest').default;
 let resolvePath = require("path").resolve;
 
 let path = process.argv.slice(2)[0];
 require(resolvePath(process.cwd(), path));
+
+jutest.autoRun();

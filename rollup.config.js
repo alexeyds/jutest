@@ -3,7 +3,7 @@ import pkg from './package.json';
 
 export default [
   {
-    input: 'lib/index.js',
+    input: 'lib/jutest.js',
     output: { file: pkg.main, format: 'cjs', indent: false },
     external: [
       ...Object.keys(pkg.dependencies || {}),
