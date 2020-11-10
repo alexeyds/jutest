@@ -2,7 +2,7 @@ import { strict as assert } from 'assert';
 import { createTest } from "test";
 
 async function testHasExpectations() {
-  let name = 'Test#run passes expectations object to test body';
+  let name = 'runTest() passes expectations object to {testBody}';
   let runTest = createTest({
     name,
     testBody: (t) => { t.assert(true); }
@@ -15,7 +15,7 @@ async function testHasExpectations() {
 }
 
 async function testHasFailures() {
-  let name = 'Test#run can fail';
+  let name = 'runTest() supports failing assertions';
   let runTest = createTest({
     name,
     testBody: (t) => { t.assert(false); }
@@ -33,7 +33,7 @@ async function testHasFailures() {
 
 async function testAsynchroniouslyRunsTestBody() {
   let runTest = createTest({
-    name: 'Test#run works with async test bodies',
+    name: 'runTest() works with async {testBody}',
     testBody: async (t) => { t.assert(false); }
   });
   let result = await runTest();
