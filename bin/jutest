@@ -5,4 +5,4 @@ process.on('unhandledRejection', err => {
 });
 
 require('@babel/register');
-require('../lib/auto_run')({defaultTestDir: "tests"});
+require('../lib/jutest_runner')();
