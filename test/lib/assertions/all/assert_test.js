@@ -19,4 +19,9 @@ jutest('assertions.assert()', s => {
     t.equal(result.expected, true);
     t.assert(result.failureDetails !== undefined);
   });
+
+  s.test('works with truthy values', t => {
+    let result = assertions.assert({});
+    t.equal(result.passed, true);
+  });
 });
