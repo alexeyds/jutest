@@ -19,10 +19,4 @@ jutest('assertions.same()', s => {
     t.equal(result.passed, false);
     t.assert(result.failureDetails !== undefined);
   });
-
-  s.test('uses strict equality comparsion', t => {
-    let result = assertions.same({a: undefined}, {a: null});
-
-    t.equal(result.passed, false);
-  });
 });

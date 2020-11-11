@@ -19,9 +19,4 @@ jutest('assertions.notEqual()', s => {
     t.equal(result.expected, 1);
     t.assert(result.failureDetails !== undefined);
   });
-
-  s.test('uses Object.is', t => {
-    t.equal(assertions.notEqual({}, {}).passed, true);
-    t.equal(assertions.notEqual(-0, 0).passed, true);
-  });
 });
