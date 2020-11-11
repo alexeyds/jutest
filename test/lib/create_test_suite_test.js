@@ -69,4 +69,10 @@ jutest('createSuite()', s => {
     t.equal(result_2.testName, 'top suite nested test');
     t.equal(result_1.testName, 'top suite nested suite nested test');
   });
+
+  s.test('throws if suiteBody is an async function', t => {
+    t.throws(() => {
+      createSuite({suiteName: '', suiteBody: async () => {} });
+    }, /async/);
+  });
 });
