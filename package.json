@@ -13,7 +13,7 @@
     "lint": "eslint {src,test}/**/*{js,jsx}",
     "test-dist": "echo",
     "prepublishOnly": "yarn test && yarn build && yarn test-dist",
-    "build": "rollup -c && ./test.sh test/dist"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
     "@babel/register": "^7.12.1",
+    "@rollup/plugin-node-resolve": "^10.0.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^7.12.1",
     "rollup": "^2.33.1",
@@ -38,6 +39,7 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "deep-equal": "^2.0.4",
+    "glob": "^7.1.6",
     "lodash.pick": "^4.4.0"
   }
 }
