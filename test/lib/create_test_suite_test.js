@@ -1,6 +1,5 @@
 import jutest from 'jutest';
 import TestResults from "test_results";
-import TestSetup from "test_setup";
 import createSuite from "create_test_suite";
 
 jutest('createSuite()', s => {
