@@ -100,4 +100,27 @@ jutest('TestSetup', s => {
       t.equal(calledWith, 'foobar');
     });
   });
+
+  s.describe("#clone", s => {
+    s.test("clones all defined callbacks into a new object", async t => {
+      let setup = new TestSetup();
+      setup.setup(() => ({ a: 1 }));
+      setup = setup.clone();
+
+      let result = await setup.runSetups();
+      t.same(result, {a: 1});
+    });
+
+    s.test("callbacks are not shared between cloned instances", async t => {
+      let oldSetup = new TestSetup();
+      oldSetup.setup(() => ({ a: 1 }));
+      let newSetup = oldSetup.clone();
+      oldSetup.setup(() => ({ b: 2 }));
+
+      let oldResult = await oldSetup.runSetups();
+      t.same(oldResult, {a: 1, b: 2});
+      let newResult = await newSetup.runSetups();
+      t.same(newResult, {a: 1});
+    });
+  });
 });
