@@ -1,6 +1,7 @@
 import jutest from 'jutest';
-import createSuite from "create_test_suite";
 import TestResults from "test_results";
+import TestSetup from "test_setup";
+import createSuite from "create_test_suite";
 
 jutest('createSuite()', s => {
   s.test("adds test result to testResults", async t => {
@@ -74,5 +75,41 @@ jutest('createSuite()', s => {
     t.throws(() => {
       createSuite({suiteName: '', suiteBody: async () => {} });
     }, /async/);
+  });
+
+  s.describe("testSetup", s => {
+    s.test("supports all TestSetup metods", async t => {
+      let assigns;
+
+      let suiteBody = s => {
+        s.setup(() => ({foo: 'bar'}));
+        s.test('test', (t, a) => assigns = a);
+      };
+
+      let runSuite = createSuite({suiteName: 'top suite', suiteBody, testResults: new TestResults()});
+      await runSuite();
+
+      t.same(assigns, { foo: 'bar' });
+    });
+
+    s.test("clones setups in nested suites", async t => {
+      let assigns;
+
+      let suiteBody = s => {
+        s.setup(() => ({foo: 'bar'}));
+
+        s.describe('nested suite', s => {
+          s.setup(() => ({bar: 'baz'}));
+          s.test('nested test', (t, a) => assigns = a);
+        });
+
+        s.setup(() => ({baz: 'boo'}));
+      };
+
+      let runSuite = createSuite({suiteName: 'top suite', suiteBody, testResults: new TestResults()});
+      await runSuite();
+
+      t.same(assigns, { foo: 'bar', bar: 'baz' });
+    });
   });
 });

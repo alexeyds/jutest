@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "deep-equal": "^2.0.4"
+    "deep-equal": "^2.0.4",
+    "lodash.pick": "^4.4.0"
   }
 }
