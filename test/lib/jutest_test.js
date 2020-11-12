@@ -8,7 +8,7 @@ jutest('jutest', s => {
   });
 
   s.describe('supports nested suites', s => {
-    s.test('test', t => {
+    s.test('test',  t => {
       t.assert(true);
     });
   });
