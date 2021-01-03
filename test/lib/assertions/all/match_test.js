@@ -19,6 +19,10 @@ jutest('assertions/match', s => {
       t.equal(result.actual, 'foobar');
       t.same(result.expected, /baz/);
     });
+
+    s.test("throws readable error if matcher is not a regexp", t => {
+      t.throws(() => assertions.match('foo', 'bar'), /regular expression/);
+    });
   });
 
   s.describe("doesNotMatch()", s => {
