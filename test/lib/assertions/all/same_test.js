@@ -18,7 +18,6 @@ jutest('assertions/same', s => {
       let result = assertions.same({a: 1}, {a: 2});
 
       t.equal(result.passed, false);
-      t.assert(result.failureDetails !== undefined);
     });
   });
 
@@ -38,7 +37,6 @@ jutest('assertions/same', s => {
       let result = assertions.notSame({a: 1}, {a: 2});
 
       t.equal(result.passed, true);
-      t.assert(result.failureDetails !== undefined);
     });
 
     s.test('uses strict equality comparsion', t => {

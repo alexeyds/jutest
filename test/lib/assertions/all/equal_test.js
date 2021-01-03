@@ -18,7 +18,6 @@ jutest('assertions/equal', s => {
       t.equal(result.passed, false);
       t.equal(result.actual, 1);
       t.equal(result.expected, 2);
-      t.assert(result.failureDetails !== undefined);
     });
 
     s.test('uses Object.is', t => {
@@ -43,7 +42,6 @@ jutest('assertions/equal', s => {
       t.equal(result.passed, false);
       t.equal(result.actual, 1);
       t.equal(result.expected, 1);
-      t.assert(result.failureDetails !== undefined);
     });
   });
 });

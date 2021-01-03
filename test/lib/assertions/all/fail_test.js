@@ -11,6 +11,6 @@ jutest('assertions.fail()', s => {
 
   s.test('can be inspected', t => {
     let result = assertions.fail('foobar');
-    t.assert(result.failureDetails.match(/foobar/));
+    t.assert(result.failureMessage.match(/foobar/));
   });
 });

@@ -18,7 +18,6 @@ jutest('assertions/assert', s => {
       t.equal(result.passed, false);
       t.equal(result.actual, false);
       t.equal(result.expected, true);
-      t.assert(result.failureDetails !== undefined);
     });
 
     s.test('works with truthy values', t => {
@@ -43,7 +42,6 @@ jutest('assertions/assert', s => {
       t.equal(result.passed, false);
       t.equal(result.actual, true);
       t.equal(result.expected, false);
-      t.assert(result.failureDetails !== undefined);
     });
   });
 });

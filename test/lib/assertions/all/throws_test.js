@@ -19,13 +19,13 @@ jutest('assertions.throws()', s => {
       t.equal(result.actual, undefined);
       t.equal(result.expected, Error);
       t.equal(result.operator, 'throws');
-      t.assert(result.failureDetails !== undefined);
+      t.match(result.failureMessage, /no errors/);
     });
 
     s.test("fails if error doesn't match the expectation", t => {
       let result = assertions.throws(() => { throw Error('baz'); }, 'bar');
 
-      t.assert(result.failureDetails !== undefined);
+      t.match(result.failureMessage, /baz/);
     });
   });
 

@@ -18,7 +18,6 @@ jutest('assertions/match', s => {
       t.equal(result.passed, false);
       t.equal(result.actual, 'foobar');
       t.same(result.expected, /baz/);
-      t.assert(result.failureDetails !== undefined);
     });
   });
 
@@ -38,7 +37,6 @@ jutest('assertions/match', s => {
       t.equal(result.passed, false);
       t.equal(result.actual, 'foobar');
       t.same(result.expected, /foo/);
-      t.assert(result.failureDetails !== undefined);
     });
   });
 });
