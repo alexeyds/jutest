@@ -19,6 +19,6 @@ jutest('createAssertions()', s => {
       error = e;
     }
 
-    t.assert(error.details !== undefined);
+    t.assert(error.message !== undefined);
   });
 });

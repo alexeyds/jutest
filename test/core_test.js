@@ -28,7 +28,9 @@ async function testHasFailures() {
   assert.equal(result.passed, false);
   assert.equal(result.testName, name);
 
-  assert.notEqual(result.error.details, undefined);
+  let message = result.error.message;
+  assert.equal(typeof message, 'string');
+  assert(message.length > 0);
 }
 
 async function testAsynchroniouslyRunsTestBody() {

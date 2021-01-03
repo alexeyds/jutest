@@ -1,5 +1,5 @@
 import jutest from 'jutest';
-import Assertion from "assertions/assertion";
+import Assertion, { AssertionFailedError } from "assertions/assertion";
 
 jutest('Assertion', s => {
   s.describe("::create", s => {
@@ -56,6 +56,18 @@ jutest('Assertion', s => {
       let negated = Assertion.negate(assertion, { operator: 'notEqual', buildFailureMessage });
 
       t.equal(negated.failureMessage, "1 should be notEqual 1");
+    });
+  });
+
+  s.describe("::ensurePassed", s => {
+    s.test("returns true if assertion passed", t => {
+      let result = Assertion.ensurePassed(Assertion.create({passed: true, operator: 'test'}));
+      t.equal(result, true);
+    });
+
+    s.test("throws if assertion is failed", t => {
+      let assertion = Assertion.create({passed: false, operator: 'test'});
+      t.throws(() => Assertion.ensurePassed(assertion), AssertionFailedError);
     });
   });
 });
