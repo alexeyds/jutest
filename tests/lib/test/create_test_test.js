@@ -1,6 +1,6 @@
 import jutest from "jutest";
 import TestSetup from "test_setup";
-import createTest from "create_test";
+import createTest from "test/create_test";
 
 jutest("createTest()", s => {
   s.describe("testSetup", s => {

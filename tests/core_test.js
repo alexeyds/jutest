@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import TestSetup from 'test_setup';
-import createTest from "create_test";
+import createTest from "test/create_test";
 
 async function testHasExpectations() {
   let name = 'runTest() passes expectations object to {testBody}';
