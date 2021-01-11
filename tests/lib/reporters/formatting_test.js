@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import { addPadding, joinLines, section, extractErrorStack } from "reporters/formatting";
+import { addPadding, joinLines, extractErrorStack } from "reporters/formatting";
 
 jutest("reporting/formatting", s => {
   s.describe("addPadding()", s => {
@@ -23,13 +23,6 @@ jutest("reporting/formatting", s => {
     s.test("joins lines", t => {
       let result = joinLines('testing', 'things', 'foobar');
       t.equal(result, 'testing\nthings\nfoobar');
-    });
-  });
-
-  s.describe("section()", s => {
-    s.test("prepends line breaks", t => {
-      let result = section('testing');
-      t.equal(result, '\n\ntesting');
     });
   });
 
