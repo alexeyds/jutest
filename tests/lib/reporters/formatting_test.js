@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import { addPadding, joinLines, extractErrorStack } from "reporters/formatting";
+import { addPadding, joinLines, presentStackTrace } from "reporters/formatting";
 
 jutest("reporting/formatting", s => {
   s.describe("addPadding()", s => {
@@ -26,23 +26,18 @@ jutest("reporting/formatting", s => {
     });
   });
 
-  s.describe("extractErrorStack()", s => {
+  s.describe("presentStackTrace()", s => {
     let firstLine = t => t.split('\n')[0];
     let currentFileRegexp = /formatting_test/;
 
-    s.test("removes error message from stack", t => {
-      let result = extractErrorStack(new Error('foobar'));
+    s.test("presents stack trace", t => {
+      let result = presentStackTrace(new Error('foobar'));
       t.match(firstLine(result), currentFileRegexp);
     });
 
-    s.test("removes leading spaces from stack trace lines", t => {
-      let result = extractErrorStack(new Error('foobar'));
-      t.doesNotMatch(firstLine(result), /^\s+/);
-    });
-
-    s.test("removes multi-line error messages", t => {
-      let result = extractErrorStack(new Error('foobar\ntest'));
-      t.match(firstLine(result), currentFileRegexp);
+    s.test("returns default message if target is not an Error", t => {
+      let result = presentStackTrace('testing');
+      t.equal(result, '(no stack trace)');
     });
   });
 });
