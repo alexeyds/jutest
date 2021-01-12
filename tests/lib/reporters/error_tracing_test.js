@@ -1,5 +1,7 @@
 import jutest from "jutest";
-import { splitStackTrace } from "reporters/error_tracing";
+import nodePath from 'path';
+import { addPadding } from "reporters/formatting";
+import { splitStackTrace, traceFailedLine, readFailedLine } from "reporters/error_tracing";
 
 jutest("reporters/error_tracing", s => {
   s.describe("splitStackTrace()", s => {
@@ -18,6 +20,48 @@ jutest("reporters/error_tracing", s => {
     s.test("removes multi-line error messages", t => {
       let result = splitStackTrace(new Error('foobar\ntest'));
       t.match(result[0], currentFileRegexp);
+    });
+  });
+
+  function tracedError(stackTraceLines) {
+    let error = new Error('testing');
+    let stackTrace = stackTraceLines.map(l => addPadding(l, 4)).join('\n');
+    error.stack = `${error.name}: ${error.message}\n${stackTrace}`;
+    return error;
+  }
+
+  s.describe("traceFailedLine()", s => {
+    let sourceDir = '/foobar/test/source';
+    let sourceLine = path => nodePath.join(sourceDir, path);
+
+    s.test("returns first line matching sourceDir", t => {
+      let target = sourceLine('/my_target');
+      let error = tracedError(['/test', target, '/foobar']);
+      let result = traceFailedLine(error, { sourceDir });
+
+      t.equal(result, target);
+    });
+
+    s.test("has {excludeSourceDirs} option", t => {
+      let target = sourceLine('/my_target');
+      let error = tracedError(['/test', sourceLine('/node_modules/target'), target, '/foobar']);
+      let result = traceFailedLine(error, { sourceDir, excludeSourceDirs: ['node_modules'] });
+
+      t.equal(result, target);
+    });
+
+    s.test("returns null by default", t => {
+      let error = tracedError(['/test', '/foobar']);
+      let result = traceFailedLine(error, { sourceDir });
+
+      t.equal(result, null);
+    });
+
+    s.test("matches directories exactly", t => {
+      let error = tracedError([sourceLine('/tests')]);
+      let result = traceFailedLine(error, { sourceDir, excludeSourceDirs: ['test'] });
+
+      t.notEqual(result, null);
     });
   });
 });
