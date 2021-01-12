@@ -64,4 +64,36 @@ jutest("reporters/error_tracing", s => {
       t.notEqual(result, null);
     });
   });
+
+  s.describe("readFailedLine()", s => {
+    let sourceDir = process.cwd();
+
+    s.test("reads failed line from source file", async t => {
+      let error = new Error('my error');
+      let result = await readFailedLine(error, { sourceDir });
+
+      t.match(result, /my error/);
+    });
+
+    s.test("returns null if line not found", async t => {
+      let error = tracedError(['/foobar']);
+      let result = await readFailedLine(error, { sourceDir });
+
+      t.equal(result, null);
+    });
+
+    s.test("returns null if file/line number cannot be parsed", async t => {
+      let error = tracedError([nodePath.join(sourceDir, '/test.js')]);
+      let result = await readFailedLine(error, { sourceDir });
+
+      t.equal(result, null);
+    });
+
+    s.test("returns null if file is not found", async t => {
+      let error = tracedError([nodePath.join(sourceDir, '/test.js:31')]);
+      let result = await readFailedLine(error, { sourceDir });
+
+      t.equal(result, null);
+    });
+  });
 });
