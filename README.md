@@ -27,7 +27,8 @@ process.on('unhandledRejection', err => {
   throw err;
 });
 
-// Configure babel if needed(make sure @babel/register package is installed), otherwise remove this line
+// Configure babel if needed(make sure @babel/register package is installed)
+// otherwise remove this line
 require('@babel/register');
 
 require('jutest').autoRun();
