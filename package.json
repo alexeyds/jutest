@@ -13,7 +13,7 @@
     "lint": "eslint {src,test}/**/*{js,jsx}",
     "test-dist": "echo",
     "prepublishOnly": "yarn test && yarn build && yarn test-dist",
-    "build": "rollup -c"
+    "build": "./bin/build"
   },
   "repository": {
     "type": "git",
@@ -30,11 +30,10 @@
     "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.20.2",
     "@babel/register": "^7.18.9",
-    "@rollup/plugin-node-resolve": "^15.0.1",
     "babel-plugin-module-resolver": "^5.0.0",
-    "eslint": "^8.34.0",
-    "rollup": "^3.17.1",
-    "rollup-plugin-babel": "^4.4.0"
+    "esbuild": "^0.17.10",
+    "esbuild-node-externals": "^1.6.0",
+    "eslint": "^8.34.0"
   },
   "dependencies": {
     "chalk": "^4.1.2",
