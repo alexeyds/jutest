@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 let esbuild = require('esbuild');
-let config = require("../esbuild-config.js");
+let { config } = require("../esbuild-config/esbuild.build.js");
 
 async function run() {
   await esbuild.build(config);

@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+const tsConfigPaths = require("tsconfig-paths");
+tsConfigPaths.register();
+
+const { register } = require('esbuild-register/dist/node');
+const { config } = require('../esbuild-config/esbuild.test');
+register(config);
+
+require('../lib/jutest').default.autoRun({defaultTestDir: "tests", excludeSourceDirs: ['/node_modules', '/lib/assertions', '/lib/test']});

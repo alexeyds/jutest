@@ -9,7 +9,7 @@
     "lib"
   ],
   "scripts": {
-    "test": "./bin/jutest",
+    "test": "./bin/test",
     "lint": "eslint {src,test}/**/*{js,jsx}",
     "test-dist": "echo",
     "prepublishOnly": "yarn test && yarn build && yarn test-dist",
@@ -27,13 +27,11 @@
   "author": "Alexey D",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.20.12",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/register": "^7.18.9",
-    "babel-plugin-module-resolver": "^5.0.0",
     "esbuild": "^0.17.10",
     "esbuild-node-externals": "^1.6.0",
-    "eslint": "^8.34.0"
+    "esbuild-register": "^3.4.2",
+    "eslint": "^8.34.0",
+    "tsconfig-paths": "^4.1.2"
   },
   "dependencies": {
     "chalk": "^4.1.2",

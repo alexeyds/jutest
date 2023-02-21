@@ -1,8 +1,0 @@
-#!/usr/bin/env node
-
-process.on('unhandledRejection', err => {
-  throw err;
-});
-
-require('@babel/register');
-require('../lib/jutest').default.autoRun({defaultTestDir: "tests", excludeSourceDirs: ['/node_modules', '/lib/assertions', '/lib/test']});
