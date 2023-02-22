@@ -7,7 +7,7 @@ jutest("utils/file", s => {
     let fixturePath = f => nodePath.join(process.cwd(), 'tests/lib/utils/file/fixtures', f);
 
     s.test("returns read line", async t => {
-      let result = await readLine(fixturePath('five_lines_file.txt'), 3); 
+      let result = await readLine(fixturePath('five-lines-file.txt'), 3); 
 
       t.equal(result.success, true);
       t.equal(result.error, null);
@@ -23,7 +23,7 @@ jutest("utils/file", s => {
     });
 
     s.test("returns error if line not found", async t => {
-      let result = await readLine(fixturePath('five_lines_file.txt'), 10); 
+      let result = await readLine(fixturePath('five-lines-file.txt'), 10); 
 
       t.equal(result.success, false);
       t.match(result.error, /10/);
@@ -31,7 +31,7 @@ jutest("utils/file", s => {
     });
 
     s.test("returns success if line is empty string", async t => {
-      let result = await readLine(fixturePath('five_lines_file.txt'), 6);
+      let result = await readLine(fixturePath('five-lines-file.txt'), 6);
 
       t.equal(result.success, true);
       t.equal(result.error, null);

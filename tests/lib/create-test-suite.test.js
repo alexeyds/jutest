@@ -1,6 +1,6 @@
 import jutest from 'jutest';
-import TestResults from "test_results";
-import createSuite from "create_test_suite";
+import TestResults from "test-results";
+import createSuite from "create-test-suite";
 
 jutest('createSuite()', s => {
   s.test("adds test result to testResults", async t => {

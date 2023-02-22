@@ -28,7 +28,7 @@ jutest("reporting/formatting", s => {
 
   s.describe("presentStackTrace()", s => {
     let firstLine = t => t.split('\n')[0];
-    let currentFileRegexp = /formatting_test/;
+    let currentFileRegexp = /formatting.test/;
 
     s.test("presents stack trace", t => {
       let result = presentStackTrace(new Error('foobar'));

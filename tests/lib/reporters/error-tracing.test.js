@@ -1,11 +1,11 @@
 import jutest from "jutest";
 import nodePath from 'path';
 import { addPadding } from "reporters/formatting";
-import { splitStackTrace, traceFailedLine, readFailedLine } from "reporters/error_tracing";
+import { splitStackTrace, traceFailedLine, readFailedLine } from "reporters/error-tracing";
 
 jutest("reporters/error_tracing", s => {
   s.describe("splitStackTrace()", s => {
-    let currentFileRegexp = /error_tracing_test/;
+    let currentFileRegexp = /error-tracing.test/;
 
     s.test("removes error message from stack", t => {
       let result = splitStackTrace(new Error('foobar'));

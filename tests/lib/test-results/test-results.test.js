@@ -1,5 +1,5 @@
 import jutest from 'jutest';
-import TestResults from "test_results";
+import TestResults from "test-results";
 
 jutest('TestResults', s => {
   s.describe('#all', s => {

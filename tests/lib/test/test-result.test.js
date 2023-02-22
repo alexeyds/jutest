@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import TestResult from "test/test_result";
+import TestResult from "test/test-result";
 
 jutest("TestResult", s => {
   s.describe("::passed", s => {

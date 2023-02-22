@@ -1,5 +1,5 @@
 import jutest from 'jutest';
-import TestSetup from "test_setup";
+import TestSetup from "test-setup";
 
 jutest('TestSetup', s => {
   s.describe('#runSetups', s => {

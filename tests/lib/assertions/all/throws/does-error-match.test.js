@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import doesErrorMatch from "assertions/all/throws/does_error_match";
+import doesErrorMatch from "assertions/all/throws/does-error-match";
 
 jutest("doesErrorMatch()", s => {
   s.describe("string matcher", s => {

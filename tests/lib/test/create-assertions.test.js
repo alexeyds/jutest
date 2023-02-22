@@ -1,5 +1,5 @@
 import jutest from 'jutest';
-import createAssertions from "test/create_assertions";
+import createAssertions from "test/create-assertions";
 
 jutest('createAssertions()', s => {
   s.test('returns assertions object', t => {
