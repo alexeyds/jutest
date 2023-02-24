@@ -3,7 +3,7 @@ import nodePath from 'path';
 import { addPadding } from "reporters/formatting";
 import { splitStackTrace, traceFailedLine, readFailedLine } from "reporters/error-tracing";
 
-jutest("reporters/error_tracing", s => {
+jutest("reporters/error-tracing", s => {
   s.describe("splitStackTrace()", s => {
     let currentFileRegexp = /error-tracing.test/;
 
