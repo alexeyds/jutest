@@ -1,5 +1,5 @@
 import jutest from 'jutest';
-import Assertion, { AssertionFailedError } from "assertions/assertion";
+import Assertion, { AssertionFailedError, AssertionResult, negateAssertion } from "assertions/assertion";
 
 jutest('Assertion', s => {
   s.describe("::create", s => {
@@ -68,6 +68,69 @@ jutest('Assertion', s => {
     s.test("throws if assertion is failed", t => {
       let assertion = Assertion.create({passed: false, operator: 'test'});
       t.throws(() => Assertion.ensurePassed(assertion), AssertionFailedError);
+    });
+  });
+
+  s.describe("AssertionResult", s => {
+    s.test("creates result", t => {
+      let result = new AssertionResult({
+        passed: false,
+        operator: 'equal',
+        expected: 1,
+        actual: 2
+      });
+
+      t.equal(result.passed, false);
+      t.equal(result.operator, 'equal');
+      t.equal(result.negated, false);
+      t.equal(result.expected, 1);
+      t.equal(result.actual, 2);
+    });
+
+    s.test("has #negate method", t => {
+      let result = new AssertionResult({
+        passed: false,
+        operator: 'equal',
+        expected: 1,
+        actual: 2
+      });
+
+      let negated = result.negate({ operator: 'notEqual' });
+
+      t.notEqual(negated, result);
+      t.equal(negated.passed, true);
+      t.equal(negated.negated, true);
+      t.equal(negated.operator, 'notEqual');
+      t.equal(negated.expected, 1);
+      t.equal(negated.actual, 2);
+    });
+  });
+
+  s.describe("negateAssertion", s => {
+    s.test("negates assertion result", t => {
+      let assertion = () => new AssertionResult({
+        passed: false,
+        operator: 'equal'
+      });
+
+      let negatedAssertion = negateAssertion(assertion, { operator: 'notEqual' });
+      let result = negatedAssertion();
+
+      t.equal(negatedAssertion.name, 'notEqual');
+      t.equal(result.passed, true);
+      t.equal(result.operator, 'notEqual');
+    });
+
+    s.test("delegates all arguments to the original function", t => {
+      let assertion = (actual, expected) => new AssertionResult({
+        passed: true,
+        actual,
+        expected
+      });
+      let result = negateAssertion(assertion, { operator: 'notEqual' })(5, 1);
+
+      t.equal(result.actual, 5);
+      t.equal(result.expected, 1);
     });
   });
 });
