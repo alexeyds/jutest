@@ -114,4 +114,13 @@ jutest("TestContext", s => {
       t.same(result, 5);
     });
   });
+
+  s.describe("testName", s => {
+    s.test("joins test name with other names", (t, { context }) => {
+      context.addName("Foobar");
+      context.addName("Test");
+
+      t.equal(context.testName('baz'), 'Foobar Test baz');
+    });
+  });
 });

@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import { ArraysContainer } from "test-context/arrays-container";
+import { ArraysContainer } from "test-context/utils/arrays-container";
 
 jutest("ArraysContainer", s => {
   s.test("creates a container for arrays", t => {

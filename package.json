@@ -31,6 +31,7 @@
     "esbuild-node-externals": "^1.6.0",
     "esbuild-register": "^3.4.2",
     "eslint": "^8.34.0",
+    "sinon": "^15.0.3",
     "tsconfig-paths": "^4.1.2"
   },
   "dependencies": {
