@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
-import { Test } from "test";
-import { TestContext } from "test-context";
+import { Test } from "core/test";
+import { TestContext } from "core/test-context";
 
 async function test(name, body) {
   return new Test(name, body, { context: new TestContext() }).run();
