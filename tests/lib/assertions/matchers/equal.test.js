@@ -1,7 +1,7 @@
 import jutest from 'jutest';
-import { equal, notEqual } from "core/assertions/matchers/equal";
+import { equal, notEqual } from "assertions/matchers/equal";
 
-jutest('core/assertions/matchers/equal', s => {
+jutest('assertions/matchers/equal', s => {
   s.describe("equal()", s => {
     s.test('passes if two objects are equal', t => {
       let result = equal(1, 1);

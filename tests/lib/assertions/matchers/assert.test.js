@@ -1,7 +1,7 @@
 import jutest from 'jutest';
-import { assert, refute } from "core/assertions/matchers/assert";
+import { assert, refute } from "assertions/matchers/assert";
 
-jutest('core/assertions/matchers/assert', s => {
+jutest('assertions/matchers/assert', s => {
   s.describe("assert()", s => {
     s.test('passes if target is true', t => {
       let result = assert(true);

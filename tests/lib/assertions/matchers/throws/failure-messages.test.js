@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import { noErrorThrownMessage, wrongErrorThrownMessage } from "core/assertions/matchers/throws/failure-messages";
+import { noErrorThrownMessage, wrongErrorThrownMessage } from "assertions/matchers/throws/failure-messages";
 
 jutest("throws/failure-messages", s => {
   s.describe("noErrorThrownMessage()", s => {

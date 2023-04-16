@@ -1,7 +1,7 @@
 import jutest from 'jutest';
-import { throws } from "core/assertions/matchers/throws";
+import { throws } from "assertions/matchers/throws";
 
-jutest('core/assertions/matchers/throws', s => {
+jutest('assertions/matchers/throws', s => {
   s.describe('throws()', s => {
     s.test('passes if provided expression throws', t => {
       let result = throws(() => { throw 'foobar'; }, 'foobar');

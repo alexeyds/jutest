@@ -1,7 +1,7 @@
 import jutest from 'jutest';
-import { fail } from "core/assertions/matchers/fail";
+import { fail } from "assertions/matchers/fail";
 
-jutest('core/assertions/matchers/fail', s => {
+jutest('assertions/matchers/fail', s => {
   s.describe("fail()", s => {
     s.test("fails with given message", t => {
       let result = fail('foobartest');

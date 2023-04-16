@@ -1,7 +1,7 @@
 import jutest from 'jutest';
-import { same, notSame } from "core/assertions/matchers/same";
+import { same, notSame } from "assertions/matchers/same";
 
-jutest('core/assertions/matchers/same', s => {
+jutest('assertions/matchers/same', s => {
   s.describe("same()", s => {
     s.test('passes if two objects have the same structure', t => {
       let result = same({a: 1}, {a: 1});

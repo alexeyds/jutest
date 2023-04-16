@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import { createAssertions, AssertionFailedError } from "core/assertions";
+import { createAssertions, AssertionFailedError } from "assertions";
 
 jutest("assertions", s => {
   s.describe("createAssertions()", s => {

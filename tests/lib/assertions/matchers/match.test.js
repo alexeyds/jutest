@@ -1,7 +1,7 @@
 import jutest from 'jutest';
-import { match, doesNotMatch } from "core/assertions/matchers/match";
+import { match, doesNotMatch } from "assertions/matchers/match";
 
-jutest('core/assertions/matchers/match', s => {
+jutest('assertions/matchers/match', s => {
   s.describe("match()", s => {
     s.test("passes if string matches given regexp", t => {
       let result = match('foobar', /foo/);

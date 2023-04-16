@@ -8,6 +8,13 @@ function describe(name, block) {
 }
 
 jutest("TestSuite", s => {
+  s.describe("name", s => {
+    s.test("returns suite name", t => {
+      let suite = describe('suite', () => {});
+      t.equal(suite.name, 'suite');
+    });
+  });
+
   s.describe("#tests", s => {
     s.test("returns defined tests", async t => {
       let suite = describe('suite', s => {
@@ -74,22 +81,6 @@ jutest("TestSuite", s => {
       await tests[0].run();
 
       t.same(assigns, { a: 1 });
-    });
-  });
-
-  s.describe("#onTestsReady", s => {
-    s.test("fires callback when tests are loaded", async t => {
-      let suite = describe('suite', async s => {
-        await Promise.resolve();
-        s.test('test', () => {});
-      });
-
-      let resolve;
-      let promise = new Promise(r => resolve = r);
-      suite.onTestsReady(resolve);
-      let tests = await promise;
-
-      t.equal(tests.length, 1);
     });
   });
 });

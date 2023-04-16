@@ -1,7 +1,7 @@
 import jutest from "jutest";
-import { NegatableFailureMessage, negateMatcher } from "core/assertions/utils/negatable-matcher";
+import { NegatableFailureMessage, negateMatcher } from "assertions/utils/negatable-matcher";
 
-jutest("core/assertions/utils/negatable-matcher", s => {
+jutest("assertions/utils/negatable-matcher", s => {
   s.describe("NegatableFailureMessage", s => {
     s.test("has #toString method", t => {
       let message = new NegatableFailureMessage({ operator: 'same', expected: 1, actual: 2 });

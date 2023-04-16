@@ -115,12 +115,25 @@ jutest("TestContext", s => {
     });
   });
 
+  s.describe("name", s => {
+    s.test("returns context name", (t, { context }) => {
+      context.addName("Foobar");
+      context.addName("Test");
+
+      t.equal(context.name, 'Foobar Test');
+    });
+  });
+
   s.describe("testName", s => {
     s.test("joins test name with other names", (t, { context }) => {
       context.addName("Foobar");
       context.addName("Test");
 
       t.equal(context.testName('baz'), 'Foobar Test baz');
+    });
+
+    s.test("works if context has no name", (t, { context }) => {
+      t.equal(context.testName('baz'), 'baz');
     });
   });
 });

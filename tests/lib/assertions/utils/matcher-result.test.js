@@ -1,5 +1,5 @@
 import jutest from "jutest";
-import { success, failure } from "core/assertions/utils/matcher-result";
+import { success, failure } from "assertions/utils/matcher-result";
 
 jutest("matcher-result", s => {
   s.describe("success()", s => {
