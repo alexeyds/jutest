@@ -78,7 +78,7 @@ jutest("TestSuite", s => {
       t.equal(promise1, promise2);
     });
 
-    s.test("allows adding tests from suite body", async t => {
+    s.test("adds tests from suite body", async t => {
       let suite = describe('test', s => {
         s.test('foo', () => {});
       });
@@ -88,7 +88,7 @@ jutest("TestSuite", s => {
       t.equal(suite.tests[0].name, 'test foo');
     });
 
-    s.test("allows adding nested suites from suite body", async t => {
+    s.test("adds nested suites from suite body", async t => {
       let suite = describe('test', s => {
         s.describe('nested', s => {
           s.test('foo', () => {});
@@ -100,7 +100,7 @@ jutest("TestSuite", s => {
       t.equal(suite.tests[0].name, 'test nested foo');
     });
 
-    s.test("allows modifying setups setups", async t => {
+    s.test("allows modifying context setups", async t => {
       let assigns;
 
       let suite = describe('test', s => {

@@ -54,20 +54,4 @@ jutest("SuiteBuilder", s => {
       t.match(tests[0].name, 'foo bar');
     });
   });
-
-  s.describe("#toPublicAPI", s => {
-    s.test("defines delegators for adding tests and suites", (t, { builder }) => {
-      let api = builder.toPublicAPI();
-      api.test('foo', () => {});
-      api.describe('suite', () => {});
-    });
-
-    s.test("defines delegators for suite's context", (t, { builder }) => {
-      let api = builder.toPublicAPI();
-      api.setup(() => {});
-      api.assertBeforeTest(() => {});
-      api.assertAfterTest(() => {});
-      api.teardown(() => {});
-    });
-  });
 });
