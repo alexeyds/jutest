@@ -47,10 +47,22 @@ jutest("utils/delegator", s => {
     });
 
     s.test("works with multiple values", (t, { source }) => {
+      source.bar = () => {};
       let delegator = createDelegator(source, { foo: '', bar: true });
 
       t.refute(delegator.foo);
       t.assert(delegator.bar);
+    });
+
+    s.test("binds delegated functions to the sources", t => {
+      let source = {
+        foo: function() { this.bar = 1; }
+
+      };
+      let delegator = createDelegator(source, { foo: true });
+      delegator.foo();
+
+      t.equal(source.bar, 1);
     });
   });
 
