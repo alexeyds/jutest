@@ -64,6 +64,10 @@ jutest("utils/delegator", s => {
 
       t.equal(source.bar, 1);
     });
+
+    s.test("warns about missing functions", (t, { source }) => {
+      t.throws(() => createDelegator(source, { bar: true }), /missing/);
+    });
   });
 
   s.describe("createDelegatorFunction", s => {
