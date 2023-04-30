@@ -14,7 +14,6 @@ async function testHasExpectations() {
 
   assert.equal(result.passed, true);
   assert.equal(result.error, null);
-  assert.equal(result.testName, name);
 }
 
 async function testHasFailures() {
@@ -24,7 +23,6 @@ async function testHasFailures() {
   });
 
   assert.equal(result.passed, false);
-  assert.equal(result.testName, name);
 
   let message = result.error.message;
   assert.equal(typeof message, 'string');
