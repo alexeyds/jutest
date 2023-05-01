@@ -110,5 +110,29 @@ jutest("TestSuite", s => {
       t.match(tests[1].name, 'suite nested test');
       t.match(tests[2].name, 'suite test2');
     });
+
+    s.test("locks test context outside suite body", async t => {
+      let suite = describe('suite', s => {
+        s.describe('suite2', () => {
+          s.setup(() => {});
+        });
+      });
+
+      let error = await suite.composeTests().catch(e => e);
+
+      t.match(error, 'locked');
+    });
+
+    s.test("locks test/suites addition outside of suite body", async t => {
+      let suite = describe('suite', s => {
+        s.describe('suite2', () => {
+          s.test(() => {});
+        });
+      });
+
+      let error = await suite.composeTests().catch(e => e);
+
+      t.match(error, 'locked');
+    });
   });
 });

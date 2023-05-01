@@ -136,4 +136,11 @@ jutest("TestContext", s => {
       t.equal(context.testName('baz'), 'baz');
     });
   });
+
+  s.describe("lock", s => {
+    s.test("prevents modifying locked context", (t, { context }) => {
+      context.lock();
+      t.throws(() => context.addName('Foobar'), /locked/);
+    });
+  });
 });
