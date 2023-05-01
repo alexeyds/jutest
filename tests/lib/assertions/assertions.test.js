@@ -1,10 +1,10 @@
 import jutest from "jutest";
-import { createAssertions, AssertionFailedError } from "assertions";
+import { JutestAssertions, AssertionFailedError } from "assertions";
 
 jutest("assertions", s => {
-  s.describe("createAssertions()", s => {
+  s.describe("JutestAssertions", s => {
     s.setup(() => {
-      return { assertions: createAssertions() };
+      return { assertions: new JutestAssertions() };
     });
 
     s.test("builds an object with assertions", (t, { assertions }) => {

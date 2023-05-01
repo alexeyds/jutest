@@ -10,10 +10,11 @@ function describe(name, block) {
 jutest("TestSuite", s => {
   s.describe("#constructor", s => {
     s.test("sets initial attributes", t => {
-      let suite = describe('test', () => {});
+      let suite = describe('suite', () => {});
 
       t.equal(suite.tests, undefined);
       t.equal(suite.isReady, false);
+      t.equal(suite.isASuite, true);
     });
   });
 
@@ -37,26 +38,6 @@ jutest("TestSuite", s => {
       new TestSuite('suite', () => {}, { context });
 
       t.equal(context.name, 'foobar');
-    });
-  });
-
-  s.describe("#createTest", s => {
-    s.test("creates test with suite's context", t => {
-      let suite = describe('test', () => {});
-      let test = suite.createTest('foo', () => {});
-
-      t.equal(test.name, 'test foo');
-    });
-  });
-
-  s.describe("#createSuite", s => {
-    s.test("creates nested suite", t => {
-      let suite = describe('test', () => {});
-      let nestedSuite = suite.createSuite('foo', () => {});
-      let test = nestedSuite.createTest('bar', () => {});
-
-      t.equal(nestedSuite.name, 'test foo');
-      t.equal(test.name, 'test foo bar');
     });
   });
 
@@ -112,6 +93,22 @@ jutest("TestSuite", s => {
       await suite.tests[0].run();
 
       t.same(assigns, { a: 1 });
+    });
+
+    s.test("returns tests in order they were defined", async t => {
+      let suite = describe('suite', s => {
+        s.test('test1', () => {});
+        s.describe('nested', s => {
+          s.test('test', () => {});
+        });
+        s.test('test2', () => {});
+      });
+
+      let tests = await suite.composeTests();
+
+      t.match(tests[0].name, 'suite test1');
+      t.match(tests[1].name, 'suite nested test');
+      t.match(tests[2].name, 'suite test2');
     });
   });
 });
