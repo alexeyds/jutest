@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { createDelegator, createDelegatorFunction } from "utils/delegator";
 import { spy } from "sinon";
 

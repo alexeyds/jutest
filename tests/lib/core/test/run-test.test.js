@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { TestContext } from "core/test-context";
 import { runTest as rawRunTest } from "core/test/run-test";
 import { spy } from "sinon";

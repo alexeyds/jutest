@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { addPadding, joinLines, presentStackTrace } from "reporters/formatting";
 
 jutest("reporting/formatting", s => {

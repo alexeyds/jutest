@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { deepMerge, isPlainObject } from "utils/object";
 
 jutest("utils/object", s => {

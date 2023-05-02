@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { nameFunction } from "utils/function";
 
 jutest("utils/function", s => {

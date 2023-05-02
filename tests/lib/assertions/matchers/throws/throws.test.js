@@ -1,4 +1,4 @@
-import jutest from 'jutest';
+import { jutest } from 'jutest';
 import { throws } from "assertions/matchers/throws";
 
 jutest('assertions/matchers/throws', s => {

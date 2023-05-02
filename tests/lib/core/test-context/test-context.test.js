@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { TestContext } from "core/test-context";
 
 jutest("TestContext", s => {

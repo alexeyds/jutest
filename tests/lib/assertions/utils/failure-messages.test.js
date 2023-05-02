@@ -1,4 +1,4 @@
-import jutest from 'jutest';
+import { jutest } from 'jutest';
 import { assertionFailedMessage, negationFailedMessage } from "assertions/utils/failure-messages";
 
 jutest('assertions/utils/failure-messages', s => {

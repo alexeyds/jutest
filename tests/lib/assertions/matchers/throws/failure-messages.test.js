@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { noErrorThrownMessage, wrongErrorThrownMessage } from "assertions/matchers/throws/failure-messages";
 
 jutest("throws/failure-messages", s => {

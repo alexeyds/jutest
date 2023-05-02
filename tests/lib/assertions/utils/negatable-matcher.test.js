@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { NegatableFailureMessage, negateMatcher } from "assertions/utils/negatable-matcher";
 
 jutest("assertions/utils/negatable-matcher", s => {

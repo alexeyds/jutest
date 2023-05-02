@@ -1,4 +1,4 @@
-import jutest from 'jutest';
+import { jutest } from 'jutest';
 import { same, notSame } from "assertions/matchers/same";
 
 jutest('assertions/matchers/same', s => {

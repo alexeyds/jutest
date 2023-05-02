@@ -1,6 +1,4 @@
-import jutest from 'jutest';
-
-jutest.setup(() => ({jutest: 'hello'}));
+import { jutest } from 'jutest';
 
 jutest('jutest', s => {
   s.test('runs tests', t => {
@@ -11,9 +9,5 @@ jutest('jutest', s => {
     s.test('test',  t => {
       t.assert(true);
     });
-  });
-
-  s.test('supports TestSetup helpers in top scope', (t, assigns) => {
-    t.same(assigns, { jutest: 'hello' });
   });
 });

@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { tryFunctionCall, doesErrorMatch } from "assertions/matchers/throws/utils";
 
 jutest("throws/utils", s => {

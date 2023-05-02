@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import nodePath from "path";
 import { readLine } from "utils/file";
 

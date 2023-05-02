@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { ArraysContainer } from "core/test-context/arrays-container";
 
 jutest("ArraysContainer", s => {

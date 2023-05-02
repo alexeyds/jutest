@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import nodePath from 'path';
 import { addPadding } from "reporters/formatting";
 import { splitStackTrace, traceFailedLine, readFailedLine } from "reporters/error-tracing";

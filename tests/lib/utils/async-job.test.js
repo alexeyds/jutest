@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { AsyncJob } from "utils/async-job";
 
 jutest("utils/async-job", s => {

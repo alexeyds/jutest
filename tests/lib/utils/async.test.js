@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { createOrderedResolver } from "utils/async";
 
 jutest("utils/async", s => {

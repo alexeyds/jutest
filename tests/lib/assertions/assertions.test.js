@@ -1,4 +1,4 @@
-import jutest from "jutest";
+import { jutest } from "jutest";
 import { JutestAssertions, AssertionFailedError } from "assertions";
 
 jutest("assertions", s => {
