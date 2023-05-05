@@ -12,7 +12,7 @@ jutest("TestSuite", s => {
     s.test("sets initial attributes", t => {
       let suite = describe('suite', () => {});
 
-      t.equal(suite.tests, undefined);
+      t.equal(suite.testsAndSuites, undefined);
       t.equal(suite.isReady, false);
       t.equal(suite.isASuite, true);
     });
@@ -41,20 +41,20 @@ jutest("TestSuite", s => {
     });
   });
 
-  s.describe("#composeTests", s => {
+  s.describe("#compose", s => {
     s.test("composes empty array if no tests are registered", async t => {
       let suite = describe('test', () => {});
-      let result = await suite.composeTests();
+      let result = await suite.compose();
 
-      t.same(suite.tests, []);
-      t.equal(result, suite.tests);
+      t.same(suite.testsAndSuites, []);
+      t.equal(result, suite.testsAndSuites);
       t.equal(suite.isReady, true);
     });
 
     s.test("uses single-use job", t => {
       let suite = describe('test', () => {});
-      let promise1 = suite.composeTests();
-      let promise2 = suite.composeTests(); 
+      let promise1 = suite.compose();
+      let promise2 = suite.compose(); 
 
       t.equal(promise1, promise2);
     });
@@ -63,10 +63,10 @@ jutest("TestSuite", s => {
       let suite = describe('test', s => {
         s.test('foo', () => {});
       });
-      await suite.composeTests();
+      await suite.compose();
 
-      t.equal(suite.tests.length, 1);
-      t.equal(suite.tests[0].name, 'test foo');
+      t.equal(suite.testsAndSuites.length, 1);
+      t.equal(suite.testsAndSuites[0].name, 'test foo');
     });
 
     s.test("adds nested suites from suite body", async t => {
@@ -75,10 +75,12 @@ jutest("TestSuite", s => {
           s.test('foo', () => {});
         });
       });
-      await suite.composeTests();
+      await suite.compose();
 
-      t.equal(suite.tests.length, 1);
-      t.equal(suite.tests[0].name, 'test nested foo');
+      t.equal(suite.testsAndSuites.length, 1);
+      let nestedSuite = suite.testsAndSuites[0];
+      t.equal(nestedSuite.name, 'test nested');
+      t.equal(nestedSuite.testsAndSuites[0].name, 'test nested foo');
     });
 
     s.test("allows modifying context setups", async t => {
@@ -89,13 +91,13 @@ jutest("TestSuite", s => {
         s.test('foo', (t, a) => assigns = a);
       });
 
-      await suite.composeTests();
-      await suite.tests[0].run();
+      await suite.compose();
+      await suite.testsAndSuites[0].run();
 
       t.same(assigns, { a: 1 });
     });
 
-    s.test("returns tests in order they were defined", async t => {
+    s.test("returns tests and suites in order they were defined", async t => {
       let suite = describe('suite', s => {
         s.test('test1', () => {});
         s.describe('nested', s => {
@@ -104,11 +106,11 @@ jutest("TestSuite", s => {
         s.test('test2', () => {});
       });
 
-      let tests = await suite.composeTests();
+      let testsAndSuites = await suite.compose();
 
-      t.match(tests[0].name, 'suite test1');
-      t.match(tests[1].name, 'suite nested test');
-      t.match(tests[2].name, 'suite test2');
+      t.match(testsAndSuites[0].name, 'suite test1');
+      t.match(testsAndSuites[1].name, 'suite nested');
+      t.match(testsAndSuites[2].name, 'suite test2');
     });
 
     s.test("locks test context outside suite body", async t => {
@@ -118,7 +120,7 @@ jutest("TestSuite", s => {
         });
       });
 
-      let error = await suite.composeTests().catch(e => e);
+      let error = await suite.compose().catch(e => e);
 
       t.match(error, 'locked');
     });
@@ -130,7 +132,7 @@ jutest("TestSuite", s => {
         });
       });
 
-      let error = await suite.composeTests().catch(e => e);
+      let error = await suite.compose().catch(e => e);
 
       t.match(error, 'locked');
     });
