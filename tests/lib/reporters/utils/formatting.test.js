@@ -1,7 +1,7 @@
 import { jutest } from "jutest";
-import { addPadding, joinLines, presentStackTrace } from "reporters/formatting";
+import { addPadding, joinLines, presentStackTrace } from "reporters/utils/formatting";
 
-jutest("reporting/formatting", s => {
+jutest("reporting/utils/formatting", s => {
   s.describe("addPadding()", s => {
     s.test("prepends spaces to text", t => {
       let result = addPadding('testing', 2);

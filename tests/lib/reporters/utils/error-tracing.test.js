@@ -1,9 +1,9 @@
 import { jutest } from "jutest";
 import nodePath from 'path';
-import { addPadding } from "reporters/formatting";
-import { splitStackTrace, traceFailedLine, readFailedLine } from "reporters/error-tracing";
+import { addPadding } from "reporters/utils/formatting";
+import { splitStackTrace, traceFailedLine, readFailedLine } from "reporters/utils/error-tracing";
 
-jutest("reporters/error-tracing", s => {
+jutest("reporters/utils/error-tracing", s => {
   s.describe("splitStackTrace()", s => {
     let currentFileRegexp = /error-tracing.test/;
 
