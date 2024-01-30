@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { TestsContainer } from "test-runner/tests-container";
+import { TestsContainer } from "core/tests-container";
 import { TestContext } from "core/test-context";
 
 jutest("TestsContainer", s => {
