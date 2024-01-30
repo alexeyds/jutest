@@ -1,7 +1,7 @@
 import { jutest } from 'jutest';
-import { assertionFailedMessage, negationFailedMessage } from "assertions/utils/failure-messages";
+import { assertionFailedMessage, negationFailedMessage } from "assertions/shared";
 
-jutest('assertions/utils/failure-messages', s => {
+jutest('assertions/shared/failure-messages', s => {
   s.describe("assertionFailedMessage", s => {
     s.test('composes failure message', t => {
       let message = assertionFailedMessage({ expected: {a: 1}, actual: 2, operator: 'equal' });
