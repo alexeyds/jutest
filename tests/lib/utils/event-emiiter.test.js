@@ -36,8 +36,7 @@ jutest("EventEmitter", s => {
     });
 
     s.test("validates event is supported", async (t, { emitter }) => {
-      const error = await emitter.emit('test').catch(e => e);
-      t.match(error, /supported/);
+      await t.async.rejects(emitter.emit('test'), /supported/);
     });
   });
 
