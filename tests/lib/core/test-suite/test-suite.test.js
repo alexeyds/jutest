@@ -120,9 +120,7 @@ jutest("TestSuite", s => {
         });
       });
 
-      let error = await suite.compose().catch(e => e);
-
-      t.match(error, 'locked');
+      await t.async.rejects(suite.compose(), 'locked');
     });
 
     s.test("locks test/suites addition outside of suite body", async t => {
@@ -132,9 +130,7 @@ jutest("TestSuite", s => {
         });
       });
 
-      let error = await suite.compose().catch(e => e);
-
-      t.match(error, 'locked');
+      await t.async.rejects(suite.compose(), 'locked');
     });
   });
 });

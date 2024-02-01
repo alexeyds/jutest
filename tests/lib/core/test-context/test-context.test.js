@@ -152,4 +152,16 @@ jutest("TestContext", s => {
       t.throws(() => context.addName('Foobar'), 'my custom error');
     });
   });
+
+  s.describe("toConfigurationAPI", s => {
+    s.test("exposes setup methods", (t, { context }) => {
+      let config = context.toConfigurationAPI();
+
+      t.assert(config.setup);
+      t.assert(config.teardown);
+      t.assert(config.assertBeforeTest);
+      t.assert(config.assertAfterTest);
+      t.assert(config.name);
+    });
+  });
 });
