@@ -6,8 +6,8 @@ jutest("TestsContainer", s => {
     return { 
       testContainer: new TestsContainer(),
       context: new TestContext(),
-    }
-  })
+    };
+  });
 
   s.describe("#constructor", s => {
     s.test("sets default attributes", (t, { testContainer }) => {

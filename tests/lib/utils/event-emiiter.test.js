@@ -20,7 +20,7 @@ jutest("EventEmitter", s => {
 
       await emitter.emit('start', 1, 2, 3);
 
-      t.same(listener.firstCall.args, [1, 2, 3])
+      t.same(listener.firstCall.args, [1, 2, 3]);
     });
 
     s.test("validates event is supported", async (t, { emitter }) => {
@@ -35,23 +35,23 @@ jutest("EventEmitter", s => {
 
       await emitter.emit('start');
 
-      t.equal(listener.called, true)
+      t.equal(listener.called, true);
     });
 
     s.test("supports multiple listeners", async (t, { emitter }) => {
       let listener1 = spy();
       let listener2 = spy();
       emitter.on('start', listener1);
-      emitter.on('start', listener2)
+      emitter.on('start', listener2);
 
       await emitter.emit('start');
 
-      t.equal(listener1.called, true)
-      t.equal(listener2.called, true)
+      t.equal(listener1.called, true);
+      t.equal(listener2.called, true);
     });
 
     s.test("validates event is supported", (t, { emitter }) => {
-      t.throws(() => emitter.on('test', () => {}), /supported/)
+      t.throws(() => emitter.on('test', () => {}), /supported/);
     });
   });
 
@@ -65,12 +65,12 @@ jutest("EventEmitter", s => {
 
       await emitter.emit('start');
 
-      t.equal(listener1.called, false)
+      t.equal(listener1.called, false);
       t.equal(listener2.called, true);
     });
 
     s.test("validates event is supported", (t, { emitter }) => {
-      t.throws(() => emitter.off('test', () => {}), /supported/)
+      t.throws(() => emitter.off('test', () => {}), /supported/);
     });
   });
 });

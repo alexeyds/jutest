@@ -52,12 +52,12 @@ jutest("assertions/matchers/async/passes-eventually", s => {
 
   s.describe("timers test", s => {
     s.setup(() => {
-      return { clock: useFakeTimers() }
-    })
+      return { clock: useFakeTimers() };
+    });
 
     s.teardown(({ clock }) => {
       clock.restore();
-    })
+    });
 
     s.test("stops trying after specified timeout", async (t, { clock }) => {
       let resultPromise = passesEventually(() => {

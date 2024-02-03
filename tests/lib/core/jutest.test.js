@@ -7,7 +7,7 @@ jutest("Jutest", s => {
     let jutest = new Jutest({ testsContainer: container }).toPublicAPI();
 
     return { container, jutest };
-  })
+  });
 
   s.describe("#test", s => {
     s.test("adds test to the container", (t, { container, jutest }) => {
@@ -39,7 +39,7 @@ jutest("Jutest", s => {
   s.describe("#configureNewInstance", s => {
     s.test("returns the public API of the new instance", (t, { container, jutest }) => {
       let jutest2 = jutest.configureNewInstance();
-      jutest2('foobar', () => {})
+      jutest2('foobar', () => {});
       let suite = container.testsAndSuites[0];
 
       t.notEqual(jutest, jutest2);
@@ -48,7 +48,7 @@ jutest("Jutest", s => {
 
     s.test("exposes context's configuration API", (t, { container, jutest }) => {
       let jutest2 = jutest.configureNewInstance(c => c.name('jutest2'));
-      jutest2.test('test', () => {})
+      jutest2.test('test', () => {});
 
       let test = container.testsAndSuites[0];
 
@@ -68,7 +68,6 @@ jutest("Jutest", s => {
     });
 
     s.test("extends existing context", (t, { container, jutest }) => {
-      let setupsRan = 0;
       let jutest3 = jutest
         .configureNewInstance(c => c.name('jutest2'))
         .configureNewInstance(c => c.name('jutest3'));
@@ -80,11 +79,11 @@ jutest("Jutest", s => {
       t.equal(test.name, 'jutest2 jutest3 test');
     });
 
-    s.test("locks context after first configuration", (t, { container, jutest }) => {
+    s.test("locks context after first configuration", (t, { jutest }) => {
       let config;
-      let jutest3 = jutest.configureNewInstance(c => config = c);
+      jutest.configureNewInstance(c => config = c);
 
-      t.throws(() => config.name('test'), /locked/)
+      t.throws(() => config.name('test'), /locked/);
     });
   });
 });

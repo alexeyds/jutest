@@ -46,14 +46,14 @@ jutest('assertions/matchers/throws', s => {
 
   s.describe('matchExecutionResult()', s => {
     s.test('passes if provided execution result has an error', t => {
-      let executionResult = tryFunctionCall(() => { throw 'foobar' })
+      let executionResult = tryFunctionCall(() => { throw 'foobar'; });
       let result = matchExecutionResult({ executionResult, matcher: 'foobar', operator: 'throws' });
 
       t.equal(result.passed, true);
     });
 
     s.test('fails if provided expression doesnt throw', t => {
-      let executionResult = tryFunctionCall(() => { })
+      let executionResult = tryFunctionCall(() => { });
       let result = matchExecutionResult({ executionResult, matcher: Error, operator: 'throws' });
 
       t.equal(result.passed, false);
@@ -61,7 +61,7 @@ jutest('assertions/matchers/throws', s => {
     });
 
     s.test("fails if error doesn't match the expectation", t => {
-      let executionResult = tryFunctionCall(() => { throw Error('baz') })
+      let executionResult = tryFunctionCall(() => { throw Error('baz'); });
       let result = matchExecutionResult({ executionResult, matcher: 'bar', operator: 'throws' });
 
       t.match(result.failureMessage, /baz/);

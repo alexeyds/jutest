@@ -1,13 +1,13 @@
 import { jutest } from "jutest";
 import { TestsContainer, Jutest } from "core";
-import { TestRunner, TEST_RUNNER_EVENTS } from "runtime";
+import { TestRunner } from "runtime";
 import { spy } from "sinon";
 
 jutest("TestRunner", s => {
   s.setup(() => {
     let container = new TestsContainer();
     let runner = new TestRunner({ testsContainer: container });
-    let jutest = new Jutest({ testsContainer: container }).toPublicAPI();;
+    let jutest = new Jutest({ testsContainer: container }).toPublicAPI();
 
     return { container, runner, jutest };
   });
@@ -15,7 +15,7 @@ jutest("TestRunner", s => {
   s.describe("#run", s => {
     s.test("runs tests from the container", async (t, { runner, jutest, container }) => {
       jutest.test('test', t => {
-        t.assert(true)
+        t.assert(true);
       });
 
       await runner.run();
@@ -47,7 +47,7 @@ jutest("TestRunner", s => {
         s.test('test', testBody);
       });
 
-      jutest.describe('suite2', s => {
+      jutest.describe('suite2', () => {
         throw 'foobar';
       });
 
@@ -56,7 +56,7 @@ jutest("TestRunner", s => {
     });
 
     ['run-start', 'suites-loaded'].forEach(event => {
-      s.test(`emits "${event}" event`, async (t, { runner, jutest }) => {
+      s.test(`emits "${event}" event`, async (t, { runner }) => {
         let listener = spy();
         runner.on(event, listener);
         await runner.run();

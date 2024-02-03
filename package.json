@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "./bin/test",
-    "lint": "eslint {src,test}/**/*{js,jsx}",
+    "lint": "eslint {src,tests}/**/*{js,jsx}",
     "test-dist": "echo",
     "prepublishOnly": "yarn test && yarn build && yarn test-dist",
     "build": "./bin/build"
