@@ -1,6 +1,5 @@
 import { jutest } from "jutest";
-import { TestContext } from "core/test-context";
-import { Test } from "core/test";
+import { Test, TestContext } from "core";
 import { spy } from "sinon";
 
 function createTest(body, context) {

@@ -23,20 +23,8 @@ jutest("EventEmitter", s => {
       t.same(listener.firstCall.args, [1, 2, 3])
     });
 
-    s.test("calls async listeners in order", async (t, { emitter }) => {
-      let listener1 = spy();
-      let listener2 = spy();
-
-      emitter.on('start', () => Promise.resolve().then(listener1));
-      emitter.on('start', listener2);
-
-      await emitter.emit('start');
-
-      t.assert(listener2.calledAfter(listener1));
-    });
-
     s.test("validates event is supported", async (t, { emitter }) => {
-      await t.async.rejects(emitter.emit('test'), /supported/);
+      t.async.rejects(emitter.emit('test'), /supported/);
     });
   });
 

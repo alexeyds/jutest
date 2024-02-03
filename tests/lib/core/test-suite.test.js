@@ -1,6 +1,5 @@
 import { jutest } from "jutest";
-import { TestContext } from "core/test-context";
-import { TestSuite } from "core/test-suite";
+import { TestContext, TestSuite } from "core";
 
 function describe(name, block) {
   let context = new TestContext();
