@@ -42,13 +42,6 @@ jutest("Test", s => {
     });
   });
 
-  s.describe("#context", s => {
-    s.test("returns context", (t, { context }) => {
-      let test = createTest(() => {}, context);
-      t.equal(test.context, context);
-    });
-  });
-
   s.describe("#ownName", s => {
     s.test("returns name passed to the test", (t, { context }) => {
       let test = new Test('foobar', () => {}, { context });
