@@ -1,28 +1,9 @@
 import { jutest } from "jutest";
 import nodePath from 'path';
 import { addPadding } from "reporters/utils/formatting";
-import { splitStackTrace, traceFailedLine, readFailedLine } from "reporters/utils/error-tracing";
+import { traceFailedLine, readFailedLine } from "reporters/utils/error-tracing";
 
 jutest("reporters/utils/error-tracing", s => {
-  s.describe("splitStackTrace()", s => {
-    let currentFileRegexp = /error-tracing.test/;
-
-    s.test("removes error message from stack", t => {
-      let result = splitStackTrace(new Error('foobar'));
-      t.match(result[0], currentFileRegexp);
-    });
-
-    s.test("removes leading spaces from stack trace lines", t => {
-      let result = splitStackTrace(new Error('foobar'));
-      t.doesNotMatch(result[0], /^\s+/);
-    });
-
-    s.test("removes multi-line error messages", t => {
-      let result = splitStackTrace(new Error('foobar\ntest'));
-      t.match(result[0], currentFileRegexp);
-    });
-  });
-
   function tracedError(stackTraceLines) {
     let error = new Error('testing');
     let stackTrace = stackTraceLines.map(l => addPadding(l, 4)).join('\n');
