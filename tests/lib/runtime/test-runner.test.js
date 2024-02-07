@@ -107,12 +107,12 @@ jutest("TestRunner", s => {
   });
 
   s.describe("#runAtFileLocation", s => {
-    let ownFileName = 'test-runner.test.js'
+    let ownFileName = 'test-runner.test.js';
 
     s.test("only runs test/suite defined on the specified line", async (t, { runner, jutest, container }) => {
       jutest.test('test', () => {});
       jutest.test('test2', () => {});
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 113 })
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 113 });
 
       let [test1, test2] = container.specs;
 
@@ -126,7 +126,7 @@ jutest("TestRunner", s => {
         s.test('test2', () => {});
       });
 
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 125 })
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 125 });
 
       let [test1, test2] = container.specs[0].specs;
 
@@ -140,7 +140,7 @@ jutest("TestRunner", s => {
         s.test('test2', () => {});
       });
 
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 0 })
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 0 });
 
       let [test1, test2] = container.specs[0].specs;
 
