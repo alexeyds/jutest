@@ -12,13 +12,13 @@ jutest("TestRunner", s => {
     return { container, runner, jutest };
   });
 
-  s.describe("#run", s => {
+  s.describe("#runAll()", s => {
     s.test("runs tests from the container", async (t, { runner, jutest, container }) => {
       jutest.test('test', t => {
         t.assert(true);
       });
 
-      await runner.run();
+      await runner.runAll();
       let [test] = container.testsAndSuites;
 
       t.equal(test.wasRun, true);
@@ -32,9 +32,8 @@ jutest("TestRunner", s => {
         });
       });
 
-      await runner.run();
-      let [suite] = container.testsAndSuites;
-      let [test] = suite.testsAndSuites;
+      await runner.runAll();
+      let [test] = container.testsAndSuites[0].testsAndSuites;
 
       t.equal(test.wasRun, true);
       t.equal(test.result.passed, true);
@@ -51,7 +50,7 @@ jutest("TestRunner", s => {
         throw 'foobar';
       });
 
-      await t.async.rejects(runner.run(), /foobar/);
+      await t.async.rejects(runner.runAll(), /foobar/);
       t.equal(testBody.called, false);
     });
 
@@ -59,7 +58,7 @@ jutest("TestRunner", s => {
       s.test(`emits "${event}" event`, async (t, { runner }) => {
         let listener = spy();
         runner.on(event, listener);
-        await runner.run();
+        await runner.runAll();
 
         t.equal(listener.called, true);
       });
@@ -71,7 +70,7 @@ jutest("TestRunner", s => {
         let listener = spy();
         runner.on(event, listener);
 
-        await runner.run();
+        await runner.runAll();
 
         t.equal(listener.called, true);
         let suite = listener.firstCall.args[0];
@@ -88,7 +87,7 @@ jutest("TestRunner", s => {
         let listener = spy();
         runner.on(event, listener);
 
-        await runner.run();
+        await runner.runAll();
 
         t.equal(listener.called, true);
         let test = listener.firstCall.args[0];
@@ -101,9 +100,52 @@ jutest("TestRunner", s => {
       let listener = spy();
       runner.on('run-end', listener);
 
-      await runner.run();
+      await runner.runAll();
 
       t.equal(listener.called, true);
+    });
+  });
+
+  s.describe("#runAtFileLocation", s => {
+    let ownFileName = 'test-runner.test.js'
+
+    s.test("only runs test/suite defined on the specified line", async (t, { runner, jutest, container }) => {
+      jutest.test('test', () => {});
+      jutest.test('test2', () => {});
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 113 })
+
+      let [test1, test2] = container.testsAndSuites;
+
+      t.equal(test1.wasRun, true);
+      t.equal(test2.wasRun, false);
+    });
+
+    s.test("works with nested specs", async (t, { runner, jutest, container }) => {
+      jutest.describe('suite', (s) => {
+        s.test('test1', () => {});
+        s.test('test2', () => {});
+      });
+
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 125 })
+
+      let [test1, test2] = container.testsAndSuites[0].testsAndSuites;
+
+      t.equal(test1.wasRun, true);
+      t.equal(test2.wasRun, false);
+    });
+
+    s.test("runs all defined specs if nothing can be found on the specified line", async (t, { runner, jutest, container }) => {
+      jutest.describe('suite', (s) => {
+        s.test('test1', () => {});
+        s.test('test2', () => {});
+      });
+
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 0 })
+
+      let [test1, test2] = container.testsAndSuites[0].testsAndSuites;
+
+      t.equal(test1.wasRun, true);
+      t.equal(test2.wasRun, true);
     });
   });
 });
