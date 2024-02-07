@@ -1,10 +1,10 @@
 import { jutest } from "jutest";
-import { TestsContainer, TestContext } from "core";
+import { SpecsContainer, TestContext } from "core";
 
-jutest("TestsContainer", s => {
+jutest("SpecsContainer", s => {
   s.setup(() => {
     return { 
-      testContainer: new TestsContainer(),
+      testContainer: new SpecsContainer(),
       context: new TestContext(),
     };
   });
