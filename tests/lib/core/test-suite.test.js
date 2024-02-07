@@ -11,7 +11,7 @@ jutest("TestSuite", s => {
     s.test("sets initial attributes", t => {
       let suite = describe('suite', () => {});
 
-      t.equal(suite.testsAndSuites, undefined);
+      t.equal(suite.specs, undefined);
       t.equal(suite.isReady, false);
       t.equal(suite.isASuite, true);
     });
@@ -45,8 +45,8 @@ jutest("TestSuite", s => {
       let suite = describe('test', () => {});
       let result = await suite.compose();
 
-      t.same(suite.testsAndSuites, []);
-      t.equal(result, suite.testsAndSuites);
+      t.same(suite.specs, []);
+      t.equal(result, suite.specs);
       t.equal(suite.isReady, true);
     });
 
@@ -64,8 +64,8 @@ jutest("TestSuite", s => {
       });
       await suite.compose();
 
-      t.equal(suite.testsAndSuites.length, 1);
-      t.equal(suite.testsAndSuites[0].name, 'test foo');
+      t.equal(suite.specs.length, 1);
+      t.equal(suite.specs[0].name, 'test foo');
     });
 
     s.test("adds nested suites from suite body", async t => {
@@ -76,10 +76,10 @@ jutest("TestSuite", s => {
       });
       await suite.compose();
 
-      t.equal(suite.testsAndSuites.length, 1);
-      let nestedSuite = suite.testsAndSuites[0];
+      t.equal(suite.specs.length, 1);
+      let nestedSuite = suite.specs[0];
       t.equal(nestedSuite.name, 'test nested');
-      t.equal(nestedSuite.testsAndSuites[0].name, 'test nested foo');
+      t.equal(nestedSuite.specs[0].name, 'test nested foo');
     });
 
     s.test("allows modifying context setups", async t => {
@@ -91,7 +91,7 @@ jutest("TestSuite", s => {
       });
 
       await suite.compose();
-      await suite.testsAndSuites[0].run();
+      await suite.specs[0].run();
 
       t.same(assigns, { a: 1 });
     });
@@ -105,11 +105,11 @@ jutest("TestSuite", s => {
         s.test('test2', () => {});
       });
 
-      let testsAndSuites = await suite.compose();
+      let specs = await suite.compose();
 
-      t.match(testsAndSuites[0].name, 'suite test1');
-      t.match(testsAndSuites[1].name, 'suite nested');
-      t.match(testsAndSuites[2].name, 'suite test2');
+      t.match(specs[0].name, 'suite test1');
+      t.match(specs[1].name, 'suite nested');
+      t.match(specs[2].name, 'suite test2');
     });
 
     s.test("locks test context outside suite body", async t => {

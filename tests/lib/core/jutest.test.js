@@ -12,7 +12,7 @@ jutest("Jutest", s => {
   s.describe("#test", s => {
     s.test("adds test to the container", (t, { container, jutest }) => {
       jutest.test('foobar', () => {});
-      let test = container.testsAndSuites[0];
+      let test = container.specs[0];
 
       t.equal(test.name, 'foobar');
     });
@@ -21,7 +21,7 @@ jutest("Jutest", s => {
   s.describe("#describe", s => {
     s.test("adds test to the container", (t, { container, jutest }) => {
       jutest.describe('foobar', () => {});
-      let suite = container.testsAndSuites[0];
+      let suite = container.specs[0];
 
       t.equal(suite.name, 'foobar');
       t.equal(suite.isASuite, true);
@@ -29,7 +29,7 @@ jutest("Jutest", s => {
 
     s.test("has a shorthand definition", (t, { container, jutest }) => {
       jutest('foobar', () => {});
-      let suite = container.testsAndSuites[0];
+      let suite = container.specs[0];
 
       t.equal(suite.name, 'foobar');
       t.equal(suite.isASuite, true);
@@ -40,7 +40,7 @@ jutest("Jutest", s => {
     s.test("returns the public API of the new instance", (t, { container, jutest }) => {
       let jutest2 = jutest.configureNewInstance();
       jutest2('foobar', () => {});
-      let suite = container.testsAndSuites[0];
+      let suite = container.specs[0];
 
       t.notEqual(jutest, jutest2);
       t.equal(suite.name, 'foobar');
@@ -50,7 +50,7 @@ jutest("Jutest", s => {
       let jutest2 = jutest.configureNewInstance(c => c.name('jutest2'));
       jutest2.test('test', () => {});
 
-      let test = container.testsAndSuites[0];
+      let test = container.specs[0];
 
       t.equal(test.name, 'jutest2 test');
     });
@@ -61,7 +61,7 @@ jutest("Jutest", s => {
       jutest.test('test', () => {});
       jutest2.test('test', () => {});
 
-      let [test1, test2] = container.testsAndSuites;
+      let [test1, test2] = container.specs;
 
       t.equal(test1.name, 'test');
       t.equal(test2.name, 'jutest2 test');
@@ -74,7 +74,7 @@ jutest("Jutest", s => {
 
       jutest3.test('test', () => {});
 
-      let test = container.testsAndSuites[0];
+      let test = container.specs[0];
 
       t.equal(test.name, 'jutest2 jutest3 test');
     });

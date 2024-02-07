@@ -19,7 +19,7 @@ jutest("TestRunner", s => {
       });
 
       await runner.runAll();
-      let [test] = container.testsAndSuites;
+      let [test] = container.specs;
 
       t.equal(test.wasRun, true);
       t.equal(test.result.passed, true);
@@ -33,7 +33,7 @@ jutest("TestRunner", s => {
       });
 
       await runner.runAll();
-      let [test] = container.testsAndSuites[0].testsAndSuites;
+      let [test] = container.specs[0].specs;
 
       t.equal(test.wasRun, true);
       t.equal(test.result.passed, true);
@@ -114,7 +114,7 @@ jutest("TestRunner", s => {
       jutest.test('test2', () => {});
       await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 113 })
 
-      let [test1, test2] = container.testsAndSuites;
+      let [test1, test2] = container.specs;
 
       t.equal(test1.wasRun, true);
       t.equal(test2.wasRun, false);
@@ -128,7 +128,7 @@ jutest("TestRunner", s => {
 
       await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 125 })
 
-      let [test1, test2] = container.testsAndSuites[0].testsAndSuites;
+      let [test1, test2] = container.specs[0].specs;
 
       t.equal(test1.wasRun, true);
       t.equal(test2.wasRun, false);
@@ -142,7 +142,7 @@ jutest("TestRunner", s => {
 
       await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 0 })
 
-      let [test1, test2] = container.testsAndSuites[0].testsAndSuites;
+      let [test1, test2] = container.specs[0].specs;
 
       t.equal(test1.wasRun, true);
       t.equal(test2.wasRun, true);
