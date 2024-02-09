@@ -53,4 +53,16 @@ jutest("SpecsContainer", s => {
       }, /some suite/);
     });
   });
+
+  s.describe("#composeAll", s => {
+    s.test("sets default attributes", async (t, { testContainer, context }) => {
+      testContainer.addSuite('my suite', (s) => {
+        s.test('test', () => {});
+      }, { context });
+
+      await testContainer.composeAll();
+
+      t.equal(testContainer.specs[0].specs.length, 1);
+    });
+  });
 });
