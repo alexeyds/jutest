@@ -1,9 +1,9 @@
 import { jutest } from "jutest";
-import { SpecsContainer, Jutest } from "core";
+import { SpecsContainer, Jutest, TestSuite } from "core";
 
 jutest("Jutest", s => {
   s.setup(() => {
-    let container = new SpecsContainer();
+    let container = new SpecsContainer({ TestSuite });
     let jutest = new Jutest({ specsContainer: container }).toPublicAPI();
 
     return { container, jutest };
@@ -83,7 +83,7 @@ jutest("Jutest", s => {
       let config;
       jutest.configureNewInstance(c => config = c);
 
-      t.throws(() => config.name('test'), /locked/);
+      t.throws(() => config.name('test'), /configure/);
     });
   });
 });

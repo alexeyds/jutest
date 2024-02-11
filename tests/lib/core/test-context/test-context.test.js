@@ -139,17 +139,8 @@ jutest("TestContext", s => {
 
   s.describe("lock", s => {
     s.test("prevents modifying locked context", (t, { context }) => {
-      t.equal(context.isLocked, false);
-
-      context.lock();
-
-      t.equal(context.isLocked, true);
+      context.lock('locked');
       t.throws(() => context.addName('Foobar'), /locked/);
-    });
-
-    s.test("accepts custom error message", (t, { context }) => {
-      context.lock('my custom error');
-      t.throws(() => context.addName('Foobar'), 'my custom error');
     });
   });
 
