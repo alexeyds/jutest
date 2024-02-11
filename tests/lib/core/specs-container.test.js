@@ -1,11 +1,20 @@
 import { jutest } from "jutest";
-import { SpecsContainer, TestContext, TestSuite } from "core";
+import { SpecsContainer, TestContext, TestSuite, Test } from "core";
 
 jutest("SpecsContainer", s => {
   s.setup(() => {
+    let context = new TestContext();
+    let specsContainer = new SpecsContainer({ TestSuite });
+    let builderAPI = specsContainer.toBuilderAPI({
+      Test,
+      TestSuite,
+      context,
+    });
+
     return { 
-      specsContainer: new SpecsContainer({ TestSuite }),
-      context: new TestContext(),
+      specsContainer,
+      context,
+      builderAPI,
     };
   });
 
@@ -15,18 +24,16 @@ jutest("SpecsContainer", s => {
     });
   });
 
-  s.describe("#addTest", s => {
-    s.test("adds test to the container", (t, { specsContainer, context }) => {
-      specsContainer.addTest('some test', () => {}, { context });
+  s.describe("toBuilderAPI", s => {
+    s.test("provides #test method", (t, { specsContainer, builderAPI }) => {
+      builderAPI.test('some test', () => {});
       let test = specsContainer.specs[0];
 
       t.equal(test.name, 'some test');
     });
-  });
 
-  s.describe("#addSuite", s => {
-    s.test("adds test to the container", (t, { specsContainer, context }) => {
-      specsContainer.addSuite('some suite', () => {}, { context });
+    s.test("provides #describe method", (t, { specsContainer, builderAPI }) => {
+      builderAPI.describe('some suite', () => {});
       let suite = specsContainer.specs[0];
 
       t.equal(suite.name, 'some suite');
@@ -35,28 +42,28 @@ jutest("SpecsContainer", s => {
   });
 
   s.describe("#lock", s => {
-    s.test("prevents adding more tests to the container", (t, { specsContainer, context }) => {
+    s.test("prevents adding more tests to the container", (t, { specsContainer, builderAPI }) => {
       specsContainer.lock('my error');
 
       t.throws(() => {
-        specsContainer.addTest('some test', () => {}, { context });
+        builderAPI.test('some test', () => {});
       }, /my error/);
     });
 
-    s.test("prevents adding more suites to the container", (t, { specsContainer, context }) => {
+    s.test("prevents adding more suites to the container", (t, { specsContainer, builderAPI }) => {
       specsContainer.lock('my error');
 
       t.throws(() => {
-        specsContainer.addSuite('some suite', () => {}, { context });
+        builderAPI.describe('some suite', () => {});
       }, /my error/);
     });
   });
 
   s.describe("#composeAll", s => {
-    s.test("sets default attributes", async (t, { specsContainer, context }) => {
-      specsContainer.addSuite('my suite', (s) => {
+    s.test("sets default attributes", async (t, { specsContainer, builderAPI }) => {
+      builderAPI.describe('my suite', (s) => {
         s.test('test', () => {});
-      }, { context });
+      });
 
       await specsContainer.composeAll();
 

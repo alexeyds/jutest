@@ -115,7 +115,7 @@ jutest("TestRunner", s => {
         s.test('test2', () => {});
       });
 
-      await runAtFileLocation({ fileName: ownFileName, lineNumber: 114 });
+      await runAtFileLocation({ fileName: ownFileName, lineNumber: 94 });
 
       let [test1, test2] = container.specs[0].specs;
 
