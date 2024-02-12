@@ -1,15 +1,11 @@
 import { jutest } from "jutest";
-import { SpecsContainer, TestContext, TestSuite, Test } from "core";
+import { SpecsContainer, TestContext } from "core";
 
 jutest("SpecsContainer", s => {
   s.setup(() => {
     let context = new TestContext();
-    let specsContainer = new SpecsContainer({ TestSuite });
-    let builderAPI = specsContainer.toBuilderAPI({
-      Test,
-      TestSuite,
-      context,
-    });
+    let specsContainer = new SpecsContainer();
+    let builderAPI = specsContainer.toBuilderAPI({ context });
 
     return { 
       specsContainer,

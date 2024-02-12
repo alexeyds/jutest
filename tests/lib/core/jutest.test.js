@@ -1,9 +1,9 @@
 import { jutest } from "jutest";
-import { SpecsContainer, Jutest, TestSuite } from "core";
+import { SpecsContainer, Jutest } from "core";
 
 jutest("Jutest", s => {
   s.setup(() => {
-    let container = new SpecsContainer({ TestSuite });
+    let container = new SpecsContainer();
     let jutest = new Jutest({ specsContainer: container }).toPublicAPI();
 
     return { container, jutest };

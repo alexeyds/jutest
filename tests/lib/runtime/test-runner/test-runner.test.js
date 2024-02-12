@@ -1,11 +1,11 @@
 import { jutest } from "jutest";
-import { SpecsContainer, Jutest, TestSuite } from "core";
+import { SpecsContainer, Jutest } from "core";
 import { TestRunner } from "runtime";
 import { spy } from "sinon";
 
 jutest("TestRunner", s => {
   s.setup(() => {
-    let container = new SpecsContainer({ TestSuite });
+    let container = new SpecsContainer();
     let runner = new TestRunner({ specsContainer: container });
     let jutest = new Jutest({ specsContainer: container }).toPublicAPI();
 
