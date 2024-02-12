@@ -11,8 +11,7 @@ jutest("TestSuite", s => {
     s.test("sets initial attributes", t => {
       let suite = describe('suite', () => {});
 
-      t.equal(suite.specs, undefined);
-      t.equal(suite.isReady, false);
+      t.equal(suite.isComposed, false);
       t.equal(suite.isASuite, true);
     });
   });
@@ -40,20 +39,18 @@ jutest("TestSuite", s => {
     });
   });
 
-  s.describe("#compose", s => {
+  s.describe("#composeSpecs", s => {
     s.test("composes empty array if no tests are registered", async t => {
       let suite = describe('test', () => {});
-      let result = await suite.compose();
 
-      t.same(suite.specs, []);
-      t.equal(result, suite.specs);
-      t.equal(suite.isReady, true);
+      t.same(await suite.composeSpecs(), []);
+      t.equal(suite.isComposed, true);
     });
 
     s.test("uses single-use job", t => {
       let suite = describe('test', () => {});
-      let promise1 = suite.compose();
-      let promise2 = suite.compose(); 
+      let promise1 = suite.composeSpecs();
+      let promise2 = suite.composeSpecs(); 
 
       t.equal(promise1, promise2);
     });
@@ -62,10 +59,10 @@ jutest("TestSuite", s => {
       let suite = describe('test', s => {
         s.test('foo', () => {});
       });
-      await suite.compose();
+      let specs = await suite.composeSpecs();
 
-      t.equal(suite.specs.length, 1);
-      t.equal(suite.specs[0].name, 'test foo');
+      t.equal(specs.length, 1);
+      t.equal(specs[0].name, 'test foo');
     });
 
     s.test("adds nested suites from suite body", async t => {
@@ -74,12 +71,13 @@ jutest("TestSuite", s => {
           s.test('foo', () => {});
         });
       });
-      await suite.compose();
+      let specs = await suite.composeSpecs();
 
-      t.equal(suite.specs.length, 1);
-      let nestedSuite = suite.specs[0];
+      t.equal(specs.length, 1);
+      let nestedSuite = specs[0];
+      let nestedSuiteSpecs = await nestedSuite.composeSpecs();
       t.equal(nestedSuite.name, 'test nested');
-      t.equal(nestedSuite.specs[0].name, 'test nested foo');
+      t.equal(nestedSuiteSpecs[0].name, 'test nested foo');
     });
 
     s.test("allows modifying context setups", async t => {
@@ -90,8 +88,8 @@ jutest("TestSuite", s => {
         s.test('foo', (t, a) => assigns = a);
       });
 
-      await suite.compose();
-      await suite.specs[0].run();
+      let [test] = await suite.composeSpecs();
+      await test.run();
 
       t.same(assigns, { a: 1 });
     });
@@ -105,7 +103,7 @@ jutest("TestSuite", s => {
         s.test('test2', () => {});
       });
 
-      let specs = await suite.compose();
+      let specs = await suite.composeSpecs();
 
       t.match(specs[0].name, 'suite test1');
       t.match(specs[1].name, 'suite nested');
@@ -119,7 +117,7 @@ jutest("TestSuite", s => {
         });
       });
 
-      await t.async.rejects(suite.compose(), 'locked');
+      await t.async.rejects(suite.composeSpecs(), 'locked');
     });
 
     s.test("locks test/suites addition outside of suite body", async t => {
@@ -129,7 +127,7 @@ jutest("TestSuite", s => {
         });
       });
 
-      await t.async.rejects(suite.compose(), 'locked');
+      await t.async.rejects(suite.composeSpecs(), 'locked');
     });
   });
 });

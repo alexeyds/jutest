@@ -20,21 +20,22 @@ jutest("SpecsContainer", s => {
 
   s.describe("#constructor", s => {
     s.test("sets default attributes", (t, { specsContainer }) => {
-      t.same(specsContainer.specs, []);
+      let specs = specsContainer.specs;
+      t.same(specs, []);
     });
   });
 
   s.describe("toBuilderAPI", s => {
     s.test("provides #test method", (t, { specsContainer, builderAPI }) => {
       builderAPI.test('some test', () => {});
-      let test = specsContainer.specs[0];
+      let [test] = specsContainer.specs;
 
       t.equal(test.name, 'some test');
     });
 
     s.test("provides #describe method", (t, { specsContainer, builderAPI }) => {
       builderAPI.describe('some suite', () => {});
-      let suite = specsContainer.specs[0];
+      let [suite] = specsContainer.specs;
 
       t.equal(suite.name, 'some suite');
       t.equal(suite.isASuite, true);
@@ -56,18 +57,6 @@ jutest("SpecsContainer", s => {
       t.throws(() => {
         builderAPI.describe('some suite', () => {});
       }, /my error/);
-    });
-  });
-
-  s.describe("#composeAll", s => {
-    s.test("sets default attributes", async (t, { specsContainer, builderAPI }) => {
-      builderAPI.describe('my suite', (s) => {
-        s.test('test', () => {});
-      });
-
-      await specsContainer.composeAll();
-
-      t.equal(specsContainer.specs[0].specs.length, 1);
     });
   });
 });
