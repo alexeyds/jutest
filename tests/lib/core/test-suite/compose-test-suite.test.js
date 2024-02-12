@@ -23,7 +23,7 @@ jutest("composeTestSuite()", s => {
     t.equal(specs[0].name, 'test foo');
   });
 
-  s.test("adds nested suites from suite body", async t => {
+  s.test("composes nested suites", async t => {
     let specs = await composeSuite('test', s => {
       s.describe('nested', s => {
         s.test('foo', () => {});
@@ -33,6 +33,8 @@ jutest("composeTestSuite()", s => {
     t.equal(specs.length, 1);
 
     let nestedSuite = specs[0];
+    t.equal(nestedSuite.isComposed, true);
+
     let nestedSuiteSpecs = await nestedSuite.composeSpecs();
     t.equal(nestedSuite.name, 'test nested');
     t.equal(nestedSuiteSpecs[0].name, 'test nested foo');
