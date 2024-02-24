@@ -155,4 +155,25 @@ jutest("TestContext", s => {
       t.assert(config.name);
     });
   });
+
+  s.describe("ids", s => {
+    s.test("has own id", (t, { context }) => {
+      t.assert(context.id);
+      t.same(context.parentIds, [])
+    });
+
+    s.test("includes parent ids on copied contexts", (t, { context }) => {
+      let context2 = context.copy();
+
+      t.same(context2.parentIds, [context.id]);
+      t.notEqual(context2.id, context.id);
+    });
+
+    s.test("supports deeper nesting", (t, { context }) => {
+      let context2 = context.copy();
+      let context3 = context2.copy();
+
+      t.same(context3.parentIds, [context.id, context2.id]);
+    });
+  });
 });

@@ -12,6 +12,18 @@ jutest("Test", s => {
     return { context: new TestContext() };
   });
 
+  s.describe("#constructor", s => {
+    s.test("sets initial attributes", (t, { context }) => {
+      let test = new Test('foobar', () => {}, { context });
+
+      t.assert(test.sourceLocator);
+      t.equal(test.ownName, 'foobar');
+      t.equal(test.isASuite, false);
+      t.equal(test.contextId, context.id);
+      t.equal(test.parentContextIds, context.parentIds);
+    });
+  });
+
   s.describe("#run", s => {
     s.test("runs test body", async (t) => {
       let test = createTest(t => t.equal(1,1));
@@ -39,13 +51,6 @@ jutest("Test", s => {
 
       t.equal(body.callCount, 1);
       t.equal(result1, result2);
-    });
-  });
-
-  s.describe("#ownName", s => {
-    s.test("returns name passed to the test", (t, { context }) => {
-      let test = new Test('foobar', () => {}, { context });
-      t.equal(test.ownName, 'foobar');
     });
   });
 

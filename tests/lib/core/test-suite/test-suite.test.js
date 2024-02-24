@@ -8,12 +8,16 @@ function describe(name, block) {
 
 jutest("TestSuite", s => {
   s.describe("#constructor", s => {
-    s.test("sets initial attributes", t => {
-      let suite = describe('suite', () => {});
+    s.test("sets initial attributes", (t) => {
+      let context = new TestContext();
+      let suite = new TestSuite('suite', () => {}, { context });
 
+      t.assert(suite.sourceLocator);
       t.equal(suite.isComposed, false);
       t.equal(suite.isASuite, true);
-      t.assert(suite.sourceLocator);
+      t.equal(suite.ownName, 'suite');
+      t.assert(suite.contextId);
+      t.same(suite.parentContextIds, [context.id]);
     });
   });
 
