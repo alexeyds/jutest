@@ -34,7 +34,7 @@ jutest("TestRunSummary", s => {
     s.test("adds passed test result", async (t, { runSummary }) => {
       let test = createTest('my test', () => {});
       await test.run();
-      await runSummary.addTestResult(test);
+      runSummary.addTestResult(test);
 
       t.equal(runSummary.totalTestsCount, 1);
       t.equal(runSummary.passedTestsCount, 1);
@@ -46,12 +46,20 @@ jutest("TestRunSummary", s => {
     s.test("adds failed test result", async (t, { runSummary }) => {
       let test = createTest('my test', t => { t.fail('foo'); });
       await test.run();
-      await runSummary.addTestResult(test);
+      runSummary.addTestResult(test);
 
       t.equal(runSummary.totalTestsCount, 1);
       t.equal(runSummary.failedTestsCount, 1);
       t.equal(runSummary.passedTestsCount, 0);
       t.equal(runSummary.skippedTestsCount, 0);
+    });
+
+    s.test("returns added test summary", async (t, { runSummary }) => {
+      let test = createTest('my test', () => {});
+      await test.run();
+      let testSummary = runSummary.addTestResult(test);
+
+      t.equal(runSummary.testSummaries[0], testSummary);
     });
   });
 

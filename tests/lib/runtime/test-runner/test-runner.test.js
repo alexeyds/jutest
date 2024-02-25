@@ -1,7 +1,7 @@
 import { jutest } from "jutest";
 import { SpecsContainer, Jutest } from "core";
 import { TestRunner } from "runtime";
-import { RunEvents } from "runtime/test-runner/enums";
+import { RunEvents, SpecTypes, ExitReasons } from "runtime/test-runner/enums";
 import { spy } from "sinon";
 
 jutest("TestRunner", s => {
@@ -40,14 +40,36 @@ jutest("TestRunner", s => {
       t.equal(test.result.passed, true);
     });
 
-    [RunEvents.RunStart, RunEvents.RunEnd].forEach(event => {
-      s.test(`emits "${event}" event`, async (t, { runner }) => {
-        let listener = spy();
-        runner.on(event, listener);
-        await runner.runAll();
+    s.test("returns summary", async (t, { runner }) => {
+      let runSummary = await runner.runAll();
 
-        t.equal(listener.called, true);
-      });
+      t.assert(runSummary.exitReason);
+    });
+
+  });
+
+  s.describe("events", s => {
+    s.test('emits run-start event', async (t, { runner }) => {
+      let listener = spy();
+      runner.on(RunEvents.RunStart, listener);
+      await runner.runAll();
+
+      t.equal(listener.called, true);
+    });
+
+    s.test('emits run-end event', async (t, { runner, jutest }) => {
+      jutest.test('my-test', () => {});
+      let listener = spy();
+      runner.on(RunEvents.RunEnd, listener);
+      await runner.runAll();
+
+      t.equal(listener.called, true);
+      let runSummary = listener.firstCall.args[0];
+      t.equal(runSummary.passedTestsCount, 1);
+      t.equal(runSummary.testSummaries.length, 1);
+      t.assert(runSummary.runStartedAt);
+      t.assert(runSummary.runEndedAt);
+      t.equal(runSummary.exitReason, ExitReasons.RunEnd);
     });
 
     [RunEvents.SuiteStart, RunEvents.SuiteEnd].forEach(event => {
@@ -59,8 +81,9 @@ jutest("TestRunner", s => {
         await runner.runAll();
 
         t.equal(listener.called, true);
-        let suite = listener.firstCall.args[0];
-        t.equal(suite.name, 'my-suite');
+        let suiteSummary = listener.firstCall.args[0];
+        t.equal(suiteSummary.name, 'my-suite');
+        t.equal(suiteSummary.type, SpecTypes.Suite);
       });
     });
 
@@ -69,16 +92,27 @@ jutest("TestRunner", s => {
         jutest.describe('my-suite', s => {
           s.test('my-test', () => {});
         });
-
         let listener = spy();
         runner.on(event, listener);
 
         await runner.runAll();
 
         t.equal(listener.called, true);
-        let test = listener.firstCall.args[0];
-        t.equal(test.name, 'my-suite my-test');
+        let testSummary = listener.firstCall.args[0];
+        t.equal(testSummary.name, 'my-suite my-test');
+        t.equal(testSummary.type, SpecTypes.Test);
       });
+    });
+
+    s.test("test-end event includes test results", async (t, { jutest, runner }) => {
+      jutest.test('my-test', () => {});
+      let listener = spy();
+      runner.on(RunEvents.TestEnd, listener);
+
+      await runner.runAll();
+
+      let testSummary = listener.firstCall.args[0];
+      t.assert(testSummary.executionResult);
     });
   });
 
@@ -88,7 +122,7 @@ jutest("TestRunner", s => {
     s.test("only runs test/suite defined on the specified line", async (t, { jutest, container, runner }) => {
       jutest.test('test', () => {});
       jutest.test('test2', () => {});
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 89 });
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 123 });
 
       let [test1, test2] = container.specs;
 
@@ -98,16 +132,22 @@ jutest("TestRunner", s => {
 
     s.test("works with nested specs", async (t, { jutest, container, runner }) => {
       jutest.describe('suite', (s) => {
-        s.test('test1', () => {});
-        s.test('test2', () => {});
+        s.describe('suite1', s => {
+          s.test('test1', () => {});
+        });
+        s.describe('suite2', s => {
+          s.test('test2', () => {});
+        });
       });
 
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 101 });
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 139 });
 
-      let [test1, test2] = await container.specs[0].composeSpecs();
+      let [suite1, suite2] = await container.specs[0].composeSpecs();
+      let [test1] = await suite1.composeSpecs();
+      let [test2] = await suite2.composeSpecs();
 
-      t.equal(test1.wasRun, true);
-      t.equal(test2.wasRun, false);
+      t.equal(test1.wasRun, false);
+      t.equal(test2.wasRun, true);
     });
 
     s.test("runs all defined specs if nothing can be found on the specified line", async (t, { jutest, container, runner }) => {
