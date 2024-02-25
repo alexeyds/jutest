@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { deepMerge, isPlainObject, slice } from "utils/object";
+import { deepMerge, isPlainObject } from "utils/object";
 
 jutest("utils/object", s => {
   s.describe("deepMerge", s => {

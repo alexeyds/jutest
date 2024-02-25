@@ -50,7 +50,7 @@ jutest("SpecSummary", s => {
     });
 
     s.test("includes execution result for failed tests", async t => {
-      let test = createTest('my test', t => { t.fail('foo') });
+      let test = createTest('my test', t => { t.fail('foo'); });
       await test.run();
 
       let { executionResult } = new SpecSummary(test);
@@ -61,7 +61,7 @@ jutest("SpecSummary", s => {
 
     s.test("includes teardown result for failed tests", async t => {
       let context = new TestContext();
-      context.addTeardown(() => { throw '123' });
+      context.addTeardown(() => { throw '123'; });
       let test = new Test('my test', () => {}, { context });
       await test.run();
 

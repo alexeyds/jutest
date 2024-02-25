@@ -44,7 +44,7 @@ jutest("TestRunSummary", s => {
     });
 
     s.test("adds failed test result", async (t, { runSummary }) => {
-      let test = createTest('my test', t => { t.fail('foo') });
+      let test = createTest('my test', t => { t.fail('foo'); });
       await test.run();
       await runSummary.addTestResult(test);
 
