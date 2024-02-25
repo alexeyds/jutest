@@ -1,6 +1,7 @@
 import { jutest } from "jutest";
 import { SpecsContainer, Jutest } from "core";
 import { TestRunner } from "runtime";
+import { RunEvents } from "runtime/test-runner/enums";
 import { spy } from "sinon";
 
 jutest("TestRunner", s => {
@@ -39,7 +40,7 @@ jutest("TestRunner", s => {
       t.equal(test.result.passed, true);
     });
 
-    ['run-start', 'run-end'].forEach(event => {
+    [RunEvents.RunStart, RunEvents.RunEnd].forEach(event => {
       s.test(`emits "${event}" event`, async (t, { runner }) => {
         let listener = spy();
         runner.on(event, listener);
@@ -49,7 +50,7 @@ jutest("TestRunner", s => {
       });
     });
 
-    ['suite-start', 'suite-end'].forEach(event => {
+    [RunEvents.SuiteStart, RunEvents.SuiteEnd].forEach(event => {
       s.test(`emits "${event}" event`, async (t, { jutest, runner }) => {
         jutest.describe('my-suite', () => {});
         let listener = spy();
@@ -63,7 +64,7 @@ jutest("TestRunner", s => {
       });
     });
 
-    ['test-start', 'test-end'].forEach(event => {
+    [RunEvents.TestStart, RunEvents.TestEnd].forEach(event => {
       s.test(`emits "${event}" event`, async (t, { jutest, runner }) => {
         jutest.describe('my-suite', s => {
           s.test('my-test', () => {});
@@ -87,7 +88,7 @@ jutest("TestRunner", s => {
     s.test("only runs test/suite defined on the specified line", async (t, { jutest, container, runner }) => {
       jutest.test('test', () => {});
       jutest.test('test2', () => {});
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 88 });
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 89 });
 
       let [test1, test2] = container.specs;
 
@@ -101,7 +102,7 @@ jutest("TestRunner", s => {
         s.test('test2', () => {});
       });
 
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 100 });
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 101 });
 
       let [test1, test2] = await container.specs[0].composeSpecs();
 
