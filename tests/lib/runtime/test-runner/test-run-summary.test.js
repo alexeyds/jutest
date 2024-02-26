@@ -54,6 +54,17 @@ jutest("TestRunSummary", s => {
       t.equal(runSummary.skippedTestsCount, 0);
     });
 
+    s.test("adds skipped test result", async (t, { runSummary }) => {
+      let context = new TestContext();
+      let test = new Test('my test', t => { t.fail('foo'); }, { context, skip: true });
+      runSummary.addTestResult(test);
+
+      t.equal(runSummary.totalTestsCount, 1);
+      t.equal(runSummary.failedTestsCount, 0);
+      t.equal(runSummary.passedTestsCount, 0);
+      t.equal(runSummary.skippedTestsCount, 1);
+    });
+
     s.test("returns added test summary", async (t, { runSummary }) => {
       let test = createTest('my test', () => {});
       await test.run();

@@ -70,5 +70,15 @@ jutest("SpecSummary", s => {
       t.match(executionResult.error, null);
       t.match(executionResult.teardownError, /123/);
     });
+
+    s.test("supports skipped tests", t => {
+      let context = new TestContext();
+      let test = new Test('my test', () => {}, { context, skip: true });
+
+      let { executionResult } = new SpecSummary(test);
+      t.equal(executionResult.status, TestStatuses.Skipped);
+      t.equal(executionResult.error, null);
+      t.equal(executionResult.teardownError, null);
+    });
   });
 });
