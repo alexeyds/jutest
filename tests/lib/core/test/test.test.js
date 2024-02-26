@@ -21,6 +21,20 @@ jutest("Test", s => {
       t.equal(test.isASuite, false);
       t.equal(test.contextId, context.id);
       t.equal(test.parentContextIds, context.parentIds);
+      t.equal(test.skipped, false);
+    });
+
+    s.test("marks test as skipped if test body is not a function", (t, { context }) => {
+      let test = new Test('foobar', {}, { context });
+
+      t.equal(test.skipped, true);
+      t.throws(test.run, /skip/);
+    });
+
+    s.test("adds default name to unnamed tests", (t, { context }) => {
+      let test = new Test(undefined, undefined, { context });
+
+      t.equal(test.name, '(unnamed)');
     });
   });
 
@@ -67,6 +81,18 @@ jutest("Test", s => {
       context.addName("foo");
 
       t.equal(test.name, 'foo bar');
+    });
+  });
+
+  s.describe("with skip: true", s => {
+    s.test("doesn't run the test body", (t, { context }) => {
+      let body = spy();
+      let test = new Test('test', body, { context, skip: true });
+
+      t.equal(test.skipped, true);
+      t.throws(test.run, /skip/);
+      t.equal(body.called, false);
+      t.equal(test.wasRun, false);
     });
   });
 });
