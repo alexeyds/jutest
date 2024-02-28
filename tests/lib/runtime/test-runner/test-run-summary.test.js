@@ -1,6 +1,5 @@
 import { jutest } from "jutest";
 import { Test, TestContext } from "core";
-import { ExitReasons } from "runtime/test-runner/enums";
 import { TestRunSummary } from "runtime/test-runner/test-run-summary";
 
 function createTest(...args) {
@@ -23,10 +22,10 @@ jutest("TestRunSummary", s => {
 
   s.describe("#endRun", s => {
     s.test("sets run end time and exit reason", (t, { runSummary }) => {
-      runSummary.endRun({ exitReason: ExitReasons.RunEnd });
+      runSummary.endRun({ exitReason: 'some-reason' });
 
       t.assert(runSummary.runEndedAt);
-      t.equal(runSummary.exitReason, ExitReasons.RunEnd);
+      t.equal(runSummary.exitReason, 'some-reason');
     });
   });
 

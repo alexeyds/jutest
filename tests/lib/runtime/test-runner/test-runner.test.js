@@ -1,8 +1,10 @@
 import { jutest } from "jutest";
 import { SpecsContainer, Jutest, Test } from "core";
 import { TestRunner } from "runtime";
-import { RunEvents, SpecTypes, ExitReasons } from "runtime/test-runner/enums";
+import { RunEvents } from "runtime/test-runner/enums";
 import { spy } from "sinon";
+
+const { SpecTypes } = TestRunner;
 
 jutest("TestRunner", s => {
   s.setup(() => {
@@ -53,7 +55,7 @@ jutest("TestRunner", s => {
       t.equal(runSummary.testSummaries.length, 1);
       t.assert(runSummary.runStartedAt);
       t.assert(runSummary.runEndedAt);
-      t.equal(runSummary.exitReason, ExitReasons.RunEnd);
+      t.equal(runSummary.exitReason, TestRunner.ExitReasons.RunEnd);
     });
   });
 
@@ -138,7 +140,7 @@ jutest("TestRunner", s => {
     s.test("only runs test/suite defined on the specified line", async (t, { jutest, container, runner }) => {
       jutest.test('test', () => {});
       jutest.test('test2', () => {});
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 139 });
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 141 });
 
       let [test1, test2] = container.specs;
 
@@ -156,7 +158,7 @@ jutest("TestRunner", s => {
         });
       });
 
-      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 155 });
+      await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 157 });
 
       let [suite1, suite2] = await container.specs[0].composeSpecs();
       let [test1] = await suite1.composeSpecs();
