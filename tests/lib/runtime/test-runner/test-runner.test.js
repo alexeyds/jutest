@@ -1,6 +1,6 @@
 import { jutest } from "jutest";
-import { SpecsContainer, Jutest, Test } from "core";
-import { TestRunner, RuntimeEventEmitter } from "runtime";
+import { Jutest, Test } from "core";
+import { TestRunner, RuntimeEventEmitter, RuntimeContext } from "runtime";
 import { spy } from "sinon";
 
 const { Events } = RuntimeEventEmitter;
@@ -9,27 +9,27 @@ const { SpecTypes } = TestRunner;
 
 jutest("TestRunner", s => {
   s.setup(() => {
-    let container = new SpecsContainer();
-    let runner = new TestRunner({ specsContainer: container });
-    let jutest = new Jutest({ specsContainer: container }).toPublicAPI();
+    let context = new RuntimeContext();
+    let runner = new TestRunner(context);
+    let jutest = new Jutest({ specsContainer: context.specsContainer }).toPublicAPI();
 
-    return { container, runner, jutest };
+    return { context, runner, jutest, };
   });
 
   s.describe("#runAll()", s => {
-    s.test("runs tests from the container", async (t, { jutest, container, runner }) => {
+    s.test("runs tests from the container", async (t, { jutest, context, runner }) => {
       jutest.test('test', t => {
         t.assert(true);
       });
 
       await runner.runAll();
-      let [test] = container.specs;
+      let [test] = context.specsContainer.specs;
 
       t.equal(test.wasRun, true);
       t.equal(test.result.status, Test.ExecutionStatuses.Passed);
     });
 
-    s.test("runs suites from the container", async (t, { jutest, container, runner }) => {
+    s.test("runs suites from the container", async (t, { jutest, context, runner }) => {
       jutest.describe('suite', s => {
         s.test('test', t => {
           t.assert(true);
@@ -37,7 +37,7 @@ jutest("TestRunner", s => {
       });
 
       await runner.runAll();
-      let [test] = await container.specs[0].composeSpecs();
+      let [test] = await context.specsContainer.specs[0].composeSpecs();
 
       t.equal(test.wasRun, true);
       t.equal(test.result.status, Test.ExecutionStatuses.Passed);
@@ -61,17 +61,17 @@ jutest("TestRunner", s => {
   });
 
   s.describe("events", s => {
-    s.test('emits run-start event', async (t, { runner }) => {
+    s.test('emits run-start event', async (t, { runner, context }) => {
       let listener = spy();
-      runner.on(Events.RunStart, listener);
+      context.runtimeEventEmitter.on(Events.RunStart, listener);
       await runner.runAll();
 
       t.equal(listener.called, true);
     });
 
-    s.test('emits run-end event', async (t, { runner }) => {
+    s.test('emits run-end event', async (t, { runner, context }) => {
       let listener = spy();
-      runner.on(Events.RunEnd, listener);
+      context.runtimeEventEmitter.on(Events.RunEnd, listener);
       await runner.runAll();
 
       t.equal(listener.called, true);
@@ -80,10 +80,10 @@ jutest("TestRunner", s => {
     });
 
     [Events.SuiteStart, Events.SuiteEnd].forEach(event => {
-      s.test(`emits "${event}" event`, async (t, { jutest, runner }) => {
+      s.test(`emits "${event}" event`, async (t, { jutest, runner, context }) => {
         jutest.describe('my-suite', () => {});
         let listener = spy();
-        runner.on(event, listener);
+        context.runtimeEventEmitter.on(event, listener);
 
         await runner.runAll();
 
@@ -95,12 +95,12 @@ jutest("TestRunner", s => {
     });
 
     [Events.TestStart, Events.TestEnd].forEach(event => {
-      s.test(`emits "${event}" event`, async (t, { jutest, runner }) => {
+      s.test(`emits "${event}" event`, async (t, { jutest, runner, context }) => {
         jutest.describe('my-suite', s => {
           s.test('my-test', () => {});
         });
         let listener = spy();
-        runner.on(event, listener);
+        context.runtimeEventEmitter.on(event, listener);
 
         await runner.runAll();
 
@@ -111,10 +111,10 @@ jutest("TestRunner", s => {
       });
     });
 
-    s.test("test-end event includes test results", async (t, { jutest, runner }) => {
+    s.test("test-end event includes test results", async (t, { jutest, runner, context }) => {
       jutest.test('my-test', () => {});
       let listener = spy();
-      runner.on(Events.TestEnd, listener);
+      context.runtimeEventEmitter.on(Events.TestEnd, listener);
 
       await runner.runAll();
 
@@ -122,11 +122,11 @@ jutest("TestRunner", s => {
       t.assert(testSummary.executionResult);
     });
 
-    s.test('emits test-skip event', async (t, { runner, jutest }) => {
+    s.test('emits test-skip event', async (t, { runner, jutest, context }) => {
       jutest.xtest('my-test', () => {});
 
       let listener = spy();
-      runner.on(Events.TestSkip, listener);
+      context.runtimeEventEmitter.on(Events.TestSkip, listener);
       await runner.runAll();
 
       t.equal(listener.called, true);
@@ -138,18 +138,18 @@ jutest("TestRunner", s => {
   s.describe("#runAtFileLocation", s => {
     let ownFileName = 'test-runner.test.js';
 
-    s.test("only runs test/suite defined on the specified line", async (t, { jutest, container, runner }) => {
+    s.test("only runs test/suite defined on the specified line", async (t, { jutest, context, runner }) => {
       jutest.test('test', () => {});
       jutest.test('test2', () => {});
       await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 142 });
 
-      let [test1, test2] = container.specs;
+      let [test1, test2] = context.specsContainer.specs;
 
       t.equal(test1.wasRun, true);
       t.equal(test2.wasRun, false);
     });
 
-    s.test("works with nested specs", async (t, { jutest, container, runner }) => {
+    s.test("works with nested specs", async (t, { jutest, context, runner }) => {
       jutest.describe('suite', (s) => {
         s.describe('suite1', s => {
           s.test('test1', () => {});
@@ -162,7 +162,7 @@ jutest("TestRunner", s => {
 
       await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 158 });
 
-      let [suite1, suite2] = await container.specs[0].composeSpecs();
+      let [suite1, suite2] = await context.specsContainer.specs[0].composeSpecs();
       let [test1] = await suite1.composeSpecs();
       let [test2, test3] = await suite2.composeSpecs();
 
@@ -171,7 +171,7 @@ jutest("TestRunner", s => {
       t.equal(test3.wasRun, false);
     });
 
-    s.test("runs all defined specs if nothing can be found on the specified line", async (t, { jutest, container, runner }) => {
+    s.test("runs all defined specs if nothing can be found on the specified line", async (t, { jutest, context, runner }) => {
       jutest.describe('suite', (s) => {
         s.test('test1', () => {});
         s.test('test2', () => {});
@@ -179,7 +179,7 @@ jutest("TestRunner", s => {
 
       await runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 0 });
 
-      let [test1, test2] = await container.specs[0].composeSpecs();
+      let [test1, test2] = await context.specsContainer.specs[0].composeSpecs();
 
       t.equal(test1.wasRun, true);
       t.equal(test2.wasRun, true);
