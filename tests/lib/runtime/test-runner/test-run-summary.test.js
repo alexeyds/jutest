@@ -36,6 +36,7 @@ jutest("TestRunSummary", s => {
       await test.run();
       runSummary.addTestResult(test);
 
+      t.equal(runSummary.success, true);
       t.equal(runSummary.totalTestsCount, 1);
       t.equal(runSummary.passedTestsCount, 1);
       t.equal(runSummary.skippedTestsCount, 0);
@@ -48,6 +49,7 @@ jutest("TestRunSummary", s => {
       await test.run();
       runSummary.addTestResult(test);
 
+      t.equal(runSummary.success, false);
       t.equal(runSummary.totalTestsCount, 1);
       t.equal(runSummary.failedTestsCount, 1);
       t.equal(runSummary.passedTestsCount, 0);
@@ -59,6 +61,7 @@ jutest("TestRunSummary", s => {
       let test = new Test('my test', t => { t.fail('foo'); }, { context, skip: true });
       runSummary.addTestResult(test);
 
+      t.equal(runSummary.success, true);
       t.equal(runSummary.totalTestsCount, 1);
       t.equal(runSummary.failedTestsCount, 0);
       t.equal(runSummary.passedTestsCount, 0);
