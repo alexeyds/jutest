@@ -1,6 +1,6 @@
 import { jutest } from "jutest";
-import { Test, TestSuite, TestContext } from "core";
-import { SpecTypes, TestStatuses } from "runtime/test-runner/enums";
+import { Test, TestSuite, TestContext, TestExecutionStatuses } from "core";
+import { SpecTypes } from "runtime/test-runner/enums";
 import { SpecSummary } from "runtime/test-runner/spec-summary";
 
 function createTest(...args) {
@@ -22,7 +22,7 @@ jutest("SpecSummary", s => {
       t.equal(summary.type, SpecTypes.Test);
       t.equal(summary.name, 'my test');
       t.equal(summary.ownName, 'my test');
-      t.equal(summary.executionResult, null);
+      t.refute(summary.executionResult);
       t.assert(summary.contextId);
       t.same(summary.parentContextIds, []);
     });
@@ -39,44 +39,12 @@ jutest("SpecSummary", s => {
       t.assert(summary.parentContextIds);
     });
 
-    s.test("includes execution result for passed tests", async t => {
+    s.test("includes execution result for tests", async t => {
       let test = createTest('my test', () => {});
       await test.run();
 
       let { executionResult } = new SpecSummary(test);
-      t.equal(executionResult.status, TestStatuses.Passed);
-      t.equal(executionResult.error, null);
-      t.equal(executionResult.teardownError, null);
-    });
-
-    s.test("includes execution result for failed tests", async t => {
-      let test = createTest('my test', t => { t.fail('foo'); });
-      await test.run();
-
-      let { executionResult } = new SpecSummary(test);
-      t.equal(executionResult.status, TestStatuses.Failed);
-      t.match(executionResult.error, /foo/);
-      t.equal(executionResult.teardownError, null);
-    });
-
-    s.test("includes teardown result for failed tests", async t => {
-      let context = new TestContext();
-      context.addTeardown(() => { throw '123'; });
-      let test = new Test('my test', () => {}, { context });
-      await test.run();
-
-      let { executionResult } = new SpecSummary(test);
-      t.equal(executionResult.status, TestStatuses.Failed);
-      t.match(executionResult.error, null);
-      t.match(executionResult.teardownError, /123/);
-    });
-
-    s.test("supports skipped tests", t => {
-      let context = new TestContext();
-      let test = new Test('my test', () => {}, { context, skip: true });
-
-      let { executionResult } = new SpecSummary(test);
-      t.equal(executionResult.status, TestStatuses.Skipped);
+      t.equal(executionResult.status, TestExecutionStatuses.Passed);
       t.equal(executionResult.error, null);
       t.equal(executionResult.teardownError, null);
     });

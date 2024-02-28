@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { Test, TestContext } from "core";
+import { Test, TestContext, TestExecutionStatuses } from "core";
 import { spy } from "sinon";
 
 function createTest(body, context) {
@@ -28,12 +28,12 @@ jutest("Test", s => {
       let test = new Test('foobar', {}, { context });
 
       t.equal(test.skipped, true);
-      t.throws(test.run, /skip/);
+      t.equal(test.result.status, TestExecutionStatuses.Skipped);
+      t.match(test.result.skipReason, /implemented/);
     });
 
     s.test("adds default name to unnamed tests", (t, { context }) => {
       let test = new Test(undefined, undefined, { context });
-
       t.equal(test.name, '(unnamed)');
     });
   });
@@ -43,7 +43,7 @@ jutest("Test", s => {
       let test = createTest(t => t.equal(1,1));
       let result = await test.run();
 
-      t.equal(result.passed, true);
+      t.equal(result.status, TestExecutionStatuses.Passed);
       t.equal(test.wasRun, true);
       t.equal(test.result, result);
     });
@@ -66,6 +66,15 @@ jutest("Test", s => {
       t.equal(body.callCount, 1);
       t.equal(result1, result2);
     });
+
+    s.test("throws an error if test is skipped", async (t, { context }) => {
+      let body = spy();
+      let test = new Test('test', body, { context, skip: true });
+
+      await t.async.rejects(test.run(), /skip/);
+      t.equal(body.called, false);
+      t.equal(test.wasRun, false);
+    });
   });
 
   s.describe('#name', s => {
@@ -85,12 +94,14 @@ jutest("Test", s => {
   });
 
   s.describe("with skip: true", s => {
-    s.test("doesn't run the test body", (t, { context }) => {
+    s.test("marks test as skipped and includes proper result", (t, { context }) => {
       let body = spy();
       let test = new Test('test', body, { context, skip: true });
+      let { result } = test;
 
       t.equal(test.skipped, true);
-      t.throws(test.run, /skip/);
+      t.equal(result.status, TestExecutionStatuses.Skipped);
+      t.match(result.skipReason, /xtest/);
       t.equal(body.called, false);
       t.equal(test.wasRun, false);
     });

@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { Test } from "core/test";
+import { Test, TestExecutionStatuses } from "core/test";
 import { TestContext } from "core/test-context";
 
 async function test(name, body) {
@@ -12,7 +12,7 @@ async function testHasExpectations() {
     t.assert(true);
   });
 
-  assert.equal(result.passed, true);
+  assert.equal(result.status, TestExecutionStatuses.Passed);
   assert.equal(result.error, null);
 }
 
@@ -22,7 +22,7 @@ async function testHasFailures() {
     t.assert(false);
   });
 
-  assert.equal(result.passed, false);
+  assert.equal(result.status, TestExecutionStatuses.Failed);
 
   let message = result.error.message;
   assert.equal(typeof message, 'string');
@@ -34,7 +34,7 @@ async function testAsynchroniouslyRunsTestBody() {
     t.assert(false);
   });
 
-  assert.equal(result.passed, false);
+  assert.equal(result.status, TestExecutionStatuses.Failed);
 }
 
 testHasExpectations();
