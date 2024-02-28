@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { SpecsContainer, Jutest, TestExecutionStatuses } from "core";
+import { SpecsContainer, Jutest, Test } from "core";
 import { TestRunner } from "runtime";
 import { RunEvents, SpecTypes, ExitReasons } from "runtime/test-runner/enums";
 import { spy } from "sinon";
@@ -23,7 +23,7 @@ jutest("TestRunner", s => {
       let [test] = container.specs;
 
       t.equal(test.wasRun, true);
-      t.equal(test.result.status, TestExecutionStatuses.Passed);
+      t.equal(test.result.status, Test.ExecutionStatuses.Passed);
     });
 
     s.test("runs suites from the container", async (t, { jutest, container, runner }) => {
@@ -37,7 +37,7 @@ jutest("TestRunner", s => {
       let [test] = await container.specs[0].composeSpecs();
 
       t.equal(test.wasRun, true);
-      t.equal(test.result.status, TestExecutionStatuses.Passed);
+      t.equal(test.result.status, Test.ExecutionStatuses.Passed);
     });
 
     s.test("returns summary", async (t, { runner }) => {

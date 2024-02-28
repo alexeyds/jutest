@@ -1,7 +1,7 @@
 import { jutest } from "jutest";
 import { TestContext } from "core/test-context";
 import { runTest as rawRunTest } from "core/test/run-test";
-import { TestExecutionStatuses } from "core/test";
+import { ExecutionStatuses } from "core/test/execution-statuses";
 import { spy } from "sinon";
 
 function runTest(body, context) {
@@ -20,26 +20,26 @@ jutest("runTest", s => {
       let result = await runTest(testBody);
 
       t.assert(testBody.called);
-      t.equal(result.status, TestExecutionStatuses.Passed);
+      t.equal(result.status, ExecutionStatuses.Passed);
       t.equal(result.error, null);
       t.equal(result.teardownError, null);
     });
 
     s.test("passes assertions to test body", async t => {
       let result = await runTest(t => t.equal(1, 1));
-      t.equal(result.status, TestExecutionStatuses.Passed);
+      t.equal(result.status, ExecutionStatuses.Passed);
     });
 
     s.test("handles errors", async t => {
       let result = await runTest(t => t.equal(1, 2));
 
-      t.equal(result.status, TestExecutionStatuses.Failed);
+      t.equal(result.status, ExecutionStatuses.Failed);
       t.match(result.error, /equal/);
     });
 
     s.test("works with async tests", async t => {
       let result = await runTest(async t => t.equal(1, 2));
-      t.equal(result.status, TestExecutionStatuses.Failed);
+      t.equal(result.status, ExecutionStatuses.Failed);
     });
   });
 
@@ -76,7 +76,7 @@ jutest("runTest", s => {
       context.addBeforeTestAssertion(t => t.equal(1, 1));
       let result = await runTest(() => {}, context);
 
-      t.equal(result.status, TestExecutionStatuses.Passed);
+      t.equal(result.status, ExecutionStatuses.Passed);
     });
 
     s.test("passes assigns to assertion body", async (t, { context }) => {
@@ -103,7 +103,7 @@ jutest("runTest", s => {
       context.addAfterTestAssertion(t => t.equal(1, 1));
       let result = await runTest(() => {}, context);
 
-      t.equal(result.status, TestExecutionStatuses.Passed);
+      t.equal(result.status, ExecutionStatuses.Passed);
     });
 
     s.test("passes assigns to assertion body", async (t, { context }) => {
@@ -143,7 +143,7 @@ jutest("runTest", s => {
       context.addTeardown(() => { throw 'test'; });
       let result = await runTest(() => {}, context);
 
-      t.equal(result.status, TestExecutionStatuses.Failed);
+      t.equal(result.status, ExecutionStatuses.Failed);
       t.equal(result.teardownError, 'test');
     });
   });

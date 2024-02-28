@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { Test, TestContext, TestExecutionStatuses } from "core";
+import { Test, TestContext } from "core";
 import { spy } from "sinon";
 
 function createTest(body, context) {
@@ -28,7 +28,7 @@ jutest("Test", s => {
       let test = new Test('foobar', {}, { context });
 
       t.equal(test.skipped, true);
-      t.equal(test.result.status, TestExecutionStatuses.Skipped);
+      t.equal(test.result.status, Test.ExecutionStatuses.Skipped);
       t.match(test.result.skipReason, /implemented/);
     });
 
@@ -43,7 +43,7 @@ jutest("Test", s => {
       let test = createTest(t => t.equal(1,1));
       let result = await test.run();
 
-      t.equal(result.status, TestExecutionStatuses.Passed);
+      t.equal(result.status, Test.ExecutionStatuses.Passed);
       t.equal(test.wasRun, true);
       t.equal(test.result, result);
     });
@@ -100,7 +100,7 @@ jutest("Test", s => {
       let { result } = test;
 
       t.equal(test.skipped, true);
-      t.equal(result.status, TestExecutionStatuses.Skipped);
+      t.equal(result.status, Test.ExecutionStatuses.Skipped);
       t.match(result.skipReason, /xtest/);
       t.equal(body.called, false);
       t.equal(test.wasRun, false);

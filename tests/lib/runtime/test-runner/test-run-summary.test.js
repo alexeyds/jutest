@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { Test, TestContext, TestExecutionStatuses } from "core";
+import { Test, TestContext } from "core";
 import { ExitReasons } from "runtime/test-runner/enums";
 import { TestRunSummary } from "runtime/test-runner/test-run-summary";
 
@@ -41,7 +41,7 @@ jutest("TestRunSummary", s => {
       t.equal(runSummary.passedTestsCount, 1);
       t.equal(runSummary.skippedTestsCount, 0);
       t.equal(runSummary.failedTestsCount, 0);
-      t.equal(runSummary.testSummaries[0].executionResult.status, TestExecutionStatuses.Passed);
+      t.equal(runSummary.testSummaries[0].executionResult.status, Test.ExecutionStatuses.Passed);
     });
 
     s.test("adds failed test result", async (t, { runSummary }) => {

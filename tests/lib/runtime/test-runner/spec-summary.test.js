@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { Test, TestSuite, TestContext, TestExecutionStatuses } from "core";
+import { Test, TestSuite, TestContext } from "core";
 import { SpecTypes } from "runtime/test-runner/enums";
 import { SpecSummary } from "runtime/test-runner/spec-summary";
 
@@ -44,7 +44,7 @@ jutest("SpecSummary", s => {
       await test.run();
 
       let { executionResult } = new SpecSummary(test);
-      t.equal(executionResult.status, TestExecutionStatuses.Passed);
+      t.equal(executionResult.status, Test.ExecutionStatuses.Passed);
       t.equal(executionResult.error, null);
       t.equal(executionResult.teardownError, null);
     });
