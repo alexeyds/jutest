@@ -60,7 +60,7 @@ jutest("TestRunner", s => {
   s.describe("events", s => {
     s.test('emits run-start event', async (t, { runner, context }) => {
       let listener = spy();
-      context.runtimeEventEmitter.on(RuntimeEvents.RunStart, listener);
+      context.eventEmitter.on(RuntimeEvents.RunStart, listener);
       await runner.runAll();
 
       t.equal(listener.called, true);
@@ -68,7 +68,7 @@ jutest("TestRunner", s => {
 
     s.test('emits run-end event', async (t, { runner, context }) => {
       let listener = spy();
-      context.runtimeEventEmitter.on(RuntimeEvents.RunEnd, listener);
+      context.eventEmitter.on(RuntimeEvents.RunEnd, listener);
       await runner.runAll();
 
       t.equal(listener.called, true);
@@ -80,7 +80,7 @@ jutest("TestRunner", s => {
       s.test(`emits "${event}" event`, async (t, { jutest, runner, context }) => {
         jutest.describe('my-suite', () => {});
         let listener = spy();
-        context.runtimeEventEmitter.on(event, listener);
+        context.eventEmitter.on(event, listener);
 
         await runner.runAll();
 
@@ -97,7 +97,7 @@ jutest("TestRunner", s => {
           s.test('my-test', () => {});
         });
         let listener = spy();
-        context.runtimeEventEmitter.on(event, listener);
+        context.eventEmitter.on(event, listener);
 
         await runner.runAll();
 
@@ -111,7 +111,7 @@ jutest("TestRunner", s => {
     s.test("test-end event includes test results", async (t, { jutest, runner, context }) => {
       jutest.test('my-test', () => {});
       let listener = spy();
-      context.runtimeEventEmitter.on(RuntimeEvents.TestEnd, listener);
+      context.eventEmitter.on(RuntimeEvents.TestEnd, listener);
 
       await runner.runAll();
 
@@ -123,7 +123,7 @@ jutest("TestRunner", s => {
       jutest.xtest('my-test', () => {});
 
       let listener = spy();
-      context.runtimeEventEmitter.on(RuntimeEvents.TestSkip, listener);
+      context.eventEmitter.on(RuntimeEvents.TestSkip, listener);
       await runner.runAll();
 
       t.equal(listener.called, true);
