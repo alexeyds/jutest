@@ -1,36 +1,34 @@
 import { jutest } from "jutest";
-import { SpecsContainer } from "core";
-import { Jutest } from "runtime/jutest";
+import { Runtime } from "runtime";
 
 jutest("Jutest", s => {
   s.setup(() => {
-    let container = new SpecsContainer();
-    let jutest = new Jutest({ specsContainer: container }).toPublicAPI();
+    let { specsContainer, jutest } = new Runtime();
 
-    return { container, jutest };
+    return { specsContainer, jutest };
   });
 
   s.describe("#test", s => {
-    s.test("adds test to the container", (t, { container, jutest }) => {
+    s.test("adds test to the container", (t, { specsContainer, jutest }) => {
       jutest.test('foobar', () => {});
-      let test = container.specs[0];
+      let test = specsContainer.specs[0];
 
       t.equal(test.name, 'foobar');
     });
   });
 
   s.describe("#describe", s => {
-    s.test("adds test to the container", (t, { container, jutest }) => {
+    s.test("adds test to the specsContainer", (t, { specsContainer, jutest }) => {
       jutest.describe('foobar', () => {});
-      let suite = container.specs[0];
+      let suite = specsContainer.specs[0];
 
       t.equal(suite.name, 'foobar');
       t.equal(suite.isASuite, true);
     });
 
-    s.test("has a shorthand definition", (t, { container, jutest }) => {
+    s.test("has a shorthand definition", (t, { specsContainer, jutest }) => {
       jutest('foobar', () => {});
-      let suite = container.specs[0];
+      let suite = specsContainer.specs[0];
 
       t.equal(suite.name, 'foobar');
       t.equal(suite.isASuite, true);
@@ -38,44 +36,44 @@ jutest("Jutest", s => {
   });
 
   s.describe("#configureNewInstance", s => {
-    s.test("returns the public API of the new instance", (t, { container, jutest }) => {
+    s.test("returns the public API of the new instance", (t, { specsContainer, jutest }) => {
       let jutest2 = jutest.configureNewInstance();
       jutest2('foobar', () => {});
-      let suite = container.specs[0];
+      let suite = specsContainer.specs[0];
 
       t.notEqual(jutest, jutest2);
       t.equal(suite.name, 'foobar');
     });
 
-    s.test("exposes context's configuration API", (t, { container, jutest }) => {
+    s.test("exposes context's configuration API", (t, { specsContainer, jutest }) => {
       let jutest2 = jutest.configureNewInstance(c => c.name('jutest2'));
       jutest2.test('test', () => {});
 
-      let test = container.specs[0];
+      let test = specsContainer.specs[0];
 
       t.equal(test.name, 'jutest2 test');
     });
 
-    s.test("creates separate context", (t, { container, jutest }) => {
+    s.test("creates separate context", (t, { specsContainer, jutest }) => {
       let jutest2 = jutest.configureNewInstance(c => c.name('jutest2'));
 
       jutest.test('test', () => {});
       jutest2.test('test', () => {});
 
-      let [test1, test2] = container.specs;
+      let [test1, test2] = specsContainer.specs;
 
       t.equal(test1.name, 'test');
       t.equal(test2.name, 'jutest2 test');
     });
 
-    s.test("extends existing context", (t, { container, jutest }) => {
+    s.test("extends existing context", (t, { specsContainer, jutest }) => {
       let jutest3 = jutest
         .configureNewInstance(c => c.name('jutest2'))
         .configureNewInstance(c => c.name('jutest3'));
 
       jutest3.test('test', () => {});
 
-      let test = container.specs[0];
+      let test = specsContainer.specs[0];
 
       t.equal(test.name, 'jutest2 jutest3 test');
     });
