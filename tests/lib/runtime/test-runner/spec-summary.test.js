@@ -1,6 +1,6 @@
 import { jutest } from "jutest";
 import { Test, TestSuite, TestContext } from "core";
-import { SpecTypes } from "runtime/test-runner/spec-types";
+import { SpecTypes } from "runtime/enums";
 import { SpecSummary } from "runtime/test-runner/spec-summary";
 
 function createTest(...args) {
