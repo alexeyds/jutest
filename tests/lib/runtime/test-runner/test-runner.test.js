@@ -1,7 +1,7 @@
 import { jutest } from "jutest";
 import { SpecTypes, RuntimeEvents } from "runtime/enums";
-import { Jutest, Test } from "core";
-import { TestRunner, RuntimeContext } from "runtime";
+import { Test } from "core";
+import { TestRunner, RuntimeContext, Jutest } from "runtime";
 import { spy } from "sinon";
 
 jutest("TestRunner", s => {

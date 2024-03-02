@@ -1,5 +1,6 @@
 import { jutest } from "jutest";
-import { SpecsContainer, Jutest } from "core";
+import { SpecsContainer } from "core";
+import { Jutest } from "runtime/jutest";
 
 jutest("Jutest", s => {
   s.setup(() => {
