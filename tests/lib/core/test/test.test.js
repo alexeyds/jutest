@@ -67,13 +67,13 @@ jutest("Test", s => {
       t.equal(result1, result2);
     });
 
-    s.test("throws an error if test is skipped", async (t, { context }) => {
+    s.test("returns skipped result if test is skipped", async (t, { context }) => {
       let body = spy();
       let test = new Test('test', body, { context, skip: true });
 
-      await t.async.rejects(test.run(), /skip/);
+      let result = await test.run();
       t.equal(body.called, false);
-      t.equal(test.wasRun, false);
+      t.assert(result.skipReason);
     });
   });
 
