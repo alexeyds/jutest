@@ -36,6 +36,14 @@ jutest("Test", s => {
       let test = new Test(undefined, undefined, { context });
       t.equal(test.name, '(unnamed)');
     });
+
+    s.test("accepts sourceFilePath", (t, { context }) => {
+      let ownFileName = 'test.test.js';
+      let { sourceLocator } = new Test('foobar', () => {}, { context, sourceFilePath: ownFileName });
+
+      t.equal(sourceLocator.sourceFilePath, ownFileName)
+      t.assert(sourceLocator.lineNumber);
+    });
   });
 
   s.describe("#run", s => {

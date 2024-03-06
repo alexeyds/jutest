@@ -7,9 +7,13 @@ function describe(name, block) {
 }
 
 jutest("TestSuite", s => {
+  s.setup(() => {
+    let context = new TestContext();
+    return { context };
+  });
+
   s.describe("#constructor", s => {
-    s.test("sets initial attributes", (t) => {
-      let context = new TestContext();
+    s.test("sets initial attributes", (t, { context }) => {
       let suite = new TestSuite('suite', () => {}, { context });
 
       t.assert(suite.sourceLocator);
@@ -19,6 +23,14 @@ jutest("TestSuite", s => {
       t.assert(suite.contextId);
       t.same(suite.parentContextIds, [context.id]);
     });
+
+    s.test("accepts sourceFilePath", (t, { context }) => {
+      let ownFileName = 'test-suite.test.js';
+      let { sourceLocator } = new TestSuite('foobar', () => {}, { context, sourceFilePath: ownFileName });
+
+      t.equal(sourceLocator.sourceFilePath, ownFileName)
+      t.assert(sourceLocator.lineNumber);
+    });
   });
 
   s.describe("#name", s => {
@@ -27,16 +39,14 @@ jutest("TestSuite", s => {
       t.equal(suite.name, 'suite');
     });
 
-    s.test("adds name on top of the previous context", t => {
-      let context = new TestContext();
+    s.test("adds name on top of the previous context", (t, { context }) => {
       context.addName('foobar');
       let suite = new TestSuite('suite', () => {}, { context });
 
       t.equal(suite.name, 'foobar suite');
     });
 
-    s.test("doesn't mutate previous context", t => {
-      let context = new TestContext();
+    s.test("doesn't mutate previous context", (t, { context }) => {
       context.addName('foobar');
       new TestSuite('suite', () => {}, { context });
 

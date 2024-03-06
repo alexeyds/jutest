@@ -94,4 +94,26 @@ jutest("SpecsContainer", s => {
       t.equal(test.skipped, true);
     });
   });
+
+  s.describe("#setCurrentSourceFilePath", s => {
+    s.test("passes file path to tests", (t, { specsContainer, builderAPI }) => {
+      specsContainer.setCurrentSourceFilePath('specs-container.test.js');
+      builderAPI.test('foobar', () => {});
+      let [test] = specsContainer.specs;
+
+      t.assert(test.sourceLocator.sourceFilePath)
+    });
+
+    s.test("passes file path to suites", async (t, { specsContainer, builderAPI }) => {
+      specsContainer.setCurrentSourceFilePath('specs-container.test.js');
+      builderAPI.describe('foobar', s => {
+        s.test('baz', () => {});
+      });
+      let [suite] = specsContainer.specs;
+      let [test] = await suite.composeSpecs();
+
+      t.assert(suite.sourceLocator.sourceFilePath)
+      t.assert(test.sourceLocator.sourceFilePath)
+    });
+  });
 });

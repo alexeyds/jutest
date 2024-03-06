@@ -5,7 +5,7 @@ import { composeTestSuite } from "core/test-suite/compose-test-suite";
 function composeSuite(name, body) {
   let context = new TestContext();
   context.addName(name);
-  return composeTestSuite(body, context);
+  return composeTestSuite(body, { context });
 }
 
 jutest("composeTestSuite()", s => {
