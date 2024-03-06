@@ -41,7 +41,7 @@ jutest("Test", s => {
       let ownFileName = 'test.test.js';
       let { sourceLocator } = new Test('foobar', () => {}, { context, sourceFilePath: ownFileName });
 
-      t.equal(sourceLocator.sourceFilePath, ownFileName)
+      t.equal(sourceLocator.sourceFilePath, ownFileName);
       t.assert(sourceLocator.lineNumber);
     });
   });

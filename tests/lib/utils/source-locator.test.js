@@ -29,18 +29,18 @@ jutest("utils/source-locator", s => {
     });
 
     s.test("accepts sourceFilePath", t => {
-      let sourceFilePath = 'source-locator.test.js'
-      let locator = new SourceLocator({ sourceFilePath })
+      let sourceFilePath = 'source-locator.test.js';
+      let locator = new SourceLocator({ sourceFilePath });
 
-      t.equal(locator.sourceFilePath, sourceFilePath)
-      t.equal(locator.lineNumber, 33)
+      t.equal(locator.sourceFilePath, sourceFilePath);
+      t.equal(locator.lineNumber, 33);
     });
   });
 
   s.describe("#guessLineNumberInFile", s => {
     s.test("returns source line in the matching file", t => {
       let locator = new SourceLocator();
-      let lineNumber = locator.guessLineNumberInFile('source-locator.test.js');
+      let lineNumber = locator.guessLineNumberInFile(ownFileName);
 
       t.equal(lineNumber, 42);
     });
@@ -52,7 +52,7 @@ jutest("utils/source-locator", s => {
         return new SourceLocator();
       }
 
-      let lineNumber = locator.guessLineNumberInFile('source-locator.test.js');
+      let lineNumber = locator.guessLineNumberInFile(ownFileName);
 
       t.equal(lineNumber, 49);
     });

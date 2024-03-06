@@ -101,7 +101,7 @@ jutest("SpecsContainer", s => {
       builderAPI.test('foobar', () => {});
       let [test] = specsContainer.specs;
 
-      t.assert(test.sourceLocator.sourceFilePath)
+      t.assert(test.sourceLocator.sourceFilePath);
     });
 
     s.test("passes file path to suites", async (t, { specsContainer, builderAPI }) => {
@@ -112,8 +112,8 @@ jutest("SpecsContainer", s => {
       let [suite] = specsContainer.specs;
       let [test] = await suite.composeSpecs();
 
-      t.assert(suite.sourceLocator.sourceFilePath)
-      t.assert(test.sourceLocator.sourceFilePath)
+      t.assert(suite.sourceLocator.sourceFilePath);
+      t.assert(test.sourceLocator.sourceFilePath);
     });
   });
 });

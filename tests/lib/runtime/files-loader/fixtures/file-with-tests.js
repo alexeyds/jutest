@@ -8,4 +8,4 @@ jutest('main suite', s => {
   });
 });
 
-jutest.test('top level test', () => {})
+jutest.test('top level test', () => {});
