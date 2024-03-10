@@ -46,7 +46,7 @@ jutest("runTest", s => {
   s.describe("setup", s => {
     s.test("runs setups before test", async (t, { context }) => {
       let setup = spy();
-      context.addSetup(setup);
+      context.setup(setup);
       let testBody = spy();
       await runTest(testBody, context);
 
@@ -54,7 +54,7 @@ jutest("runTest", s => {
     });
 
     s.test("passes resulting assigns to the test", async (t, { context }) => {
-      context.addSetup(() => ({ a: 1 }));
+      context.setup(() => ({ a: 1 }));
       let assigns;
       await runTest((t, a) => assigns = a, context);
 
@@ -65,7 +65,7 @@ jutest("runTest", s => {
   s.describe("before test assertions", s => {
     s.test("runs assertion before test", async (t, { context }) => {
       let assertionBody = spy();
-      context.addBeforeTestAssertion(assertionBody);
+      context.assertBeforeTest(assertionBody);
       let testBody = spy();
       await runTest(testBody, context);
 
@@ -73,16 +73,16 @@ jutest("runTest", s => {
     });
 
     s.test("passes assertions to assertion body", async (t, { context }) => {
-      context.addBeforeTestAssertion(t => t.equal(1, 1));
+      context.assertBeforeTest(t => t.equal(1, 1));
       let result = await runTest(() => {}, context);
 
       t.equal(result.status, ExecutionStatuses.Passed);
     });
 
     s.test("passes assigns to assertion body", async (t, { context }) => {
-      context.addSetup(() => ({ a: 1 }));
+      context.setup(() => ({ a: 1 }));
       let assigns;
-      context.addBeforeTestAssertion((t, a) => assigns = a);
+      context.assertBeforeTest((t, a) => assigns = a);
       await runTest(() => {}, context);
 
       t.same(assigns, { a: 1});
@@ -92,7 +92,7 @@ jutest("runTest", s => {
   s.describe("after test assertions", s => {
     s.test("runs assertion before test", async (t, { context }) => {
       let assertionBody = spy();
-      context.addAfterTestAssertion(assertionBody);
+      context.assertAfterTest(assertionBody);
       let testBody = spy();
       await runTest(testBody, context);
 
@@ -100,16 +100,16 @@ jutest("runTest", s => {
     });
 
     s.test("passes assertions to assertion body", async (t, { context }) => {
-      context.addAfterTestAssertion(t => t.equal(1, 1));
+      context.assertAfterTest(t => t.equal(1, 1));
       let result = await runTest(() => {}, context);
 
       t.equal(result.status, ExecutionStatuses.Passed);
     });
 
     s.test("passes assigns to assertion body", async (t, { context }) => {
-      context.addSetup(() => ({ a: 1 }));
+      context.setup(() => ({ a: 1 }));
       let assigns;
-      context.addAfterTestAssertion((t, a) => assigns = a);
+      context.assertAfterTest((t, a) => assigns = a);
       await runTest(() => {}, context);
 
       t.same(assigns, { a: 1});
@@ -122,8 +122,8 @@ jutest("runTest", s => {
       let assertion = spy();
       let testBody = spy();
 
-      context.addAfterTestAssertion(assertion);
-      context.addTeardown(teardown);
+      context.assertAfterTest(assertion);
+      context.teardown(teardown);
       await runTest(testBody, context);
 
       t.assert(teardown.calledAfter(testBody));
@@ -131,16 +131,16 @@ jutest("runTest", s => {
     });
 
     s.test("passes assigns to teardowns", async (t, { context }) => {
-      context.addSetup(() => ({ a: 1 }));
+      context.setup(() => ({ a: 1 }));
       let assigns;
-      context.addTeardown((a) => assigns = a);
+      context.teardown((a) => assigns = a);
       await runTest(() => {}, context);
 
       t.same(assigns, { a: 1});
     });
 
     s.test("handles teardown errors", async (t, { context }) => {
-      context.addTeardown(() => { throw 'test'; });
+      context.teardown(() => { throw 'test'; });
       let result = await runTest(() => {}, context);
 
       t.equal(result.status, ExecutionStatuses.Failed);

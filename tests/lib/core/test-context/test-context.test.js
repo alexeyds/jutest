@@ -33,15 +33,15 @@ jutest("TestContext", s => {
   s.describe("runSetups", s => {
     s.test("runs added setups", async (t, { context }) => {
       let result;
-      context.addSetup(() => result = 1);
+      context.setup(() => result = 1);
       await context.runSetups();
 
       t.equal(result, 1);
     });
 
     s.test('merges all setup results together', async (t, { context }) => {
-      context.addSetup(() => ({ a: 1, b: 2 }));
-      context.addSetup(() => ({ b: 3, c: 4 }));
+      context.setup(() => ({ a: 1, b: 2 }));
+      context.setup(() => ({ b: 3, c: 4 }));
       let result = await context.runSetups();
 
       t.same(result, { a: 1, b: 3, c: 4 });
@@ -52,16 +52,16 @@ jutest("TestContext", s => {
         return { result: result*2 };
       };
 
-      context.addSetup(() => ({ result: 5 }));
-      context.addSetup(multiplier);
-      context.addSetup(multiplier);
+      context.setup(() => ({ result: 5 }));
+      context.setup(multiplier);
+      context.setup(multiplier);
       let { result } = await context.runSetups();
 
       t.equal(result, 20);
     });
 
     s.test("works even if setup returns non-mergeable value", async (t, { context }) => {
-      context.addSetup(() => 'asd');
+      context.setup(() => 'asd');
       let result = await context.runSetups();
 
       t.same(result, {});
@@ -71,7 +71,7 @@ jutest("TestContext", s => {
   s.describe("runTeardowns", s => {
     s.test("runs added teardowns", async (t, { context }) => {
       let result;
-      context.addTeardown(() => result = 1);
+      context.teardown(() => result = 1);
       await context.runTeardowns();
 
       t.equal(result, 1);
@@ -79,8 +79,8 @@ jutest("TestContext", s => {
 
     s.test("runs teardowns in order", async (t, { context }) => {
       let results = [];
-      context.addTeardown(() => Promise.resolve().then(() => results.push(1)));
-      context.addTeardown(() => results.push(2));
+      context.teardown(() => Promise.resolve().then(() => results.push(1)));
+      context.teardown(() => results.push(2));
       await context.runTeardowns();
 
       t.same(results, [1, 2]);
@@ -88,7 +88,7 @@ jutest("TestContext", s => {
 
     s.test("passes provided arguments to teardowns", async (t, { context }) => {
       let result;
-      context.addTeardown((a, b) => result = a - b);
+      context.teardown((a, b) => result = a - b);
       await context.runTeardowns(10, 5);
 
       t.same(result, 5);
@@ -98,7 +98,7 @@ jutest("TestContext", s => {
   s.describe('runAfterTestAssertions', s => {
     s.test("runs added assertions", async (t, { context }) => {
       let result;
-      context.addAfterTestAssertion((a, b) => result = a - b);
+      context.assertAfterTest((a, b) => result = a - b);
       await context.runAfterTestAssertions(10, 5);
 
       t.same(result, 5);
@@ -108,7 +108,7 @@ jutest("TestContext", s => {
   s.describe('runBeforeTestAssertions', s => {
     s.test("runs added assertions", async (t, { context }) => {
       let result;
-      context.addBeforeTestAssertion((a, b) => result = a - b);
+      context.assertBeforeTest((a, b) => result = a - b);
       await context.runBeforeTestAssertions(10, 5);
 
       t.same(result, 5);
@@ -152,7 +152,7 @@ jutest("TestContext", s => {
       t.assert(config.teardown);
       t.assert(config.assertBeforeTest);
       t.assert(config.assertAfterTest);
-      t.assert(config.name);
+      t.assert(config.addName);
     });
   });
 

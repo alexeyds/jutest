@@ -46,7 +46,7 @@ jutest("Jutest", s => {
     });
 
     s.test("exposes context's configuration API", (t, { specsContainer, jutest }) => {
-      let jutest2 = jutest.configureNewInstance(c => c.name('jutest2'));
+      let jutest2 = jutest.configureNewInstance(c => c.addName('jutest2'));
       jutest2.test('test', () => {});
 
       let test = specsContainer.specs[0];
@@ -55,7 +55,7 @@ jutest("Jutest", s => {
     });
 
     s.test("creates separate context", (t, { specsContainer, jutest }) => {
-      let jutest2 = jutest.configureNewInstance(c => c.name('jutest2'));
+      let jutest2 = jutest.configureNewInstance(c => c.addName('jutest2'));
 
       jutest.test('test', () => {});
       jutest2.test('test', () => {});
@@ -68,8 +68,8 @@ jutest("Jutest", s => {
 
     s.test("extends existing context", (t, { specsContainer, jutest }) => {
       let jutest3 = jutest
-        .configureNewInstance(c => c.name('jutest2'))
-        .configureNewInstance(c => c.name('jutest3'));
+        .configureNewInstance(c => c.addName('jutest2'))
+        .configureNewInstance(c => c.addName('jutest3'));
 
       jutest3.test('test', () => {});
 
@@ -82,7 +82,7 @@ jutest("Jutest", s => {
       let config;
       jutest.configureNewInstance(c => config = c);
 
-      t.throws(() => config.name('test'), /configure/);
+      t.throws(() => config.addName('test'), /configure/);
     });
   });
 });
