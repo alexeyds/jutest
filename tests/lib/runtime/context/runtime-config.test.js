@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { RuntimeConfig } from "runtime/runtime-config";
+import { RuntimeConfig } from "runtime/context/runtime-config";
 
 function createFileConfig(fileLocation) {
   return new RuntimeConfig({ fileLocations: [fileLocation] });

@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { RuntimeEventEmitter } from "runtime/runtime-event-emitter";
+import { RuntimeEventEmitter } from "runtime/context/runtime-event-emitter";
 import { RuntimeEvents } from "runtime";
 import { spy } from "sinon";
 
