@@ -86,4 +86,9 @@ jutest("composeTestSuite()", s => {
 
     await t.async.rejects(compositionPromise, 'locked');
   });
+
+  s.test("does nothing if suite body is not a function", async t => {
+    let specs = await composeSuite('test');
+    t.same(specs, []);
+  });
 });
