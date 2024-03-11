@@ -58,7 +58,7 @@ jutest("TestSuite", s => {
       let specsContainer = new SpecsContainer({ sourceFilePath: 'foo.js' });
       let suite = new TestSuite('', () => {}, { specsContainer });
 
-      t.equal(suite.sourceLocator.sourceFilePath, 'foo.js')
+      t.equal(suite.sourceLocator.sourceFilePath, 'foo.js');
     });
   });
 

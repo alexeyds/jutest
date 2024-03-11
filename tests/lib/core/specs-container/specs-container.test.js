@@ -27,7 +27,7 @@ jutest("SpecsContainer", s => {
         context,
         skip: true,
         sourceFilePath: 'foo.test'
-      })
+      });
 
       t.equal(specsContainer.context, context);
       t.equal(specsContainer.skip, true);
@@ -52,7 +52,7 @@ jutest("SpecsContainer", s => {
 
     s.test("copies the context", (t, { specsContainer }) => {
       let copy = specsContainer.copy();
-      t.notEqual(copy.context, specsContainer.context)
+      t.notEqual(copy.context, specsContainer.context);
     });
 
     s.test("allows overwriting 'skip' attribute", t => {
@@ -73,7 +73,7 @@ jutest("SpecsContainer", s => {
 
     s.test("shares specs between two versions", (t, { specsContainer }) => {
       let copy = specsContainer.extend();
-      copy.test('foo')
+      copy.test('foo');
 
       t.equal(specsContainer.specs.length, 1);
       t.equal(copy.specs, specsContainer.specs);
@@ -240,7 +240,7 @@ jutest("SpecsContainer", s => {
     });
 
     s.test("resets source path to its original value", async t => {
-      let specsContainer = new SpecsContainer({ sourceFilePath: 'foo.test.js' })
+      let specsContainer = new SpecsContainer({ sourceFilePath: 'foo.test.js' });
       await specsContainer.withSourceFilePath('specs-container.test.js', () => {});
       specsContainer.test('foo', () => {});
       let [test] = specsContainer.specs;

@@ -35,7 +35,7 @@ jutest("composeTestSuite()", s => {
     t.equal(specs[0].name, 'test nested');
   });
 
-  s.test("provides access to context API", async t => {
+  s.test("provides access to context API", async () => {
     await composeSuite('test', s => {
       s.setup(() => ({ a: 1 }));
     });
