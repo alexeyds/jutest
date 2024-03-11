@@ -63,20 +63,25 @@ jutest("SpecsContainer", s => {
     });
   });
 
-  s.describe("#extend", s => {
+  s.describe("#copyWithSharedSpecs", s => {
     s.test("copies original context", (t, { specsContainer }) => {
-      let copy = specsContainer.extend();
+      let copy = specsContainer.copyWithSharedSpecs();
 
       t.notEqual(copy, specsContainer);
       t.assert(copy.context);
     });
 
     s.test("shares specs between two versions", (t, { specsContainer }) => {
-      let copy = specsContainer.extend();
+      let copy = specsContainer.copyWithSharedSpecs();
       copy.test('foo');
 
       t.equal(specsContainer.specs.length, 1);
       t.equal(copy.specs, specsContainer.specs);
+    });
+
+    s.test("delegates attrs to copy method", (t, { specsContainer }) => {
+      let copy = specsContainer.copyWithSharedSpecs({ skip: true });
+      t.equal(copy.skip, true);
     });
   });
 
