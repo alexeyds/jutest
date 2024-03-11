@@ -24,7 +24,7 @@ jutest("findRunnableSpecs", s => {
   s.test("returns tests defined on the specified line", async t => {
     let { specsContainer, jutest, context } = createFileRuntime({ file: ownFileName, lineNumber: 29 });
 
-    specsContainer.setSourceFilePath(ownFileName);
+    specsContainer.sourceFilePath = ownFileName;
     jutest.test('test1');
     jutest.test('test2');
 
@@ -37,7 +37,7 @@ jutest("findRunnableSpecs", s => {
   s.test("works with suites", async t => {
     let { specsContainer, jutest, context } = createFileRuntime({ file: ownFileName, lineNumber: 43 });
 
-    specsContainer.setSourceFilePath(ownFileName);
+    specsContainer.sourceFilePath = ownFileName;
     jutest.describe('test', s => {
       s.test('test1');
       s.test('test2');
