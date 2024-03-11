@@ -1,22 +1,18 @@
 import { jutest } from "jutest";
-import { Test, TestSuite, TestContext } from "core";
+import { SpecsContainer, Test } from "core";
 import { SpecTypes } from "runtime/enums";
 import { SpecSummary } from "runtime/test-runner/spec-summary";
 
-function createTest(...args) {
-  let context = new TestContext();
-  return new Test(...args, { context });
-}
-
-function createSuite(...args) {
-  let context = new TestContext();
-  return new TestSuite(...args, { context });
-}
-
 jutest("SpecSummary", s => {
+  s.setup(() => {
+    let specsContainer = new SpecsContainer();
+    return { specsContainer };
+  });
+
   s.describe("constructor", s => {
-    s.test("creates summary for a new test", t => {
-      let test = createTest('my test', () => {});
+    s.test("creates summary for a new test", (t, { specsContainer }) => {
+      specsContainer.test('my test', () => {});
+      let [test] = specsContainer.specs;
       let summary = new SpecSummary(test);
 
       t.equal(summary.type, SpecTypes.Test);
@@ -27,8 +23,9 @@ jutest("SpecSummary", s => {
       t.same(summary.parentContextIds, []);
     });
 
-    s.test("creates summary for a suite", t => {
-      let suite = createSuite('my suite', () => {});
+    s.test("creates summary for a suite", (t, { specsContainer }) => {
+      specsContainer.describe('my suite', () => {});
+      let [suite] = specsContainer.specs;
       let summary = new SpecSummary(suite);
 
       t.equal(summary.type, SpecTypes.Suite);
@@ -39,8 +36,9 @@ jutest("SpecSummary", s => {
       t.assert(summary.parentContextIds);
     });
 
-    s.test("includes execution result for tests", async t => {
-      let test = createTest('my test', () => {});
+    s.test("includes execution result for tests", async (t, { specsContainer }) => {
+      specsContainer.test('my test', () => {});
+      let [test] = specsContainer.specs;
       await test.run();
 
       let { executionResult } = new SpecSummary(test);
