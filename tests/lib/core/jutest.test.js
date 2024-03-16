@@ -10,6 +10,7 @@ jutest("Jutest", s => {
   s.describe("#constructor", s => {
     s.test("sets default attributes", (t, { jutestInstance }) => {
       t.same(jutestInstance.specs, []);
+      t.same(jutestInstance.specsByFile, {});
     });
   });
 

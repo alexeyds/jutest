@@ -8,9 +8,10 @@ jutest("loadFiles", s => {
   s.setup(() => {
     let requireSpy = spy();
     let jutestInstance = new Jutest();
-    let context = TestRunnerContext.forSingleLocation('foo.test.js');
+    let file = 'foo.test.js'
+    let context = TestRunnerContext.forSingleLocation(file);
 
-    return { requireSpy, context, jutestInstance };
+    return { requireSpy, context, jutestInstance, file };
   });
 
   s.test("calls the require func with specified files", async (t, { requireSpy, jutestInstance }) => {
@@ -22,7 +23,7 @@ jutest("loadFiles", s => {
     t.equal(requireSpy.firstCall.args[0], file);
   });
 
-  s.test("sets source path for loaded specs", async (t, { context, jutestInstance }) => {
+  s.test("sets source path for loaded specs", async (t, { context, jutestInstance, file }) => {
     let requireFunc = () => {
       jutestInstance.api.test('foo', () => {});
     };
@@ -31,6 +32,7 @@ jutest("loadFiles", s => {
     let [test] = jutestInstance.specs;
 
     t.assert(test.sourceLocator.sourceFilePath);
+    t.same(jutestInstance.specsByFile[file], [test]);
   });
 
   s.test("composes loaded specs", async (t, { context, jutestInstance }) => {

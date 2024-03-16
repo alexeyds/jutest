@@ -16,9 +16,10 @@ jutest("SpecsContainer", s => {
   s.describe("constructor", s => {
     s.test("sets default attributes", (t, { specsContainer }) => {
       t.same(specsContainer.specs, []);
+      t.same(specsContainer.specsByFile, {});
       t.assert(specsContainer.context);
       t.equal(specsContainer.skip, false);
-      t.equal(specsContainer.sourceFilePath, undefined);
+      t.equal(specsContainer.sourceFilePath, null);
     });
 
     s.test("allows setting attributes", t => {
@@ -99,13 +100,18 @@ jutest("SpecsContainer", s => {
         skip: true,
         sourceFilePath: 'foo.test',
       });
-
-      specsContainer.test('bar', () => {});
-      let [test] = specsContainer.specs;
+      let test = specsContainer.test('bar', () => {});
 
       t.equal(test.name, 'foo bar');
       t.equal(test.skipped, true);
       t.equal(test.sourceLocator.sourceFilePath, 'foo.test');
+    });
+
+    s.test("saves test within the current file", t => {
+      let specsContainer = new SpecsContainer({ sourceFilePath: 'foo.test' });
+      let test = specsContainer.test('bar', () => {});
+
+      t.same(specsContainer.specsByFile['foo.test'], [test]);
     });
   });
 
@@ -139,6 +145,13 @@ jutest("SpecsContainer", s => {
       t.equal(suite.name, 'foo bar');
       t.equal(suite.skipped, true);
       t.equal(suite.sourceLocator.sourceFilePath, 'foo.test');
+    });
+
+    s.test("saves spec within the current file", t => {
+      let specsContainer = new SpecsContainer({ sourceFilePath: 'foo.test' });
+      let suite = specsContainer.describe('bar', () => {});
+
+      t.same(specsContainer.specsByFile['foo.test'], [suite]);
     });
   });
 
@@ -212,6 +225,7 @@ jutest("SpecsContainer", s => {
       let [test] = specsContainer.specs;
 
       t.assert(test.sourceLocator.sourceFilePath);
+      t.same(specsContainer.specsByFile['specs-container.test.js'], [test]);
     });
 
     s.test("resets current path after", async (t, { specsContainer }) => {
