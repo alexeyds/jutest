@@ -11,7 +11,7 @@ jutest("TestRunSummary", s => {
   });
 
   s.describe("#startRun", s => {
-    s.test("sets run start time", (t, { runSummary, jutestInstance }) => {
+    s.test("sets run start time", (t, { runSummary }) => {
       runSummary.startRun();
       t.assert(runSummary.runStartedAt);
     });

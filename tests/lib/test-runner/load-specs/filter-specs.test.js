@@ -5,18 +5,17 @@ import { filterSpecs } from "test-runner/load-specs/filter-specs";
 
 let ownFileName = 'filter-specs.test.js';
 
-jutest("findRunnableSpecs", s => {
+jutest("filterSpecs", s => {
   s.setup(() => {
     let jutestInstance = new Jutest();
-    let context = TestRunnerContext.forSingleLocation('foo.test.js');
-
-    return { jutestInstance, context };
+    return { jutestInstance };
   });
 
-  s.test("returns all specs by default", async (t, { jutestInstance, context }) => {
+  s.test("returns all specs by default", async (t, { jutestInstance }) => {
     jutestInstance.api.test('test1');
     jutestInstance.api.test('test2');
 
+    let context = new TestRunnerContext();
     let specs = await filterSpecs(jutestInstance, context);
 
     t.equal(specs.length, 2);
@@ -25,12 +24,11 @@ jutest("findRunnableSpecs", s => {
   });
 
   s.test("returns tests defined on the specified line", async (t, { jutestInstance }) => {
-    let context = TestRunnerContext.forSingleLocation(ownFileName, 32);
-
     jutestInstance.specsContainer.sourceFilePath = ownFileName;
     jutestInstance.api.test('test1');
     jutestInstance.api.test('test2');
 
+    let context = TestRunnerContext.forSingleLocation(ownFileName, 29);
     let specs = await filterSpecs(jutestInstance, context);
 
     t.equal(specs.length, 1);
@@ -38,14 +36,13 @@ jutest("findRunnableSpecs", s => {
   });
 
   s.test("works with suites", async (t, { jutestInstance }) => {
-    let context = TestRunnerContext.forSingleLocation(ownFileName, 46);
-
     jutestInstance.specsContainer.sourceFilePath = ownFileName;
     jutestInstance.api.describe('test', s => {
       s.test('test1');
       s.test('test2');
     });
 
+    let context = TestRunnerContext.forSingleLocation(ownFileName, 42);
     let specs = await filterSpecs(jutestInstance, context);
 
     t.equal(specs.length, 1);
