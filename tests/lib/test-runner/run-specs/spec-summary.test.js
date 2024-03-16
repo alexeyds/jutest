@@ -13,8 +13,7 @@ jutest("SpecSummary", s => {
 
   s.describe("constructor", s => {
     s.test("creates summary for a new test", (t, { jutestInstance }) => {
-      jutestInstance.test('my test', () => {});
-      let [test] = jutestInstance.specs;
+      let test = jutestInstance.specsContainer.test('my test', () => {});
       let summary = new SpecSummary(test);
 
       t.equal(summary.type, SpecTypes.Test);
@@ -26,8 +25,7 @@ jutest("SpecSummary", s => {
     });
 
     s.test("creates summary for a suite", (t, { jutestInstance }) => {
-      jutestInstance.describe('my suite', () => {});
-      let [suite] = jutestInstance.specs;
+      let suite = jutestInstance.specsContainer.describe('my suite', () => {});
       let summary = new SpecSummary(suite);
 
       t.equal(summary.type, SpecTypes.Suite);
@@ -39,8 +37,7 @@ jutest("SpecSummary", s => {
     });
 
     s.test("includes execution result for tests", async (t, { jutestInstance }) => {
-      jutestInstance.test('my test', () => {});
-      let [test] = jutestInstance.specs;
+      let test = jutestInstance.specsContainer.test('my test', () => {});
       await test.run();
 
       let { executionResult } = new SpecSummary(test);

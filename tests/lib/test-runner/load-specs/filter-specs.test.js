@@ -14,8 +14,8 @@ jutest("findRunnableSpecs", s => {
   });
 
   s.test("returns all specs by default", async (t, { jutestInstance, context }) => {
-    jutestInstance.test('test1');
-    jutestInstance.test('test2');
+    jutestInstance.api.test('test1');
+    jutestInstance.api.test('test2');
 
     let specs = await filterSpecs(jutestInstance, context);
 
@@ -28,8 +28,8 @@ jutest("findRunnableSpecs", s => {
     let context = TestRunnerContext.forSingleLocation(ownFileName, 32);
 
     jutestInstance.specsContainer.sourceFilePath = ownFileName;
-    jutestInstance.test('test1');
-    jutestInstance.test('test2');
+    jutestInstance.api.test('test1');
+    jutestInstance.api.test('test2');
 
     let specs = await filterSpecs(jutestInstance, context);
 
@@ -41,7 +41,7 @@ jutest("findRunnableSpecs", s => {
     let context = TestRunnerContext.forSingleLocation(ownFileName, 46);
 
     jutestInstance.specsContainer.sourceFilePath = ownFileName;
-    jutestInstance.describe('test', s => {
+    jutestInstance.api.describe('test', s => {
       s.test('test1');
       s.test('test2');
     });

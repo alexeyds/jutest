@@ -24,7 +24,7 @@ jutest("loadFiles", s => {
 
   s.test("sets source path for loaded specs", async (t, { context, jutestInstance }) => {
     let requireFunc = () => {
-      jutestInstance.test('foo', () => {});
+      jutestInstance.api.test('foo', () => {});
     };
 
     await loadFiles(jutestInstance, context, requireFunc);
@@ -35,7 +35,7 @@ jutest("loadFiles", s => {
 
   s.test("composes loaded specs", async (t, { context, jutestInstance }) => {
     let requireFunc = () => {
-      jutestInstance.describe('foo', () => {});
+      jutestInstance.api.describe('foo', () => {});
     };
 
     await loadFiles(jutestInstance, context, requireFunc);
@@ -47,6 +47,6 @@ jutest("loadFiles", s => {
   s.test("locks specs container after files are loaded", async (t, { context, jutestInstance, requireSpy }) => {
     await loadFiles(jutestInstance, context, requireSpy);
 
-    t.throws(() => jutestInstance.test('asd'), /lock/);
+    t.throws(() => jutestInstance.api.test('asd'), /lock/);
   });
 });

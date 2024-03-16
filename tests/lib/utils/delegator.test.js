@@ -57,7 +57,6 @@ jutest("utils/delegator", s => {
     s.test("binds delegated functions to the sources", t => {
       let source = {
         foo: function() { this.bar = 1; }
-
       };
       let delegator = createDelegator(source, { foo: true });
       delegator.foo();
@@ -67,6 +66,15 @@ jutest("utils/delegator", s => {
 
     s.test("warns about missing functions", (t, { source }) => {
       t.throws(() => createDelegator(source, { bar: true }), /missing/);
+    });
+
+    s.test("accepts hideReturnValues option", t => {
+      let source = {
+        foo: () => 1,
+      };
+      let delegator = createDelegator(source, { foo: true }, { hideReturnValues: true });
+
+      t.equal(delegator.foo(), undefined);
     });
   });
 
@@ -88,6 +96,11 @@ jutest("utils/delegator", s => {
       delegator(1, 2);
 
       t.same(soruceFunction.firstCall.args, [1, 2]);
+    });
+
+    s.test("accepts hideReturnValue option", t => {
+      let delegator = createDelegatorFunction(() => 1, { hideReturnValue: true });
+      t.equal(delegator(), undefined);
     });
   });
 });

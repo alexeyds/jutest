@@ -11,38 +11,26 @@ jutest("Jutest", s => {
     s.test("sets default attributes", (t, { jutestInstance }) => {
       t.same(jutestInstance.specs, []);
     });
-
-    s.test("exposes specs builder API", (t, { jutestInstance }) => {
-      t.assert(jutestInstance.test);
-      t.assert(jutestInstance.describe);
-      t.assert(jutestInstance.xtest);
-      t.assert(jutestInstance.xdescribe);
-    });
-
-    s.test("specs builder API actually works", (t, { jutestInstance }) => {
-      jutestInstance.test('foo');
-      t.equal(jutestInstance.specs[0].name, 'foo');
-    });
   });
 
   s.describe("#configureNewInstance", s => {
     s.test("returns new instance", (t, { jutestInstance }) => {
       let jutest2 = jutestInstance.configureNewInstance();
 
-      t.assert(jutest2.test);
+      t.assert(jutest2.api);
       t.assert(jutest2.specsContainer);
     });
 
     s.test("shares specs between instances", (t, { jutestInstance }) => {
       let jutest2 = jutestInstance.configureNewInstance();
-      jutestInstance.test('foo');
+      jutestInstance.api.test('foo');
 
       t.equal(jutest2.specs[0].name, 'foo');
     });
 
     s.test("accepts configuration function", (t, { jutestInstance }) => {
       let jutest2 = jutestInstance.configureNewInstance(s => s.addName('foo'));
-      jutest2.test('bar');
+      jutest2.api.test('bar');
 
       t.equal(jutest2.specs[0].name, 'foo bar');
     });

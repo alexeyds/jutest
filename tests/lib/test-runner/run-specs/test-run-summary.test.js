@@ -2,22 +2,12 @@ import { jutest } from "jutest";
 import { Jutest } from "core";
 import { TestRunSummary } from "test-runner/run-specs/test-run-summary";
 
-function createTest(...args) {
-  let jutestInstance = new Jutest();
-  jutestInstance.test(...args);
-  return jutestInstance.specs[0];
-}
-
-function createSkippedTest(...args) {
-  let jutestInstance = new Jutest();
-  jutestInstance.xtest(...args);
-  return jutestInstance.specs[0];
-}
-
 jutest("TestRunSummary", s => {
   s.setup(() => {
     let runSummary = new TestRunSummary();
-    return { runSummary };
+    let jutestInstance = new Jutest();
+
+    return { runSummary, jutestInstance };
   });
 
   s.describe("#startRun", s => {
@@ -37,8 +27,8 @@ jutest("TestRunSummary", s => {
   });
 
   s.describe("#addTestResult", s => {
-    s.test("adds passed test result", async (t, { runSummary }) => {
-      let test = createTest('my test', () => {});
+    s.test("adds passed test result", async (t, { runSummary, jutestInstance }) => {
+      let test = jutestInstance.specsContainer.test('my test', () => {});
       await test.run();
       runSummary.addTestResult(test);
 
@@ -50,8 +40,8 @@ jutest("TestRunSummary", s => {
       t.assert(runSummary.testSummaries[0].executionResult.status);
     });
 
-    s.test("adds failed test result", async (t, { runSummary }) => {
-      let test = createTest('my test', t => { t.fail('foo'); });
+    s.test("adds failed test result", async (t, { runSummary, jutestInstance }) => {
+      let test = jutestInstance.specsContainer.test('my test', t => { t.fail('foo'); });
       await test.run();
       runSummary.addTestResult(test);
 
@@ -62,8 +52,8 @@ jutest("TestRunSummary", s => {
       t.equal(runSummary.skippedTestsCount, 0);
     });
 
-    s.test("adds skipped test result", async (t, { runSummary }) => {
-      let test = createSkippedTest('my test', t => { t.fail('foo'); });
+    s.test("adds skipped test result", async (t, { runSummary, jutestInstance }) => {
+      let test = jutestInstance.specsContainer.xtest('my test', t => { t.fail('foo'); });
       runSummary.addTestResult(test);
 
       t.equal(runSummary.success, true);
@@ -73,8 +63,8 @@ jutest("TestRunSummary", s => {
       t.equal(runSummary.skippedTestsCount, 1);
     });
 
-    s.test("returns added test summary", async (t, { runSummary }) => {
-      let test = createTest('my test', () => {});
+    s.test("returns added test summary", async (t, { runSummary, jutestInstance }) => {
+      let test = jutestInstance.specsContainer.test('my test', () => {});
       await test.run();
       let testSummary = runSummary.addTestResult(test);
 

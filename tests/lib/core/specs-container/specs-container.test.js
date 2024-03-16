@@ -87,8 +87,7 @@ jutest("SpecsContainer", s => {
 
   s.describe("#test", s => {
     s.test("adds test to the container", (t, { specsContainer }) => {
-      specsContainer.test('foo', () => {});
-      let [test] = specsContainer.specs;
+      let test = specsContainer.test('foo', () => {});
 
       t.equal(test.name, 'foo');
       t.equal(test.skipped, false);
@@ -112,25 +111,16 @@ jutest("SpecsContainer", s => {
 
   s.describe("#xtest", s => {
     s.test("adds skipped test to the container", (t, { specsContainer }) => {
-      specsContainer.xtest('foo', () => {});
-      let [test] = specsContainer.specs;
+      let test = specsContainer.xtest('foo', () => {});
 
       t.equal(test.name, 'foo');
-      t.equal(test.skipped, true);
-    });
-
-    s.test("prevents overwriting of meta attributes", (t, { specsContainer }) => {
-      specsContainer.xtest('foo', () => {}, { skip: false });
-      let [test] = specsContainer.specs;
-
       t.equal(test.skipped, true);
     });
   });
 
   s.describe("#describe", s => {
     s.test("adds suite to the container", (t, { specsContainer }) => {
-      specsContainer.describe('foo', () => {});
-      let [suite] = specsContainer.specs;
+      let suite = specsContainer.describe('foo', () => {});
 
       t.equal(suite.name, 'foo');
       t.equal(suite.skipped, false);
@@ -144,28 +134,19 @@ jutest("SpecsContainer", s => {
         sourceFilePath: 'foo.test',
       });
 
-      specsContainer.describe('bar', () => {});
-      let [spec] = specsContainer.specs;
+      let suite = specsContainer.describe('bar', () => {});
 
-      t.equal(spec.name, 'foo bar');
-      t.equal(spec.skipped, true);
-      t.equal(spec.sourceLocator.sourceFilePath, 'foo.test');
+      t.equal(suite.name, 'foo bar');
+      t.equal(suite.skipped, true);
+      t.equal(suite.sourceLocator.sourceFilePath, 'foo.test');
     });
   });
 
   s.describe("#xdescribe", s => {
     s.test("adds skipped suite to the container", (t, { specsContainer }) => {
-      specsContainer.xdescribe('foo', () => {});
-      let [suite] = specsContainer.specs;
+      let suite = specsContainer.xdescribe('foo', () => {});
 
       t.equal(suite.name, 'foo');
-      t.equal(suite.skipped, true);
-    });
-
-    s.test("prevents overwriting skip attribute", (t, { specsContainer }) => {
-      specsContainer.xdescribe('foo', () => {}, { skip: false });
-      let [suite] = specsContainer.specs;
-
       t.equal(suite.skipped, true);
     });
   });
@@ -180,6 +161,13 @@ jutest("SpecsContainer", s => {
       t.assert(api.xtest);
       t.assert(api.describe);
       t.assert(api.xdescribe);
+    });
+
+    s.test("makes sure wrapped functions dont expose specs", (t, { specsContainer }) => {
+      let api = specsContainer.toBuilderAPI();
+      let test = api.test('foo');
+
+      t.equal(test, undefined);
     });
   });
 
