@@ -5,8 +5,10 @@ jutest("TestRunnerContext", s => {
   s.describe("constructor", s => {
     s.test("assigns defaults", t => {
       let context = new TestRunnerContext();
+
       t.same(context.fileLocations, []);
       t.assert(context.eventEmitter);
+      t.assert(context.runSummary);
     });
 
     s.test("accepts fileLocations param", t => {

@@ -1,7 +1,7 @@
 import { jutest } from "jutest";
 import { Jutest, Test } from "core";
 import { TestRunnerEnums } from "test-runner";
-import { SpecSummary } from "test-runner/run-specs/spec-summary";
+import { SpecSummary } from "test-runner/context/run-summary/spec-summary";
 
 const { SpecTypes } = TestRunnerEnums;
 

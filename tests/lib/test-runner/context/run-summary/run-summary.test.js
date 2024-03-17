@@ -1,28 +1,67 @@
 import { jutest } from "jutest";
 import { Jutest } from "core";
-import { TestRunSummary } from "test-runner/run-specs/test-run-summary";
+import { RunSummary } from "test-runner/context/run-summary";
+import { TestRunnerEnums } from "test-runner/enums";
 
-jutest("TestRunSummary", s => {
+let { ExitReasons } = TestRunnerEnums;
+
+jutest("RunSummary", s => {
   s.setup(() => {
-    let runSummary = new TestRunSummary();
+    let runSummary = new RunSummary();
     let jutestInstance = new Jutest();
 
     return { runSummary, jutestInstance };
   });
 
-  s.describe("#startRun", s => {
-    s.test("sets run start time", (t, { runSummary }) => {
-      runSummary.startRun();
-      t.assert(runSummary.runStartedAt);
+  s.describe("constructor", s => {
+    s.test("sets default attributes", (t, { runSummary }) => {
+      t.equal(runSummary.success, true);
+      t.equal(runSummary.exitReason, null);
+      t.equal(runSummary.totalTestsCount, 0);
+      t.equal(runSummary.runTestsCount, 0);
+      t.equal(runSummary.passedTestsCount, 0);
+      t.equal(runSummary.skippedTestsCount, 0);
+      t.equal(runSummary.failedTestsCount, 0);
+      t.same(runSummary.testSummaries, []);
     });
   });
 
-  s.describe("#endRun", s => {
-    s.test("sets run end time and exit reason", (t, { runSummary }) => {
-      runSummary.endRun({ exitReason: 'some-reason' });
+  s.describe("setTotalTestsCount", s => {
+    s.test("sets tests count", (t, { runSummary }) => {
+      runSummary.setTotalTestsCount(10);
+      t.equal(runSummary.totalTestsCount, 10);
+    });
+  });
 
-      t.assert(runSummary.runEndedAt);
-      t.equal(runSummary.exitReason, 'some-reason');
+  s.describe("exits", s => {
+    s.test("has exitWithRunEnd", (t, { runSummary }) => {
+      runSummary.exitWithRunEnd();
+
+      t.assert(runSummary.exitReason);
+      t.equal(runSummary.exitReason, ExitReasons.RunEnd);
+    });
+
+    s.test("has exitWithTeardownError", (t, { runSummary }) => {
+      runSummary.exitWithTeardownError();
+
+      t.assert(runSummary.exitReason);
+      t.equal(runSummary.exitReason, ExitReasons.TeardownError);
+    });
+
+    s.test("has exitWithInterrupt", (t, { runSummary }) => {
+      runSummary.exitWithInterrupt();
+
+      t.assert(runSummary.exitReason);
+      t.equal(runSummary.exitReason, ExitReasons.Interrupt);
+    });
+  });
+
+  s.describe("buildSpecSummary", s => {
+    s.test("returns spec summary", (t, { runSummary, jutestInstance }) => {
+      let test = jutestInstance.specsContainer.test('my test', () => {});
+      let specSummary = runSummary.buildSpecSummary(test);
+
+      t.assert(specSummary.name, 'my test');
     });
   });
 
@@ -33,7 +72,7 @@ jutest("TestRunSummary", s => {
       runSummary.addTestResult(test);
 
       t.equal(runSummary.success, true);
-      t.equal(runSummary.totalTestsCount, 1);
+      t.equal(runSummary.runTestsCount, 1);
       t.equal(runSummary.passedTestsCount, 1);
       t.equal(runSummary.skippedTestsCount, 0);
       t.equal(runSummary.failedTestsCount, 0);
@@ -46,7 +85,7 @@ jutest("TestRunSummary", s => {
       runSummary.addTestResult(test);
 
       t.equal(runSummary.success, false);
-      t.equal(runSummary.totalTestsCount, 1);
+      t.equal(runSummary.runTestsCount, 1);
       t.equal(runSummary.failedTestsCount, 1);
       t.equal(runSummary.passedTestsCount, 0);
       t.equal(runSummary.skippedTestsCount, 0);
@@ -57,7 +96,7 @@ jutest("TestRunSummary", s => {
       runSummary.addTestResult(test);
 
       t.equal(runSummary.success, true);
-      t.equal(runSummary.totalTestsCount, 1);
+      t.equal(runSummary.runTestsCount, 1);
       t.equal(runSummary.failedTestsCount, 0);
       t.equal(runSummary.passedTestsCount, 0);
       t.equal(runSummary.skippedTestsCount, 1);
@@ -77,7 +116,7 @@ jutest("TestRunSummary", s => {
       let object = runSummary.toObject();
       let keys = Object.keys(object);
 
-      t.assert(keys.includes('runStartedAt', 'testSummaries', 'exitReason'));
+      t.assert(keys.includes('testSummaries', 'exitReason'));
     });
   });
 });
