@@ -10,10 +10,10 @@ jutest("TestRunnerEventEmitter", s => {
     let emitter = new TestRunnerEventEmitter();
     let listener = spy();
 
-    emitter.on(Events.RunStart, listener);
-    await emitter.emit(Events.RunStart, 'test');
-    emitter.off(Events.RunStart, listener);
-    await emitter.emit(Events.RunStart, 'test');
+    emitter.on(Events.SuiteStart, listener);
+    await emitter.emit(Events.SuiteStart, 'test');
+    emitter.off(Events.SuiteStart, listener);
+    await emitter.emit(Events.SuiteStart, 'test');
 
     t.equal(listener.callCount, 1);
     t.equal(listener.firstCall.args[0], 'test');
