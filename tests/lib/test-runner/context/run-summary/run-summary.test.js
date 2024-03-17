@@ -22,6 +22,7 @@ jutest("RunSummary", s => {
       t.equal(runSummary.passedTestsCount, 0);
       t.equal(runSummary.skippedTestsCount, 0);
       t.equal(runSummary.failedTestsCount, 0);
+      t.equal(runSummary.runTime, null);
       t.same(runSummary.testSummaries, []);
       t.same(runSummary.fileLoadTimes, []);
     });
@@ -38,6 +39,13 @@ jutest("RunSummary", s => {
     s.test("sets tests count", (t, { runSummary }) => {
       runSummary.setTotalTestsCount(10);
       t.equal(runSummary.totalTestsCount, 10);
+    });
+  });
+
+  s.describe("setRunTime", s => {
+    s.test("sets run time", (t, { runSummary }) => {
+      runSummary.setRunTime(10)
+      t.equal(runSummary.runTime, 10);
     });
   });
 
