@@ -19,6 +19,7 @@ jutest("SpecSummary", s => {
       t.equal(summary.type, SpecTypes.Test);
       t.equal(summary.name, 'my test');
       t.equal(summary.ownName, 'my test');
+      t.equal(summary.runTime, 0);
       t.refute(summary.executionResult);
       t.assert(summary.contextId);
       t.same(summary.parentContextIds, []);
@@ -32,6 +33,7 @@ jutest("SpecSummary", s => {
       t.equal(summary.name, 'my suite');
       t.equal(summary.ownName, 'my suite');
       t.equal(summary.executionResult, undefined);
+      t.equal(summary.testsCount, 0);
       t.assert(summary.contextId);
       t.assert(summary.parentContextIds);
     });
