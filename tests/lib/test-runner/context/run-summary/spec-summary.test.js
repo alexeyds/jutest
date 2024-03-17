@@ -45,5 +45,19 @@ jutest("SpecSummary", s => {
       t.equal(executionResult.error, null);
       t.equal(executionResult.teardownError, null);
     });
+
+    s.test("includes definitionLocation", async (t, { jutestInstance }) => {
+      let test;
+
+      await jutestInstance.specsContainer.withSourceFilePath('foo.test', () => {
+        test = jutestInstance.specsContainer.test('my test', () => {});
+      });
+
+      let { definitionLocation } = new SpecSummary(test);
+
+      t.assert(definitionLocation);
+      t.equal(definitionLocation.file, 'foo.test');
+      t.assert('lineNumber' in definitionLocation);
+    });
   });
 });
