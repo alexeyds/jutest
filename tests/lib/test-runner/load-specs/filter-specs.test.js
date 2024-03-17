@@ -16,7 +16,8 @@ jutest("filterSpecs", s => {
     jutestInstance.api.test('test2');
 
     let context = new TestRunnerContext();
-    let specs = await filterSpecs(jutestInstance, context);
+    let specsByFile = await filterSpecs(jutestInstance, context);
+    let specs = specsByFile['null'];
 
     t.equal(specs.length, 2);
     t.equal(specs[0].name, 'test1');
@@ -28,8 +29,9 @@ jutest("filterSpecs", s => {
     jutestInstance.api.test('test1');
     jutestInstance.api.test('test2');
 
-    let context = TestRunnerContext.forSingleLocation(ownFileName, 29);
-    let specs = await filterSpecs(jutestInstance, context);
+    let context = TestRunnerContext.forSingleLocation(ownFileName, 30);
+    let specsByFile = await filterSpecs(jutestInstance, context);
+    let specs = specsByFile[ownFileName];
 
     t.equal(specs.length, 1);
     t.equal(specs[0].name, 'test2');
@@ -42,8 +44,9 @@ jutest("filterSpecs", s => {
       s.test('test2');
     });
 
-    let context = TestRunnerContext.forSingleLocation(ownFileName, 42);
-    let specs = await filterSpecs(jutestInstance, context);
+    let context = TestRunnerContext.forSingleLocation(ownFileName, 44);
+    let specsByFile = await filterSpecs(jutestInstance, context);
+    let specs = specsByFile[ownFileName];
 
     t.equal(specs.length, 1);
     t.equal(specs[0].name, 'test test2');

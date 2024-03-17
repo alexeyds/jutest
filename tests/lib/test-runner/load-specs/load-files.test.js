@@ -8,7 +8,7 @@ jutest("loadFiles", s => {
   s.setup(() => {
     let requireSpy = spy();
     let jutestInstance = new Jutest();
-    let file = 'foo.test.js'
+    let file = 'foo.test.js';
     let context = TestRunnerContext.forSingleLocation(file);
 
     return { requireSpy, context, jutestInstance, file };
