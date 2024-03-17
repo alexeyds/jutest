@@ -10,12 +10,12 @@ function composeSuite(name, body) {
 
 jutest("composeTestSuite()", s => {
   s.test("composes empty array if no tests are registered", async t => {
-    let specs = await composeSuite('test', () => {});
+    let { specs } = await composeSuite('test', () => {});
     t.same(specs, []);
   });
 
   s.test("adds tests from suite body", async t => {
-    let specs = await composeSuite('test', s => {
+    let { specs } = await composeSuite('test', s => {
       s.test('foo', () => {});
     });
 
@@ -24,7 +24,7 @@ jutest("composeTestSuite()", s => {
   });
 
   s.test("composes nested suites", async t => {
-    let specs = await composeSuite('test', s => {
+    let { specs } = await composeSuite('test', s => {
       s.describe('nested', s => {
         s.test('foo', () => {});
       });
@@ -39,6 +39,31 @@ jutest("composeTestSuite()", s => {
     await composeSuite('test', s => {
       s.setup(() => ({ a: 1 }));
     });
+  });
+
+  s.test("returns testsCount", async t => {
+    let { testsCount } = await composeSuite('test', () => {});
+    t.equal(testsCount, 0);
+  });
+
+  s.test("includes tests in testsCount", async t => {
+    let { testsCount } = await composeSuite('test', s => {
+      s.test('foo');
+      s.test('bar');
+    });
+
+    t.equal(testsCount, 2);
+  });
+
+  s.test("includes nested suites' tests in testsCount", async t => {
+    let { testsCount } = await composeSuite('test', s => {
+      s.describe('suite2', s => {
+        s.test('foo');
+        s.test('bar');
+      })
+    });
+
+    t.equal(testsCount, 2);
   });
 
   s.test("locks test context outside of the suite body", async t => {
@@ -62,7 +87,7 @@ jutest("composeTestSuite()", s => {
   });
 
   s.test("does nothing if suite body is not a function", async t => {
-    let specs = await composeSuite('test');
+    let { specs } = await composeSuite('test');
     t.same(specs, []);
   });
 });

@@ -1,4 +1,5 @@
 import { jutest } from "jutest";
+import { spy } from "sinon";
 import { TestSuite, SpecsContainer } from "core";
 
 jutest("TestSuite", s => {
@@ -16,6 +17,7 @@ jutest("TestSuite", s => {
       t.equal(suite.isASuite, true);
       t.equal(suite.ownName, 'suite');
       t.equal(suite.skipped, false);
+      t.equal(suite.testsCount, 0);
       t.assert(suite.contextId);
       t.same(suite.parentContextIds, [specsContainer.context.id]);
     });
@@ -74,12 +76,25 @@ jutest("TestSuite", s => {
       t.equal(specs[0].name, 'test foo');
     });
 
-    s.test("utilizes single-use job", (t, { specsContainer }) => {
-      let suite = new TestSuite('test', () => {}, { specsContainer });
-      let promise1 = suite.composeSpecs();
-      let promise2 = suite.composeSpecs(); 
+    s.test("utilizes single-use job", async (t, { specsContainer }) => {
+      let body = spy();
+      let suite = new TestSuite('test', body, { specsContainer });
+      await suite.composeSpecs();
+      await suite.composeSpecs(); 
 
-      t.equal(promise1, promise2);
+      t.equal(body.callCount, 1);
+    });
+  });
+
+  s.describe("#testsCount", s => {
+    s.test("returns loaded tests count", async (t, { specsContainer }) => {
+      let suite = new TestSuite('test', s => {
+        s.test('foo', () => {});
+      }, { specsContainer });
+
+      await suite.composeSpecs();
+
+      t.equal(suite.testsCount, 1);
     });
   });
 });
