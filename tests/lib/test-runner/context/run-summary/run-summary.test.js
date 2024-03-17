@@ -23,6 +23,14 @@ jutest("RunSummary", s => {
       t.equal(runSummary.skippedTestsCount, 0);
       t.equal(runSummary.failedTestsCount, 0);
       t.same(runSummary.testSummaries, []);
+      t.same(runSummary.fileLoadTimes, []);
+    });
+  });
+
+  s.describe("setFileLoadTime", s => {
+    s.test("adds file loading time to array", (t, { runSummary }) => {
+      runSummary.setFileLoadTime('foo.js', 123);
+      t.same(runSummary.fileLoadTimes, [ { file: 'foo.js', loadTime: 123 } ]);
     });
   });
 
@@ -30,29 +38,6 @@ jutest("RunSummary", s => {
     s.test("sets tests count", (t, { runSummary }) => {
       runSummary.setTotalTestsCount(10);
       t.equal(runSummary.totalTestsCount, 10);
-    });
-  });
-
-  s.describe("exits", s => {
-    s.test("has exitWithRunEnd", (t, { runSummary }) => {
-      runSummary.exitWithRunEnd();
-
-      t.assert(runSummary.exitReason);
-      t.equal(runSummary.exitReason, ExitReasons.RunEnd);
-    });
-
-    s.test("has exitWithTeardownError", (t, { runSummary }) => {
-      runSummary.exitWithTeardownError();
-
-      t.assert(runSummary.exitReason);
-      t.equal(runSummary.exitReason, ExitReasons.TeardownError);
-    });
-
-    s.test("has exitWithInterrupt", (t, { runSummary }) => {
-      runSummary.exitWithInterrupt();
-
-      t.assert(runSummary.exitReason);
-      t.equal(runSummary.exitReason, ExitReasons.Interrupt);
     });
   });
 
@@ -108,6 +93,29 @@ jutest("RunSummary", s => {
       let testSummary = runSummary.addTestResult(test);
 
       t.equal(runSummary.testSummaries[0], testSummary);
+    });
+  });
+
+  s.describe("exits", s => {
+    s.test("has exitWithRunEnd", (t, { runSummary }) => {
+      runSummary.exitWithRunEnd();
+
+      t.assert(runSummary.exitReason);
+      t.equal(runSummary.exitReason, ExitReasons.RunEnd);
+    });
+
+    s.test("has exitWithTeardownError", (t, { runSummary }) => {
+      runSummary.exitWithTeardownError();
+
+      t.assert(runSummary.exitReason);
+      t.equal(runSummary.exitReason, ExitReasons.TeardownError);
+    });
+
+    s.test("has exitWithInterrupt", (t, { runSummary }) => {
+      runSummary.exitWithInterrupt();
+
+      t.assert(runSummary.exitReason);
+      t.equal(runSummary.exitReason, ExitReasons.Interrupt);
     });
   });
 
