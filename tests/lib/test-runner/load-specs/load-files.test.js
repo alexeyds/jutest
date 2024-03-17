@@ -51,4 +51,12 @@ jutest("loadFiles", s => {
 
     t.throws(() => jutestInstance.api.test('asd'), /lock/);
   });
+
+  s.test("sets load times for files in summary", async (t, { jutestInstance, requireSpy, context }) => {
+    await loadFiles(jutestInstance, context, requireSpy);
+    let { fileLoadTimes } = context.runSummary;
+
+    t.equal(fileLoadTimes.length, 1);
+    t.assert(fileLoadTimes[0].loadTime);
+  });
 });
