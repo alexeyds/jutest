@@ -26,22 +26,6 @@ jutest("TestRunnerContext", s => {
     });
   });
 
-  s.describe("isFileRunnable", s => {
-    s.test("returns true for any file if locations list is empty", t => {
-      let context = new TestRunnerContext();
-
-      t.equal(context.isFileRunnable('foo.test'), true);
-      t.equal(context.isFileRunnable(null), true);
-    });
-
-    s.test("returns false for non-matching files if location with line is present", t => {
-      let context = TestRunnerContext.forSingleLocation('foo.test', 14);
-
-      t.equal(context.isFileRunnable('foo.test'), true);
-      t.equal(context.isFileRunnable('bar.test'), false);
-    });
-  });
-
   s.describe("isLocationRunnable", s => {
     s.test("returns true for any location if locations list is empty", t => {
       let context = new TestRunnerContext();

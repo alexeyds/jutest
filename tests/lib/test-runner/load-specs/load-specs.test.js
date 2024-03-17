@@ -12,8 +12,8 @@ jutest("loadFiles", s => {
   s.test("requires and filters specs", async (t, { jutestInstance }) => {
     let requireFunc = (file) => {
       jutestInstance.specsContainer.sourceFilePath = file;
-      jutestInstance.specsContainer.test('my test', () => {})
-    }
+      jutestInstance.specsContainer.test('my test', () => {});
+    };
 
     let file = 'foobar.test.js';
     let context = TestRunnerContext.forSingleLocation(file);
@@ -28,9 +28,9 @@ jutest("loadFiles", s => {
       jutestInstance.specsContainer.test('my test1');
       jutestInstance.specsContainer.describe('my suite', (s) => {
         s.test('my test2');
-        s.test('my test3')
-      })
-    }
+        s.test('my test3');
+      });
+    };
     let context = TestRunnerContext.forSingleLocation('foobar.test.js');
     await loadSpecs(jutestInstance, context, requireFunc);
 
