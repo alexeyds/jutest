@@ -20,6 +20,7 @@ jutest("Test", s => {
       t.equal(test.ownName, 'foobar');
       t.equal(test.isASuite, false);
       t.equal(test.contextId, context.id);
+      t.equal(test.runTime, 0);
       t.equal(test.parentContextIds, context.parentIds);
       t.equal(test.skipped, false);
     });
@@ -54,6 +55,7 @@ jutest("Test", s => {
       t.equal(result.status, Test.ExecutionStatuses.Passed);
       t.equal(test.wasRun, true);
       t.equal(test.result, result);
+      t.assert(test.runTime);
     });
 
     s.test("doesn't bind test body to test instance", async t => {
@@ -82,6 +84,7 @@ jutest("Test", s => {
       let result = await test.run();
       t.equal(body.called, false);
       t.assert(result.skipReason);
+      t.equal(test.runTime, 0);
     });
   });
 

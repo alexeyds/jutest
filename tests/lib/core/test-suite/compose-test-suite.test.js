@@ -60,7 +60,7 @@ jutest("composeTestSuite()", s => {
       s.describe('suite2', s => {
         s.test('foo');
         s.test('bar');
-      })
+      });
     });
 
     t.equal(testsCount, 2);

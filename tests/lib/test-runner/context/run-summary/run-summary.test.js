@@ -44,7 +44,7 @@ jutest("RunSummary", s => {
 
   s.describe("setRunTime", s => {
     s.test("sets run time", (t, { runSummary }) => {
-      runSummary.setRunTime(10)
+      runSummary.setRunTime(10);
       t.equal(runSummary.runTime, 10);
     });
   });

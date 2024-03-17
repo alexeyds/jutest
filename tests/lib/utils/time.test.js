@@ -12,8 +12,13 @@ jutest("utils/time", s => {
     });
 
     s.test("returns time elapsed", async t => {
-      let time = await measureTimeElapsed(() => {});
+      let { time } = await measureTimeElapsed(() => {});
       t.assert(time);
+    });
+
+    s.test("includes returnValue of the original function", async t => {
+      let { returnValue } = await measureTimeElapsed(() => 1);
+      t.equal(returnValue, 1);
     });
   });
 });
