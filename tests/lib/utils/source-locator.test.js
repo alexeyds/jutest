@@ -40,5 +40,12 @@ jutest("utils/source-locator", s => {
       let locator = new SourceLocator({ sourceFilePath: 'foo.test.js' });
       t.refute(locator.lineNumber);
     });
+
+    s.test("caches line number", t => {
+      let locator = new SourceLocator({ sourceFilePath: ownFileName });
+
+      t.assert(locator.lineNumber);
+      t.assert(locator.lineNumber);
+    });
   });
 });
