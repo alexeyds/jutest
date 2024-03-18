@@ -2,66 +2,43 @@ import { jutest } from "jutest";
 import { SourceLocator } from "utils/source-locator";
 
 jutest("utils/source-locator", s => {
-  let currentFileRegexp = /source-locator\.test/;
   let ownFileName = 'source-locator.test.js';
 
-  s.describe("#locations", s => {
-    s.test("returns parsed source locations", t => {
-      let locator = new SourceLocator();
-      let location = locator.locations[1];
-
-      t.match(location.stackFrame, currentFileRegexp);
-      t.equal(location.lineNumber, 10);
-    });
-
-    s.test("caches the definitions", t => {
-      let locator = new SourceLocator();
-      t.equal(locator.locations, locator.locations);
-    });
-  });
-
   s.describe("constructor()", s => {
-    s.test("accepts sourceError", t => {
-      let locator = new SourceLocator({ sourceError: new Error() });
-      let location = locator.locations[0];
+    s.test("sets default attributes", t => {
+      let locator = new SourceLocator();
 
-      t.match(location.stackFrame, currentFileRegexp);
+      t.assert(locator.sourceError);
+      t.refute(locator.sourceFilePath);
+    });
+
+    s.test("accepts sourceError", t => {
+      let sourceError = new Error();
+      let locator = new SourceLocator({ sourceError });
+
+      t.equal(locator.sourceError, sourceError);
     });
 
     s.test("accepts sourceFilePath", t => {
-      let sourceFilePath = 'source-locator.test.js';
-      let locator = new SourceLocator({ sourceFilePath });
-
-      t.equal(locator.sourceFilePath, sourceFilePath);
-      t.equal(locator.lineNumber, 33);
+      let locator = new SourceLocator({ sourceFilePath: ownFileName });
+      t.equal(locator.sourceFilePath, ownFileName);
     });
   });
 
-  s.describe("#guessLineNumberInFile", s => {
-    s.test("returns source line in the matching file", t => {
+  s.describe("#lineNumber", s => {
+    s.test("returns undefined by default", t => {
       let locator = new SourceLocator();
-      let lineNumber = locator.guessLineNumberInFile(ownFileName);
-
-      t.equal(lineNumber, 42);
+      t.refute(locator.lineNumber);
     });
 
-    s.test("returns latest source line from multiple definitions", t => {
-      let locator = buildSourceLocator();
-
-      function buildSourceLocator() {
-        return new SourceLocator();
-      }
-
-      let lineNumber = locator.guessLineNumberInFile(ownFileName);
-
-      t.equal(lineNumber, 49);
+    s.test("returns line number in source file path", t => {
+      let locator = new SourceLocator({ sourceFilePath: ownFileName });
+      t.equal(locator.lineNumber, 35);
     });
 
-    s.test("returns undefined when location is not found", t => {
-      let locator = new SourceLocator();
-      let lineNumber = locator.guessLineNumberInFile('foobar.test.js');
-
-      t.equal(lineNumber, undefined);
+    s.test("returns undefined if line not found in the file", t => {
+      let locator = new SourceLocator({ sourceFilePath: 'foo.test.js' });
+      t.refute(locator.lineNumber);
     });
   });
 });

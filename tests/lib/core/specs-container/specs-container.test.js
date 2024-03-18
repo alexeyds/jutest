@@ -233,7 +233,7 @@ jutest("SpecsContainer", s => {
       specsContainer.test('foo', () => {});
       let [test] = specsContainer.specs;
 
-      t.equal(test.sourceLocator.sourceFilePath, undefined);
+      t.refute(test.sourceLocator.sourceFilePath);
     });
 
     s.test("resets current path even if an error had occured", async (t, { specsContainer }) => {
@@ -243,7 +243,7 @@ jutest("SpecsContainer", s => {
       specsContainer.test('foo', () => {});
       let [test] = specsContainer.specs;
 
-      t.equal(test.sourceLocator.sourceFilePath, undefined);
+      t.refute(test.sourceLocator.sourceFilePath);
     });
 
     s.test("resets source path to its original value", async t => {

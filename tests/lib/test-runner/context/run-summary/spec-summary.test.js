@@ -20,9 +20,10 @@ jutest("SpecSummary", s => {
       t.equal(summary.name, 'my test');
       t.equal(summary.ownName, 'my test');
       t.equal(summary.runTime, 0);
-      t.refute(summary.executionResult);
       t.assert(summary.contextId);
       t.same(summary.parentContextIds, []);
+      t.refute(summary.executionResult);
+      t.refute(summary.definitionLocation);
     });
 
     s.test("creates summary for a suite", (t, { jutestInstance }) => {
@@ -32,10 +33,11 @@ jutest("SpecSummary", s => {
       t.equal(summary.type, SpecTypes.Suite);
       t.equal(summary.name, 'my suite');
       t.equal(summary.ownName, 'my suite');
-      t.equal(summary.executionResult, undefined);
       t.equal(summary.testsCount, 0);
       t.assert(summary.contextId);
       t.assert(summary.parentContextIds);
+      t.refute(summary.executionResult);
+      t.refute(summary.definitionLocation);
     });
 
     s.test("includes execution result for tests", async (t, { jutestInstance }) => {
@@ -48,12 +50,14 @@ jutest("SpecSummary", s => {
       t.equal(executionResult.teardownError, null);
     });
 
-    s.test("includes definitionLocation", async (t, { jutestInstance }) => {
+    s.test("includes definitionLocation for failed tests", async (t, { jutestInstance }) => {
       let test;
 
       await jutestInstance.specsContainer.withSourceFilePath('foo.test', () => {
-        test = jutestInstance.specsContainer.test('my test', () => {});
+        test = jutestInstance.specsContainer.test('my test', (t) => t.assert(false));
       });
+
+      await test.run();
 
       let { definitionLocation } = new SpecSummary(test);
 
