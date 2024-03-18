@@ -1,183 +1,125 @@
-// import { jutest } from "jutest";
-// import { spy } from "sinon";
-// import { Test } from "core";
-// import { Runtime, SpecTypes, RuntimeEvents, ExitReasons } from "runtime";
+import { jutest } from "jutest";
+import { Jutest } from "core";
+import { spy } from "sinon";
+import { TestRunnerEnums } from "test-runner";
+import { TestRunnerContext } from "test-runner/context";
+import { runSpecs } from "test-runner/run-specs";
 
-// jutest("TestRunner", s => {
-//   s.setup(() => {
-//     let runtime = new Runtime();
-//     let { jutest } = runtime;
+const { Events } = TestRunnerEnums;
 
-//     return { jutest, runtime };
-//   });
+function runSpecsFromContainer(specsContainer, context=new TestRunnerContext()) {
+  return runSpecs(specsContainer.specsByFile, context);
+}
 
-//   s.describe("#runAll()", s => {
-//     s.test("runs tests from the container", async (t, { runtime }) => {
-//       runtime.jutest.test('test', t => {
-//         t.assert(true);
-//       });
+function createListener(event, context) {
+  let listener = spy();
+  context.eventEmitter.on(event, listener);
+  return listener;
+}
 
-//       await runtime.runner.runAll();
-//       let [test] = runtime.specsContainer.specs;
+jutest("runSpecs", s => {
+  s.setup(() => {
+    let { specsContainer } = new Jutest();
+    let context = new TestRunnerContext();
 
-//       t.equal(test.wasRun, true);
-//       t.equal(test.result.status, Test.ExecutionStatuses.Passed);
-//     });
+    return { specsContainer, context };
+  });
 
-//     s.test("runs suites from the container", async (t, { runtime }) => {
-//       runtime.jutest.describe('suite', s => {
-//         s.test('test', t => {
-//           t.assert(true);
-//         });
-//       });
+  s.test("runs provided tests", async (t, { specsContainer }) => {
+    let test = specsContainer.test('test', () => {});
+    await runSpecsFromContainer(specsContainer);
 
-//       await runtime.runner.runAll();
-//       let [test] = await runtime.specsContainer.specs[0].composeSpecs();
+    t.equal(test.wasRun, true);
+    t.assert(test.result.status);
+  });
 
-//       t.equal(test.wasRun, true);
-//       t.equal(test.result.status, Test.ExecutionStatuses.Passed);
-//     });
+  s.test("runs provided suites", async (t, { specsContainer }) => {
+    let suite = specsContainer.describe('suite', s => {
+      s.test('foo', () => {});
+    });
+    await runSpecsFromContainer(specsContainer);
+    let [test] = await suite.composeSpecs();
 
-//     s.test("returns summary", async (t, { runtime }) => {
-//       let runSummary = await runtime.runner.runAll();
-//       t.assert(runSummary.exitReason);
-//     });
+    t.equal(test.wasRun, true);
+  });
 
-//     s.test("returns summary", async (t, { runtime }) => {
-//       runtime.jutest.test('my-test', () => {});
-//       let runSummary = await runtime.runner.runAll();
+  s.test("adds test results to summary", async (t, { specsContainer, context }) => {
+    specsContainer.test('my test', () => {});
+    await runSpecsFromContainer(specsContainer, context);
+    let { runSummary } = context;
 
-//       t.equal(runSummary.passedTestsCount, 1);
-//       t.equal(runSummary.testSummaries.length, 1);
-//       t.assert(runSummary.runStartedAt);
-//       t.assert(runSummary.runEndedAt);
-//       t.equal(runSummary.exitReason, ExitReasons.RunEnd);
-//     });
-//   });
+    t.equal(runSummary.testSummaries.length, 1);
+    let testSummary = runSummary.testSummaries[0];
+    t.equal(testSummary.name, 'my test');
+    t.assert(testSummary.executionResult);
+  });
 
-//   s.describe("events", s => {
-//     s.test('emits run-start event', async (t, { runtime }) => {
-//       let listener = spy();
-//       runtime.eventEmitter.on(RuntimeEvents.RunStart, listener);
-//       await runtime.runner.runAll();
+  s.test("supports skipped tests", async (t, { specsContainer, context }) => {
+    let test = specsContainer.xtest('test', () => {});
+    await runSpecsFromContainer(specsContainer, context);
 
-//       t.equal(listener.called, true);
-//     });
+    t.equal(test.wasRun, false);
+    t.equal(context.runSummary.testSummaries[0].name, 'test');
+  });
 
-//     s.test('emits run-end event', async (t, { runtime }) => {
-//       let listener = spy();
-//       runtime.eventEmitter.on(RuntimeEvents.RunEnd, listener);
-//       await runtime.runner.runAll();
+  [Events.FileStart, Events.FileEnd].forEach(event => {
+    s.test(`emits ${event} event`, async (t, { specsContainer, context }) => {
+      let listener = createListener(event, context);
 
-//       t.equal(listener.called, true);
-//       let runSummary = listener.firstCall.args[0];
-//       t.assert(runSummary.exitReason);
-//     });
+      await specsContainer.withSourceFilePath('foo.test', () => {
+        specsContainer.test('my test', () => {});
+      });
+      await runSpecsFromContainer(specsContainer, context);
 
-//     [RuntimeEvents.SuiteStart, RuntimeEvents.SuiteEnd].forEach(event => {
-//       s.test(`emits "${event}" event`, async (t, { runtime }) => {
-//         runtime.jutest.describe('my-suite', () => {});
-//         let listener = spy();
-//         runtime.eventEmitter.on(event, listener);
+      t.same(listener.firstCall.args, ['foo.test']);
+    });
+  });
 
-//         await runtime.runner.runAll();
+  [Events.SuiteStart, Events.SuiteEnd].forEach(event => {    
+    s.test(`emits ${event} event`, async (t, { specsContainer, context }) => {
+      let listener = createListener(event, context);
 
-//         t.equal(listener.called, true);
-//         let suiteSummary = listener.firstCall.args[0];
-//         t.equal(suiteSummary.name, 'my-suite');
-//         t.equal(suiteSummary.type, SpecTypes.Suite);
-//       });
-//     });
+      specsContainer.describe('my suite', () => {});
+      await runSpecsFromContainer(specsContainer, context);
 
-//     [RuntimeEvents.TestStart, RuntimeEvents.TestEnd].forEach(event => {
-//       s.test(`emits "${event}" event`, async (t, { runtime }) => {
-//         runtime.jutest.describe('my-suite', s => {
-//           s.test('my-test', () => {});
-//         });
-//         let listener = spy();
-//         runtime.eventEmitter.on(event, listener);
+      t.equal(listener.firstCall.args[0].name, 'my suite');
+    });
+  });
 
-//         await runtime.runner.runAll();
+  s.test("emites test-start event", async (t, { specsContainer, context }) => {
+    let listener = createListener(Events.TestStart, context);
+    let skipListener = createListener(Events.TestSkip, context);
+    specsContainer.test('my test', () => {});
 
-//         t.equal(listener.called, true);
-//         let testSummary = listener.firstCall.args[0];
-//         t.equal(testSummary.name, 'my-suite my-test');
-//         t.equal(testSummary.type, SpecTypes.Test);
-//       });
-//     });
+    await runSpecsFromContainer(specsContainer, context);
+    let testSummary = listener.firstCall.args[0];
 
-//     s.test("test-end event includes test results", async (t, { runtime }) => {
-//       runtime.jutest.test('my-test', () => {});
-//       let listener = spy();
-//       runtime.eventEmitter.on(RuntimeEvents.TestEnd, listener);
+    t.equal(testSummary.name, 'my test');
+    t.equal(testSummary.executionResult, undefined);
+    t.equal(skipListener.called, false);
+  });
 
-//       await runtime.runner.runAll();
+  s.test("emits test-end event", async (t, { specsContainer, context }) => {
+    let listener = createListener(Events.TestEnd, context);
+    specsContainer.test('my test', () => {});
 
-//       let testSummary = listener.firstCall.args[0];
-//       t.assert(testSummary.executionResult);
-//     });
+    await runSpecsFromContainer(specsContainer, context);
+    let testSummary = listener.firstCall.args[0];
 
-//     s.test('emits test-skip event', async (t, { runtime }) => {
-//       runtime.jutest.xtest('my-test', () => {});
+    t.equal(testSummary.name, 'my test');
+    t.assert(testSummary.executionResult);
+  });
 
-//       let listener = spy();
-//       runtime.eventEmitter.on(RuntimeEvents.TestSkip, listener);
-//       await runtime.runner.runAll();
+  s.test("emits test-skip event", async (t, { specsContainer, context }) => {
+    let listener = createListener(Events.TestSkip, context);
+    let startListener = createListener(Events.TestStart, context);
+    specsContainer.xtest('my test', () => {});
 
-//       t.equal(listener.called, true);
-//       let testSummary = listener.firstCall.args[0];
-//       t.assert(testSummary.executionResult.status);
-//     });
-//   });
+    await runSpecsFromContainer(specsContainer, context);
+    let testSummary = listener.firstCall.args[0];
 
-//   s.describe("#runAtFileLocation", s => {
-//     let ownFileName = 'test-runner.test.js';
-
-//     s.test("only runs test/suite defined on the specified line", async (t, { runtime }) => {
-//       runtime.jutest.test('test', () => {});
-//       runtime.jutest.test('test2', () => {});
-//       await runtime.runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 137 });
-
-//       let [test1, test2] = runtime.specsContainer.specs;
-
-//       t.equal(test1.wasRun, true);
-//       t.equal(test2.wasRun, false);
-//     });
-
-//     s.test("works with nested specs", async (t, { runtime }) => {
-//       runtime.jutest.describe('suite', (s) => {
-//         s.describe('suite1', s => {
-//           s.test('test1', () => {});
-//         });
-//         s.describe('suite2', s => {
-//           s.test('test2', () => {});
-//           s.test('test3', () => {});
-//         });
-//       });
-
-//       await runtime.runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 153 });
-
-//       let [suite1, suite2] = await runtime.specsContainer.specs[0].composeSpecs();
-//       let [test1] = await suite1.composeSpecs();
-//       let [test2, test3] = await suite2.composeSpecs();
-
-//       t.equal(test1.wasRun, false);
-//       t.equal(test2.wasRun, true);
-//       t.equal(test3.wasRun, false);
-//     });
-
-//     s.test("runs all defined specs if nothing can be found on the specified line", async (t, { runtime }) => {
-//       runtime.jutest.describe('suite', (s) => {
-//         s.test('test1', () => {});
-//         s.test('test2', () => {});
-//       });
-
-//       await runtime.runner.runAtFileLocation({ fileName: ownFileName, lineNumber: 0 });
-
-//       let [test1, test2] = await runtime.specsContainer.specs[0].composeSpecs();
-
-//       t.equal(test1.wasRun, true);
-//       t.equal(test2.wasRun, true);
-//     });
-//   });
-// });
+    t.equal(testSummary.name, 'my test');
+    t.assert(testSummary.executionResult);
+    t.equal(startListener.called, false);
+  });
+});

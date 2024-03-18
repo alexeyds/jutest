@@ -22,7 +22,7 @@ jutest("RunSummary", s => {
       t.equal(runSummary.passedTestsCount, 0);
       t.equal(runSummary.skippedTestsCount, 0);
       t.equal(runSummary.failedTestsCount, 0);
-      t.equal(runSummary.runTime, null);
+      t.equal(runSummary.runTime, 0);
       t.same(runSummary.testSummaries, []);
       t.same(runSummary.fileLoadTimes, []);
     });
