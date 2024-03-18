@@ -35,14 +35,14 @@ jutest("TestRunnerContext", s => {
       t.equal(context.isLocationRunnable(null), true);
     });
 
-    s.test("returns false if location doesn't match the file", t => {
+    s.test("returns true if location doesn't match the file", t => {
       let context = TestRunnerContext.forSingleLocation('foo.test', 14);
-      t.equal(context.isLocationRunnable('bar.test', 14), false);
+      t.equal(context.isLocationRunnable('bar.test', 14), true);
     });
 
     s.test("returns false if location doesn't match the line number", t => {
       let context = TestRunnerContext.forSingleLocation('foo.test', 14);
-      t.equal(context.isLocationRunnable('foo.test', 15), false);
+      t.equal(context.isLocationRunnable('foo.test', 21), false);
     });
 
     s.test("returns true if location matches the line number", t => {
@@ -66,7 +66,14 @@ jutest("TestRunnerContext", s => {
       t.equal(context.isLocationRunnable('foo.test', 13), true);
       t.equal(context.isLocationRunnable('foo.test', 15), true);
       t.equal(context.isLocationRunnable('foo.test', 17), false);
-      t.equal(context.isLocationRunnable('bar.test'), false);
+      t.equal(context.isLocationRunnable('bar.test'), true);
+    });
+
+    s.test("allows +-1 line flexibility while specifying the line number", t => {
+      let context = TestRunnerContext.forSingleLocation('foo.test', 14);
+
+      t.equal(context.isLocationRunnable('foo.test', 13), true);
+      t.equal(context.isLocationRunnable('foo.test', 15), true);
     });
   });
 });

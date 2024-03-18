@@ -27,9 +27,10 @@ jutest("filterSpecs", s => {
   s.test("returns tests defined on the specified line", async (t, { jutestInstance }) => {
     jutestInstance.specsContainer.sourceFilePath = ownFileName;
     jutestInstance.api.test('test1');
+
     jutestInstance.api.test('test2');
 
-    let context = TestRunnerContext.forSingleLocation(ownFileName, 30);
+    let context = TestRunnerContext.forSingleLocation(ownFileName, 31);
     let specsByFile = await filterSpecs(jutestInstance, context);
     let specs = specsByFile[ownFileName];
 
@@ -41,10 +42,11 @@ jutest("filterSpecs", s => {
     jutestInstance.specsContainer.sourceFilePath = ownFileName;
     jutestInstance.api.describe('test', s => {
       s.test('test1');
+
       s.test('test2');
     });
 
-    let context = TestRunnerContext.forSingleLocation(ownFileName, 44);
+    let context = TestRunnerContext.forSingleLocation(ownFileName, 46);
     let specsByFile = await filterSpecs(jutestInstance, context);
     let specs = specsByFile[ownFileName];
 
