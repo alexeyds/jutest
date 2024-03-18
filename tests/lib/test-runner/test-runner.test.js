@@ -5,7 +5,7 @@ import { TestRunnerEnums } from "test-runner";
 import { jutestInstance } from "./fixtures/jutest-instance";
 import { TestRunner } from "test-runner";
 
-let { Events } = TestRunnerEnums;
+let { Events, ExitReasons } = TestRunnerEnums;
 
 let fixtureFilePath = path.join(process.cwd(), 'tests/lib/test-runner/fixtures/test-fixtures.js');
 
@@ -32,6 +32,11 @@ jutest("TestRunner", s => {
       t.equal(result.skippedTestsCount, 2);
       t.equal(result.failedTestsCount, 1);
       t.equal(result.testSummaries[0].name, 'main suite test 1');
+    });
+
+    s.test("sets run-end exit reason", async (t, { runner }) => {
+      let result = await runner.run(jutestInstance);
+      t.assert(result.exitReason, ExitReasons.RunEnd);
     });
 
     s.test("sets runTime in summary", async (t, { runner }) => {

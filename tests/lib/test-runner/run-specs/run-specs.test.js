@@ -5,7 +5,7 @@ import { TestRunnerEnums } from "test-runner";
 import { TestRunnerContext } from "test-runner/context";
 import { runSpecs } from "test-runner/run-specs";
 
-const { Events, ExitReasons } = TestRunnerEnums;
+const { Events } = TestRunnerEnums;
 
 function runSpecsFromContainer(specsContainer, context=new TestRunnerContext()) {
   return runSpecs(specsContainer.specsByFile, context);
@@ -60,11 +60,6 @@ jutest("runSpecs", s => {
 
     t.equal(test.wasRun, false);
     t.equal(context.runSummary.testSummaries[0].name, 'test');
-  });
-
-  s.test("sets run-end exit reason", async (t, { specsContainer, context }) => {
-    await runSpecsFromContainer(specsContainer, context);
-    t.equal(context.runSummary.exitReason, ExitReasons.RunEnd);
   });
 
   [Events.FileStart, Events.FileEnd].forEach(event => {
