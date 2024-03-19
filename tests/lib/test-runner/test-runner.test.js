@@ -1,6 +1,7 @@
 import { jutest } from "jutest";
 import path from "path";
 import { spy } from "sinon";
+import { fileLocation } from "utils/file-location";
 import { TestRunnerEnums } from "test-runner";
 import { jutestInstance } from "./fixtures/jutest-instance";
 import { TestRunner } from "test-runner";
@@ -11,7 +12,7 @@ let fixtureFilePath = path.join(process.cwd(), 'tests/lib/test-runner/fixtures/t
 
 function createFixtureRunner({ lineNumber }={}) {
   return new TestRunner({
-    fileLocations: [ {file: fixtureFilePath, lineNumber } ]
+    fileLocations: [ fileLocation(fixtureFilePath, lineNumber) ]
   });
 }
 

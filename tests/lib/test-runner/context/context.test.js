@@ -1,4 +1,5 @@
 import { jutest } from "jutest";
+import { fileLocation } from "utils/file-location";
 import { TestRunnerContext } from "test-runner/context";
 
 jutest("TestRunnerContext", s => {
@@ -12,7 +13,7 @@ jutest("TestRunnerContext", s => {
     });
 
     s.test("accepts fileLocations param", t => {
-      let fileLocations = [{file: 'test.js', lineNumber: 13}];
+      let fileLocations = [fileLocation('test.js', 13)];
       let context = new TestRunnerContext({ fileLocations });
 
       t.same(context.fileLocations, fileLocations);
@@ -22,7 +23,7 @@ jutest("TestRunnerContext", s => {
   s.describe("::forSingleLocation", s => {
     s.test("returns context with file", t => {
       let context = TestRunnerContext.forSingleLocation('test.js', 15);
-      t.same(context.fileLocations, [{file: 'test.js', lineNumber: 15}]);
+      t.same(context.fileLocations, [fileLocation('test.js', 15)]);
     });
   });
 
@@ -58,8 +59,8 @@ jutest("TestRunnerContext", s => {
     s.test("supports multiple line-restricted locations within the same file", t => {
       let context = new TestRunnerContext({ 
         fileLocations: [
-          { file: 'foo.test', lineNumber: 13 },
-          { file: 'foo.test', lineNumber: 15 }
+          fileLocation('foo.test', 13),
+          fileLocation('foo.test', 15),
         ]
       });
 
