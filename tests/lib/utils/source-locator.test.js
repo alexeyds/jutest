@@ -40,5 +40,13 @@ jutest("utils/source-locator", s => {
       let locator = new SourceLocator({ sourceFilePath: 'foo.test.js' });
       t.refute(locator.lineNumber);
     });
+
+    s.test("correctly handles error with stack frames without files", t => {
+      let error = new Error();
+      error.stack = 'at <anonymous>';
+      let locator = new SourceLocator({ sourceError: error, sourceFilePath: 'foo.test.js' });
+      
+      t.refute(locator.lineNumber);
+    });
   });
 });

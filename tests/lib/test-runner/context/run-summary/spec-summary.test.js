@@ -21,9 +21,9 @@ jutest("SpecSummary", s => {
       t.equal(summary.ownName, 'my test');
       t.equal(summary.runTime, 0);
       t.assert(summary.contextId);
+      t.assert(summary.definitionLocation);
       t.same(summary.parentContextIds, []);
       t.refute(summary.executionResult);
-      t.refute(summary.definitionLocation);
     });
 
     s.test("creates summary for a suite", (t, { jutestInstance }) => {
@@ -36,8 +36,8 @@ jutest("SpecSummary", s => {
       t.equal(summary.testsCount, 0);
       t.assert(summary.contextId);
       t.assert(summary.parentContextIds);
+      t.assert(summary.definitionLocation);
       t.refute(summary.executionResult);
-      t.refute(summary.definitionLocation);
     });
 
     s.test("includes execution result for tests", async (t, { jutestInstance }) => {
@@ -50,10 +50,10 @@ jutest("SpecSummary", s => {
       t.equal(executionResult.teardownError, null);
     });
 
-    s.test("includes definitionLocation for failed tests", async (t, { jutestInstance }) => {
+    s.test("includes lineNumber for failed tests", async (t, { jutestInstance }) => {
       let test;
 
-      await jutestInstance.specsContainer.withSourceFilePath('foo.test', () => {
+      await jutestInstance.specsContainer.withSourceFilePath('spec-summary.test.js', () => {
         test = jutestInstance.specsContainer.test('my test', (t) => t.assert(false));
       });
 
@@ -62,8 +62,8 @@ jutest("SpecSummary", s => {
       let { definitionLocation } = new SpecSummary(test);
 
       t.assert(definitionLocation);
-      t.equal(definitionLocation.file, 'foo.test');
-      t.assert('lineNumber' in definitionLocation);
+      t.equal(definitionLocation.file, 'spec-summary.test.js');
+      t.assert(definitionLocation.lineNumber);
     });
   });
 });
