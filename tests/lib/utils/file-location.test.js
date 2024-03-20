@@ -10,7 +10,7 @@ jutest("utils/file-location", s => {
 
   s.test("parses path with line number", t => {
     let locations = parseFileLocations("my-file.js:14");
-    t.same(locations, [ fileLocation('my-file.js', 14) ])
+    t.same(locations, [ fileLocation('my-file.js', 14) ]);
   });
 
   s.test("parses paths without line number", t => {
@@ -34,6 +34,6 @@ jutest("utils/file-location", s => {
 
   s.test("works with unusual paths", t => {
     let locations = parseFileLocations("my:14file.js:15");
-    t.same(locations, [ fileLocation('my:14file.js', 15) ])
+    t.same(locations, [ fileLocation('my:14file.js', 15) ]);
   });
 });
