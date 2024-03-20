@@ -1,7 +1,7 @@
 import { jutest } from "jutest";
 import { SourceLocator } from "utils/source-locator";
 
-jutest("utils/source-locator", s => {
+jutest("SourceLocator", s => {
   let ownFileName = 'source-locator.test.js';
 
   s.describe("constructor()", s => {
@@ -25,6 +25,31 @@ jutest("utils/source-locator", s => {
     });
   });
 
+  s.describe("#lineNumbers", s => {
+    s.test("returns empty array by default", t => {
+      let locator = new SourceLocator();
+      t.same(locator.lineNumbers, []);
+    });
+
+    s.test("returns line number in source file path", t => {
+      let locator = new SourceLocator({ sourceFilePath: ownFileName });
+      t.same(locator.lineNumbers, [35]);
+    });
+
+    s.test("returns undefined if line not found in the file", t => {
+      let locator = new SourceLocator({ sourceFilePath: 'foo.test.js' });
+      t.same(locator.lineNumbers, []);
+    });
+
+    s.test("correctly handles error with stack frames without files", t => {
+      let error = new Error();
+      error.stack = 'at <anonymous>';
+      let locator = new SourceLocator({ sourceError: error, sourceFilePath: 'foo.test.js' });
+      
+      t.same(locator.lineNumbers, []);
+    });
+  });
+
   s.describe("#lineNumber", s => {
     s.test("returns undefined by default", t => {
       let locator = new SourceLocator();
@@ -33,20 +58,7 @@ jutest("utils/source-locator", s => {
 
     s.test("returns line number in source file path", t => {
       let locator = new SourceLocator({ sourceFilePath: ownFileName });
-      t.equal(locator.lineNumber, 35);
-    });
-
-    s.test("returns undefined if line not found in the file", t => {
-      let locator = new SourceLocator({ sourceFilePath: 'foo.test.js' });
-      t.refute(locator.lineNumber);
-    });
-
-    s.test("correctly handles error with stack frames without files", t => {
-      let error = new Error();
-      error.stack = 'at <anonymous>';
-      let locator = new SourceLocator({ sourceError: error, sourceFilePath: 'foo.test.js' });
-      
-      t.refute(locator.lineNumber);
+      t.assert(locator.lineNumber);
     });
   });
 });
