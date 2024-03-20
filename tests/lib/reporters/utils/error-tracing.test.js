@@ -6,7 +6,7 @@ import { traceFailedLine, readFailedLine } from "reporters/utils/error-tracing";
 jutest("reporters/utils/error-tracing", s => {
   function tracedError(stackTraceLines) {
     let error = new Error('testing');
-    let stackTrace = stackTraceLines.map(l => addPadding(l, 4)).join('\n');
+    let stackTrace = stackTraceLines.map(l => addPadding(`at ${l}:1:4`, 4)).join('\n');
     error.stack = `${error.name}: ${error.message}\n${stackTrace}`;
     return error;
   }
@@ -20,7 +20,7 @@ jutest("reporters/utils/error-tracing", s => {
       let error = tracedError(['/test', target, '/foobar']);
       let result = traceFailedLine(error, { sourceDir });
 
-      t.equal(result, target);
+      t.match(result, target);
     });
 
     s.test("has {excludeSourceDirs} option", t => {
@@ -28,14 +28,14 @@ jutest("reporters/utils/error-tracing", s => {
       let error = tracedError(['/test', sourceLine('/node_modules/target'), target, '/foobar']);
       let result = traceFailedLine(error, { sourceDir, excludeSourceDirs: ['node_modules'] });
 
-      t.equal(result, target);
+      t.match(result, target);
     });
 
     s.test("returns null by default", t => {
       let error = tracedError(['/test', '/foobar']);
       let result = traceFailedLine(error, { sourceDir });
 
-      t.equal(result, null);
+      t.refute(result);
     });
 
     s.test("matches directories exactly", t => {

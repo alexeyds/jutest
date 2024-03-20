@@ -49,21 +49,21 @@ jutest("parseStack", s => {
       let { file, lineNumber } = parseStackFrame('at baz (filename.js:10:15)');
 
       t.equal(file, 'filename.js');
-      t.equal(lineNumber, '10');
+      t.equal(lineNumber, 10);
     });
 
     s.test("works with anonymous eval stack frames", t => {
       let { file, lineNumber } = parseStackFrame('at eval (eval at <anonymous> (filename.js:1:13), <anonymous>:1:8)');
 
       t.equal(file, 'filename.js');
-      t.equal(lineNumber, '1');
+      t.equal(lineNumber, 1);
     });
 
     s.test("works with simple stack frames", t => {
       let { file, lineNumber } = parseStackFrame('at filename.js:10:15');
 
       t.equal(file, 'filename.js');
-      t.equal(lineNumber, '10');
+      t.equal(lineNumber, 10);
     });
   });
 
