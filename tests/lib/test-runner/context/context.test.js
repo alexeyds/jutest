@@ -13,7 +13,7 @@ jutest("TestRunnerContext", s => {
     });
 
     s.test("accepts fileLocations param", t => {
-      let fileLocations = [fileLocation('test.js', 13)];
+      let fileLocations = [fileLocation('test.js', [13])];
       let context = new TestRunnerContext({ fileLocations });
 
       t.same(context.fileLocations, fileLocations);
@@ -22,8 +22,8 @@ jutest("TestRunnerContext", s => {
 
   s.describe("::forSingleLocation", s => {
     s.test("returns context with file", t => {
-      let context = TestRunnerContext.forSingleLocation('test.js', 15);
-      t.same(context.fileLocations, [fileLocation('test.js', 15)]);
+      let context = TestRunnerContext.forSingleLocation('test.js', [15]);
+      t.same(context.fileLocations, [fileLocation('test.js', [15])]);
     });
   });
 
@@ -37,22 +37,22 @@ jutest("TestRunnerContext", s => {
     });
 
     s.test("returns true if location doesn't match the file", t => {
-      let context = TestRunnerContext.forSingleLocation('foo.test', 14);
+      let context = TestRunnerContext.forSingleLocation('foo.test', [14]);
       t.equal(context.isLocationRunnable('bar.test', [14]), true);
     });
 
     s.test("returns false if location doesn't match the line number", t => {
-      let context = TestRunnerContext.forSingleLocation('foo.test', 14);
+      let context = TestRunnerContext.forSingleLocation('foo.test', [14]);
       t.equal(context.isLocationRunnable('foo.test', [21]), false);
     });
 
     s.test("returns false if line number is missing", t => {
-      let context = TestRunnerContext.forSingleLocation('foo.test', 14);
+      let context = TestRunnerContext.forSingleLocation('foo.test', [14]);
       t.equal(context.isLocationRunnable('foo.test'), false);
     });
 
     s.test("returns true if location matches the line number", t => {
-      let context = TestRunnerContext.forSingleLocation('foo.test', 14);
+      let context = TestRunnerContext.forSingleLocation('foo.test', [14]);
       t.equal(context.isLocationRunnable('foo.test', [14]), true);
     });
 
@@ -61,13 +61,8 @@ jutest("TestRunnerContext", s => {
       t.equal(context.isLocationRunnable('foo.test', [14]), true);
     });
 
-    s.test("supports multiple line-restricted locations within the same file", t => {
-      let context = new TestRunnerContext({ 
-        fileLocations: [
-          fileLocation('foo.test', 13),
-          fileLocation('foo.test', 15),
-        ]
-      });
+    s.test("supports locations with multiple lines", t => {
+      let context = TestRunnerContext.forSingleLocation('foo.test', [13, 15]);
 
       t.equal(context.isLocationRunnable('foo.test', [13]), true);
       t.equal(context.isLocationRunnable('foo.test', [15]), true);
@@ -76,7 +71,7 @@ jutest("TestRunnerContext", s => {
     });
 
     s.test("works with multiple line numbers", t => {
-      let context = TestRunnerContext.forSingleLocation('foo.test', 14);
+      let context = TestRunnerContext.forSingleLocation('foo.test', [14]);
       t.equal(context.isLocationRunnable('foo.test', [14, 15]), true);
     });
   });

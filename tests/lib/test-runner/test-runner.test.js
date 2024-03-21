@@ -10,9 +10,9 @@ let { Events, ExitReasons } = TestRunnerEnums;
 
 let fixtureFilePath = path.join(process.cwd(), 'tests/lib/test-runner/fixtures/test-fixtures.js');
 
-function createFixtureRunner({ lineNumber }={}) {
+function createFixtureRunner({ lineNumbers }={}) {
   return new TestRunner({
-    fileLocations: [ fileLocation(fixtureFilePath, lineNumber) ]
+    fileLocations: [ fileLocation(fixtureFilePath, lineNumbers) ]
   });
 }
 
@@ -45,12 +45,13 @@ jutest("TestRunner", s => {
       t.assert(result.runTime);
     });
 
-    s.test("supports running specs defined on the specific line", async t => {
-      let runner = createFixtureRunner({ lineNumber: 14 });
-      let result = await runner.run(jutestInstance);
+    s.test("supports running specs defined on the specific lines", async t => {
+      let runner = createFixtureRunner({ lineNumbers: [14, 18] });
+      let { totalTestsCount, testSummaries } = await runner.run(jutestInstance);
 
-      t.equal(result.totalTestsCount, 1);
-      t.equal(result.testSummaries[0].name, 'main suite skipped suite test 4');
+      t.equal(totalTestsCount, 2);
+      t.equal(testSummaries[0].name, 'main suite skipped suite test 4');
+      t.equal(testSummaries[1].name, 'standalone test');
     });
   });
 });

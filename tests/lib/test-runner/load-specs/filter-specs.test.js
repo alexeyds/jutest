@@ -30,7 +30,7 @@ jutest("filterSpecs", s => {
 
     jutestInstance.api.test('test2');
 
-    let context = TestRunnerContext.forSingleLocation(ownFileName, 31);
+    let context = TestRunnerContext.forSingleLocation(ownFileName, [31]);
     let specsByFile = await filterSpecs(jutestInstance, context);
     let specs = specsByFile[ownFileName];
 
@@ -46,7 +46,7 @@ jutest("filterSpecs", s => {
       s.test('test2');
     });
 
-    let context = TestRunnerContext.forSingleLocation(ownFileName, 46);
+    let context = TestRunnerContext.forSingleLocation(ownFileName, [46]);
     let specsByFile = await filterSpecs(jutestInstance, context);
     let specs = specsByFile[ownFileName];
 
