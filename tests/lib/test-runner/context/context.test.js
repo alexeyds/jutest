@@ -21,9 +21,23 @@ jutest("TestRunnerContext", s => {
   });
 
   s.describe("::forSingleLocation", s => {
-    s.test("returns context with file", t => {
+    s.test("returns context with file and line numbers", t => {
       let context = TestRunnerContext.forSingleLocation('test.js', [15]);
       t.same(context.fileLocations, [fileLocation('test.js', [15])]);
+    });
+  });
+
+  s.describe("::forSingleFile", s => {
+    s.test("returns context with file", t => {
+      let context = TestRunnerContext.forSingleFile('test.js');
+      t.same(context.fileLocations, [fileLocation('test.js')]);
+    });
+
+    s.test("accepts extra config", t => {
+      let requireFunc = () => {};
+      let context = TestRunnerContext.forSingleFile('test.js', { requireFunc });
+
+      t.equal(context.requireFunc, requireFunc);
     });
   });
 

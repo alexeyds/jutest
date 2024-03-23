@@ -3,7 +3,7 @@ import { Jutest } from "core";
 import { TestRunnerContext } from "test-runner/context";
 import { loadSpecs } from "test-runner/load-specs";
 
-jutest("loadFiles", s => {
+jutest("loadSpecs", s => {
   s.setup(() => {
     let jutestInstance = new Jutest();
     return { jutestInstance };
@@ -16,8 +16,8 @@ jutest("loadFiles", s => {
     };
 
     let file = 'foobar.test.js';
-    let context = TestRunnerContext.forSingleLocation(file);
-    let result = await loadSpecs(jutestInstance, context, requireFunc);
+    let context = TestRunnerContext.forSingleFile(file, { requireFunc });
+    let result = await loadSpecs(jutestInstance, context);
 
     t.equal(result[file].length, 1);
     t.equal(result[file][0].name, 'my test');
@@ -31,8 +31,8 @@ jutest("loadFiles", s => {
         s.test('my test3');
       });
     };
-    let context = TestRunnerContext.forSingleLocation('foobar.test.js');
-    await loadSpecs(jutestInstance, context, requireFunc);
+    let context = TestRunnerContext.forSingleFile('foobar.test.js', { requireFunc });
+    await loadSpecs(jutestInstance, context);
 
     t.equal(context.runSummary.totalTestsCount, 3);
   });
