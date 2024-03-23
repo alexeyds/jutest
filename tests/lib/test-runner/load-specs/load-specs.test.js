@@ -10,9 +10,12 @@ jutest("loadSpecs", s => {
   });
 
   s.test("requires and filters specs", async (t, { jutestInstance }) => {
-    let requireFunc = (file) => {
-      jutestInstance.specsContainer.sourceFilePath = file;
-      jutestInstance.specsContainer.test('my test', () => {});
+    let { specsContainer } = jutestInstance;
+
+    let requireFunc = async (file) => {
+      await specsContainer.withSourceFilePath(file, () => {
+        specsContainer.test('my test', () => {});
+      });
     };
 
     let file = 'foobar.test.js';
@@ -24,11 +27,15 @@ jutest("loadSpecs", s => {
   });
 
   s.test("sets total tests count in summary", async (t, { jutestInstance }) => {
-    let requireFunc = () => {
-      jutestInstance.specsContainer.test('my test1');
-      jutestInstance.specsContainer.describe('my suite', (s) => {
-        s.test('my test2');
-        s.test('my test3');
+    let { specsContainer } = jutestInstance;
+
+    let requireFunc = async () => {
+      await specsContainer.withSourceFilePath('foobar.test.js', () => {
+        specsContainer.test('my test1');
+        specsContainer.describe('my suite', (s) => {
+          s.test('my test2');
+          s.test('my test3');
+        });
       });
     };
     let context = TestRunnerContext.forSingleFile('foobar.test.js', { requireFunc });
