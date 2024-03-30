@@ -1,6 +1,6 @@
 import { jutest } from "jutest";
 import { spy } from "sinon";
-import { measureTimeElapsed } from "utils/time";
+import { measureTimeElapsed, presentMilliseconds } from "utils/time";
 
 jutest("utils/time", s => {
   s.describe("measureTimeElapsed", s => {
@@ -19,6 +19,12 @@ jutest("utils/time", s => {
     s.test("includes returnValue of the original function", async t => {
       let { returnValue } = await measureTimeElapsed(() => 1);
       t.equal(returnValue, 1);
+    });
+  });
+
+  s.describe("presentMilliseconds", s => {
+    s.test("converts ms to seconds", t => {
+      t.equal(presentMilliseconds(79142), '79.14');
     });
   });
 });
