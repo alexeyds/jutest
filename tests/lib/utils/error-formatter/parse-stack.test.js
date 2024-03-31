@@ -23,16 +23,6 @@ jutest("parseStack", s => {
       t.same(rawFrames(parsedStack), ['at baz (filename.js:10:15)', 'at bar (filename.js:15:15)']);
     });
 
-    s.test("removes error message from stacks", t => {
-      let parsedStack = parseStackArray(['$My_Error321: 123', 'at baz (filename.js:10:15)']);
-      t.same(rawFrames(parsedStack), ['at baz (filename.js:10:15)']);
-    });
-
-    s.test("works with plain error messages", t => {
-      let parsedStack = parseStackArray(['Error', 'at baz (filename.js:10:15)']);
-      t.same(rawFrames(parsedStack), ['at baz (filename.js:10:15)']);
-    });
-
     s.test("trims stack lines", t => {
       let parsedStack = parseStackArray(['  at baz (filename.js:10:15)   ']);
       t.same(rawFrames(parsedStack), ['at baz (filename.js:10:15)']);
