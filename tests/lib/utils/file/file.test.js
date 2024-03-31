@@ -1,6 +1,6 @@
 import { jutest } from "jutest";
 import nodePath from "path";
-import { readLine } from "utils/file";
+import { readLine, resolveToCwd } from "utils/file";
 
 jutest("utils/file", s => {
   s.describe("readLine()", s => {
@@ -36,6 +36,13 @@ jutest("utils/file", s => {
       t.equal(result.success, true);
       t.equal(result.error, null);
       t.equal(result.line, '');
+    });
+  });
+
+  s.describe("resolveToCwd", s => {
+    s.test("resolves path to cwd", t => {
+      t.equal(resolveToCwd('bar'), process.cwd() + '/bar');
+      t.equal(resolveToCwd('/bar'),'/bar');
     });
   });
 });
