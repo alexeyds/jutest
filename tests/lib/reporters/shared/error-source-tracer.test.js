@@ -21,7 +21,7 @@ jutest("ErrorSourceTracer", s => {
       let tracer = buildSourceTracer(error);
 
       t.equal(tracer.error, error);
-      t.assert(tracer.errorFormatter);
+      t.assert(tracer.stackParser);
     });
   });
 

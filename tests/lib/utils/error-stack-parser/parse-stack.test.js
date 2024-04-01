@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { parseStack } from "utils/error-formatter/parse-stack";
+import { parseStack } from "utils/error-stack-parser/parse-stack";
 
 function parseStackArray(lines) {
   let stack = lines.join('\n');
