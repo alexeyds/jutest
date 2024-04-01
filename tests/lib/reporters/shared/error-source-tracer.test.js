@@ -1,10 +1,6 @@
 import { jutest } from "jutest";
+import { attachStackFrame } from "tests/support";
 import { ErrorSourceTracer, ReporterConfig } from "reporters/shared";
-
-function attachStackFrame(error, stackFrames) {
-  error.stack = `${error.name}: ${error.message}\n` + stackFrames.join("\n");
-  return error;
-}
 
 function buildSourceTracer(error, config) {
   return new ErrorSourceTracer(error, new ReporterConfig(config));

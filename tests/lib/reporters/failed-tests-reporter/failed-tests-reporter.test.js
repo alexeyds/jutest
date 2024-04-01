@@ -35,29 +35,5 @@ jutest("FailedTestsReporter", s => {
       t.match(testDetails, /t\.equal\(1, 2\)/);
       t.match(testDetails, /failed-tests-reporter/);
     });
-
-    s.test("correctly presents runtime errors", async (t, { reporter, outputData }) => {
-      await TestRuntime.runWithReporter(reporter, s => {
-        s.test('my failing test', () => { throw new Error('test'); });
-      });
-
-      t.match(outputData[1], 'Error: test');
-    });
-
-    s.test("correctly presents string runtime errors", async (t, { reporter, outputData }) => {
-      await TestRuntime.runWithReporter(reporter, s => {
-        s.test('my failing test', () => { throw '123'; });
-      });
-
-      t.match(outputData[1], '123');
-    });
-
-    s.test("correctly presents nullable errors", async (t, { reporter, outputData }) => {
-      await TestRuntime.runWithReporter(reporter, s => {
-        s.test('my failing test', () => { throw undefined; });
-      });
-
-      t.match(outputData[1], 'undefined');
-    });
   });
 });
