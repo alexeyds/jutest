@@ -16,22 +16,22 @@ jutest("ErrorFormatter", s => {
     });
   });
 
-  s.describe("#stack", s => {
+  s.describe("#stackWithoutMessage", s => {
     s.test("return stack", t => {
       let formatter = new ErrorFormatter(new Error('test'));
-      t.match(formatter.stack, 'error-formatter');
+      t.match(formatter.stackWithoutMessage, 'error-formatter');
     });
 
     s.test("removes error message and name from stack", t => {
       let formatter = new ErrorFormatter(new Error('foobar test'));
 
-      t.doesNotMatch(formatter.stack, /Error:/);
-      t.doesNotMatch(formatter.stack, 'foobar test');
+      t.doesNotMatch(formatter.stackWithoutMessage, /Error:/);
+      t.doesNotMatch(formatter.stackWithoutMessage, 'foobar test');
     });
 
     s.test("removes error name if error has no message", t => {
       let formatter = new ErrorFormatter(new Error());
-      t.doesNotMatch(formatter.stack, 'Error');
+      t.doesNotMatch(formatter.stackWithoutMessage, 'Error');
     });
   });
 
@@ -40,9 +40,9 @@ jutest("ErrorFormatter", s => {
       let { stackFrames } = new ErrorFormatter(new Error());
       let [frame] = stackFrames;
 
+      t.match(frame.stackFrame, 'at');
       t.assert(frame.file);
       t.assert(frame.lineNumber);
-      t.match(frame.stackFrame, 'at');
     });
 
     s.test("works with errors with message", t => {

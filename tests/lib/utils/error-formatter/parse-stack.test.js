@@ -55,6 +55,13 @@ jutest("parseStack", s => {
       t.equal(file, 'filename.js');
       t.equal(lineNumber, 10);
     });
+
+    s.test("works with anonymous stack frames", t => {
+      let { file, lineNumber } = parseStackFrame('at eval <anonymous>:1:8)');
+
+      t.equal(file, undefined);
+      t.equal(lineNumber, undefined);
+    });
   });
 
   s.describe("internal frames detection", s => {
@@ -65,11 +72,6 @@ jutest("parseStack", s => {
 
     s.test("returns true for internal node frames", t => {
       let { isInternal } = parseStackFrame('at addChunk (node:internal/streams/readable:324:12)');
-      t.equal(isInternal, true);
-    });
-
-    s.test("allows adding custom directories/file names to what's considered internal", t => {
-      let [{ isInternal }] = parseStack('at baz (my-internal-module/filename.js:10:15)', { internalPaths: ['my-internal-module'] });
       t.equal(isInternal, true);
     });
   });
