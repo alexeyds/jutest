@@ -40,7 +40,8 @@ jutest("SummaryReporter", s => {
         s.test('bar', () => {});
       });
 
-      t.match(outputData[0], /Skipped: 1/);
+      t.match(outputData[1], /Skipped: 1/);
+      t.match(outputData[1], /\n$/);
     });
 
     s.test("reports total run time", async (t, { reporter, outputData }) => {

@@ -13,7 +13,7 @@ async function testHasExpectations() {
   });
 
   assert.equal(result.status, Test.ExecutionStatuses.Passed);
-  assert.equal(result.error, null);
+  assert.equal(result.error, undefined);
 }
 
 async function testHasFailures() {

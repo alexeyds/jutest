@@ -21,7 +21,7 @@ jutest("runTest", s => {
 
       t.assert(testBody.called);
       t.equal(result.status, ExecutionStatuses.Passed);
-      t.equal(result.error, null);
+      t.refute(result.error);
       t.equal(result.teardownError, null);
     });
 

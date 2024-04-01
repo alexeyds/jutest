@@ -10,5 +10,5 @@ register(config);
 require('../lib/jutest').autoRun({
   defaultTestDir: "tests",
   testFilesGlob: "/**/*.test.*",
-  excludeSourceDirs: ['/node_modules', '/lib/assertions', '/lib/test']
+  excludeSourceDirs: ['node_modules', 'lib/assertions', 'lib/test']
 });

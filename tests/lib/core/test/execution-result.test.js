@@ -8,7 +8,7 @@ jutest("ExecutionResult", s => {
       let result = ExecutionResult.passed();
 
       t.equal(result.status, ExecutionStatuses.Passed);
-      t.equal(result.error, null);
+      t.refute(result.error);
       t.equal(result.teardownError, null);
       t.equal(result.skipReason, null);
     });
@@ -30,7 +30,7 @@ jutest("ExecutionResult", s => {
       let result = ExecutionResult.skipped('not implemented');
 
       t.equal(result.status, ExecutionStatuses.Skipped);
-      t.equal(result.error, null);
+      t.refute(result.error);
       t.equal(result.teardownError, null);
       t.equal(result.skipReason, 'not implemented');
     });
@@ -42,7 +42,7 @@ jutest("ExecutionResult", s => {
       result.addTeardownError('error');
 
       t.equal(result.status, ExecutionStatuses.Failed);
-      t.equal(result.error, null);
+      t.refute(result.error);
       t.equal(result.teardownError, 'error');
       t.equal(result.skipReason, null);
     });

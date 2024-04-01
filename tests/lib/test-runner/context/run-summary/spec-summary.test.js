@@ -46,7 +46,7 @@ jutest("SpecSummary", s => {
 
       let { executionResult } = new SpecSummary(test);
       t.equal(executionResult.status, Test.ExecutionStatuses.Passed);
-      t.equal(executionResult.error, null);
+      t.refute(executionResult.error);
       t.equal(executionResult.teardownError, null);
     });
 
