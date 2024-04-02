@@ -34,4 +34,10 @@ jutest("ProgressReporter", s => {
 
     t.match(outputData[0], /\./);
   });
+
+  s.test("does nothing if test count is 0", async (t, { reporter, outputData }) => {
+    await TestRuntime.runWithReporter(reporter, () => {});
+
+    t.same(outputData, []);
+  });
 });
