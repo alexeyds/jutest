@@ -99,12 +99,12 @@ jutest("failed-tests-reporter/presenter-helpers", s => {
       t.equal(sourceDetails.stackFrames[0], sourceDetails.sourceFrame);
     });
 
-    s.test("includes full stack trace for AssertionError if source fram is missing", async (t) => {
+    s.test("includes full stack trace for AssertionError if source frame is missing", async (t) => {
       let error = new AssertionFailedError('foobar');
       let config = new ReporterConfig({ trackedSourcePaths: ["./foo"] });
       let sourceDetails = await presentSourceDetails(error, config);
 
-      t.notEqual(sourceDetails.stackFrames.length, 0);
+      t.assert(sourceDetails.stackFrames.length > 1);
     });
   });
 
