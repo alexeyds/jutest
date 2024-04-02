@@ -13,63 +13,61 @@ jutest("FailedTestsReporter", s => {
     return { reporter, stdout, outputData: stdout.outputData };
   });
 
-  s.describe("#finishReporting", s => {
-    s.test("does nothing if there are no failed tests", async (t, { reporter, outputData }) => {
-      await TestRuntime.runWithReporter(reporter, s => {
-        s.test('foo', () => {});
-        s.test('bar', () => {});
-      });
-
-      t.same(outputData, []);
+  s.test("does nothing if there are no failed tests", async (t, { reporter, outputData }) => {
+    await TestRuntime.runWithReporter(reporter, s => {
+      s.test('foo', () => {});
+      s.test('bar', () => {});
     });
 
-    s.test("reports basic details about failed test", async (t, { reporter, outputData }) => {
-      await TestRuntime.runWithReporter(reporter, s => {
-        s.test('my failing test', (t) => t.equal(1, 2));
-      });
+    t.same(outputData, []);
+  });
 
-      let [failuresLine, testDetails] = outputData;
-
-      t.match(failuresLine, /failures/i);
-      t.match(testDetails, 'my failing test');
-      t.match(testDetails, 'expected');
-      t.match(testDetails, /t\.equal\(1, 2\)/);
-      t.match(testDetails, /failed-tests-reporter/);
+  s.test("reports basic details about failed test", async (t, { reporter, outputData }) => {
+    await TestRuntime.runWithReporter(reporter, s => {
+      s.test('my failing test', (t) => t.equal(1, 2));
     });
 
-    s.test("includes test location in the details", async (t, { reporter, outputData }) => {
-      let runtime = new TestRuntime({ reporter, runAsFile: currentFileName });
-      await runtime.defineAndRun(s => {
-        s.test('my failing test', (t) => t.equal(1, 2));
-      });
+    let [failuresLine, testDetails] = outputData;
 
-      let [, testDetails] = outputData;
+    t.match(failuresLine, /failures/i);
+    t.match(testDetails, 'my failing test');
+    t.match(testDetails, 'expected');
+    t.match(testDetails, /t\.equal\(1, 2\)/);
+    t.match(testDetails, /failed-tests-reporter/);
+  });
 
-      t.match(testDetails, currentFileName);
-      t.match(testDetails, 'jutest');
+  s.test("includes test location in the details", async (t, { reporter, outputData }) => {
+    let runtime = new TestRuntime({ reporter, runAsFile: currentFileName });
+    await runtime.defineAndRun(s => {
+      s.test('my failing test', (t) => t.equal(1, 2));
     });
 
-    s.test("reports basic details about skipped test", async (t, { reporter, outputData }) => {
-      await TestRuntime.runWithReporter(reporter, s => {
-        s.xtest('my skipped test', (t) => t.equal(1, 2));
-      });
+    let [, testDetails] = outputData;
 
-      let [failuresLine, testDetails] = outputData;
+    t.match(testDetails, currentFileName);
+    t.match(testDetails, 'jutest');
+  });
 
-      t.match(failuresLine, /skipped/i);
-      t.match(testDetails, 'my skipped test');
-      t.match(testDetails, 'xtest');
+  s.test("reports basic details about skipped test", async (t, { reporter, outputData }) => {
+    await TestRuntime.runWithReporter(reporter, s => {
+      s.xtest('my skipped test', (t) => t.equal(1, 2));
     });
 
-    s.test("includes test location in skipped test details", async (t, { reporter, outputData }) => {
-      let runtime = new TestRuntime({ reporter, runAsFile: currentFileName });
-      await runtime.defineAndRun(s => {
-        s.xtest('my skipped test', (t) => t.equal(1, 2));
-      });
+    let [failuresLine, testDetails] = outputData;
 
-      let [, testDetails] = outputData;
+    t.match(failuresLine, /skipped/i);
+    t.match(testDetails, 'my skipped test');
+    t.match(testDetails, 'xtest');
+  });
 
-      t.match(testDetails, currentFileName);
+  s.test("includes test location in skipped test details", async (t, { reporter, outputData }) => {
+    let runtime = new TestRuntime({ reporter, runAsFile: currentFileName });
+    await runtime.defineAndRun(s => {
+      s.xtest('my skipped test', (t) => t.equal(1, 2));
     });
+
+    let [, testDetails] = outputData;
+
+    t.match(testDetails, currentFileName);
   });
 });
