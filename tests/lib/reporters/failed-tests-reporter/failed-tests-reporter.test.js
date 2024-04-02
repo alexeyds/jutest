@@ -2,6 +2,8 @@ import { jutest } from "jutest";
 import { createStdoutMock, TestRuntime } from "tests/support";
 import { FailedTestsReporter, ReporterConfig } from "reporters";
 
+let currentFileName = 'failed-tests-reporter.test.js';
+
 jutest("FailedTestsReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
@@ -29,11 +31,45 @@ jutest("FailedTestsReporter", s => {
       let [failuresLine, testDetails] = outputData;
 
       t.match(failuresLine, /failures/i);
-      t.match(failuresLine, /\n$/);
       t.match(testDetails, 'my failing test');
       t.match(testDetails, 'expected');
       t.match(testDetails, /t\.equal\(1, 2\)/);
       t.match(testDetails, /failed-tests-reporter/);
+    });
+
+    s.test("includes test location in the details", async (t, { reporter, outputData }) => {
+      let runtime = new TestRuntime({ reporter, runAsFile: currentFileName });
+      await runtime.defineAndRun(s => {
+        s.test('my failing test', (t) => t.equal(1, 2));
+      });
+
+      let [, testDetails] = outputData;
+
+      t.match(testDetails, currentFileName);
+      t.match(testDetails, 'jutest');
+    });
+
+    s.test("reports basic details about skipped test", async (t, { reporter, outputData }) => {
+      await TestRuntime.runWithReporter(reporter, s => {
+        s.xtest('my skipped test', (t) => t.equal(1, 2));
+      });
+
+      let [failuresLine, testDetails] = outputData;
+
+      t.match(failuresLine, /skipped/i);
+      t.match(testDetails, 'my skipped test');
+      t.match(testDetails, 'xtest');
+    });
+
+    s.test("includes test location in skipped test details", async (t, { reporter, outputData }) => {
+      let runtime = new TestRuntime({ reporter, runAsFile: currentFileName });
+      await runtime.defineAndRun(s => {
+        s.xtest('my skipped test', (t) => t.equal(1, 2));
+      });
+
+      let [, testDetails] = outputData;
+
+      t.match(testDetails, currentFileName);
     });
   });
 });

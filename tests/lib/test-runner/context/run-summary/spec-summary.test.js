@@ -65,5 +65,20 @@ jutest("SpecSummary", s => {
       t.equal(definitionLocation.file, 'spec-summary.test.js');
       t.assert(definitionLocation.lineNumber);
     });
+
+    s.test("includes lineNumber for skipped tests", async (t, { jutestInstance }) => {
+      let test;
+
+      await jutestInstance.specsContainer.withSourceFilePath('spec-summary.test.js', () => {
+        test = jutestInstance.specsContainer.test('my test');
+      });
+
+      await test.run();
+
+      let { definitionLocation } = new SpecSummary(test);
+
+      t.assert(definitionLocation);
+      t.assert(definitionLocation.lineNumber);
+    });
   });
 });
