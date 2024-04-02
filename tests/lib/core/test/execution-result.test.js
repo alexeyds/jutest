@@ -9,7 +9,6 @@ jutest("ExecutionResult", s => {
 
       t.equal(result.status, ExecutionStatuses.Passed);
       t.refute(result.error);
-      t.equal(result.teardownError, null);
       t.equal(result.skipReason, null);
     });
   });
@@ -20,7 +19,6 @@ jutest("ExecutionResult", s => {
 
       t.equal(result.status, ExecutionStatuses.Failed);
       t.equal(result.error, 'some error');
-      t.equal(result.teardownError, null);
       t.equal(result.skipReason, null);
     });
   });
@@ -31,20 +29,7 @@ jutest("ExecutionResult", s => {
 
       t.equal(result.status, ExecutionStatuses.Skipped);
       t.refute(result.error);
-      t.equal(result.teardownError, null);
       t.equal(result.skipReason, 'not implemented');
-    });
-  });
-
-  s.describe("#addTeardownError", s => {
-    s.test("converts tests into a failure with teardown error", t => {
-      let result = ExecutionResult.passed();
-      result.addTeardownError('error');
-
-      t.equal(result.status, ExecutionStatuses.Failed);
-      t.refute(result.error);
-      t.equal(result.teardownError, 'error');
-      t.equal(result.skipReason, null);
     });
   });
 
@@ -53,7 +38,7 @@ jutest("ExecutionResult", s => {
       let result = ExecutionResult.failed('some error').toObject();
       let keys = Object.keys(result);
 
-      t.assert(keys.includes('status', 'error', 'teardownError', 'skipReason'));
+      t.assert(keys.includes('status', 'error', 'skipReason'));
     });
   });
 });

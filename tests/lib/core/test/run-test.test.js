@@ -22,7 +22,6 @@ jutest("runTest", s => {
       t.assert(testBody.called);
       t.equal(result.status, ExecutionStatuses.Passed);
       t.refute(result.error);
-      t.equal(result.teardownError, null);
     });
 
     s.test("passes assertions to test body", async t => {
@@ -137,14 +136,6 @@ jutest("runTest", s => {
       await runTest(() => {}, context);
 
       t.same(assigns, { a: 1});
-    });
-
-    s.test("handles teardown errors", async (t, { context }) => {
-      context.teardown(() => { throw 'test'; });
-      let result = await runTest(() => {}, context);
-
-      t.equal(result.status, ExecutionStatuses.Failed);
-      t.equal(result.teardownError, 'test');
     });
   });
 });

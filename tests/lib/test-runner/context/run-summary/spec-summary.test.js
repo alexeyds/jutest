@@ -47,7 +47,6 @@ jutest("SpecSummary", s => {
       let { executionResult } = new SpecSummary(test);
       t.equal(executionResult.status, Test.ExecutionStatuses.Passed);
       t.refute(executionResult.error);
-      t.equal(executionResult.teardownError, null);
     });
 
     s.test("includes lineNumber for failed tests", async (t, { jutestInstance }) => {

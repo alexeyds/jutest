@@ -112,13 +112,6 @@ jutest("RunSummary", s => {
       t.equal(runSummary.exitReason, ExitReasons.RunEnd);
     });
 
-    s.test("has exitWithTeardownError", (t, { runSummary }) => {
-      runSummary.exitWithTeardownError();
-
-      t.assert(runSummary.exitReason);
-      t.equal(runSummary.exitReason, ExitReasons.TeardownError);
-    });
-
     s.test("has exitWithInterrupt", (t, { runSummary }) => {
       runSummary.exitWithInterrupt();
 
