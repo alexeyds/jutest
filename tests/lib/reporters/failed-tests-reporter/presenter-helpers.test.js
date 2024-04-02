@@ -2,9 +2,9 @@ import { jutest } from "jutest";
 import { attachStackFrame } from "tests/support";
 import { AssertionFailedError } from "assertions";
 import { ReporterConfig } from "reporters";
-import { presentErrorMessage, presentSourceDetails } from "reporters/failed-tests-reporter/error-presenters";
+import { presentErrorMessage, presentSourceDetails, presentTestLocation } from "reporters/failed-tests-reporter/presenter-helpers";
 
-jutest("failed-tests-reporter/error-presenters", s => {
+jutest("failed-tests-reporter/presenter-helpers", s => {
   s.describe("presentErrorMessage", s => {
     s.test("presents regular errors", t => {
       let error = new Error("test");
@@ -101,10 +101,28 @@ jutest("failed-tests-reporter/error-presenters", s => {
 
     s.test("includes full stack trace for AssertionError if source fram is missing", async (t) => {
       let error = new AssertionFailedError('foobar');
-      let config = new ReporterConfig({ trackedSourcePaths: ["./foo"] })
+      let config = new ReporterConfig({ trackedSourcePaths: ["./foo"] });
       let sourceDetails = await presentSourceDetails(error, config);
 
       t.notEqual(sourceDetails.stackFrames.length, 0);
+    });
+  });
+
+  s.describe("presentTestLocation", s => {
+    s.test("returns file and line number", t => {
+      t.equal(presentTestLocation({ file: 'foo', lineNumber: 2 }), 'foo:2');
+    });
+
+    s.test("returns file only if there is no line number", t => {
+      t.equal(presentTestLocation({ file: 'foo' }), 'foo');
+    });
+
+    s.test("returns empty string if there is no file", t => {
+      t.equal(presentTestLocation({ lineNumber: 1 }), '');
+    });
+
+    s.test("replaces cwd in file name", t => {
+      t.equal(presentTestLocation({ file: process.cwd() + '/foo', lineNumber: 1 }), './foo:1');
     });
   });
 });
