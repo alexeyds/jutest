@@ -90,5 +90,21 @@ jutest("failed-tests-reporter/error-presenters", s => {
 
       t.same(sourceDetails.stackFrames, []);
     });
+
+    s.test("only includes one frame in the stack for AssertionError", async (t, { config }) => {
+      let error = new AssertionFailedError('foobar');
+      let sourceDetails = await presentSourceDetails(error, config);
+
+      t.equal(sourceDetails.stackFrames.length, 1);
+      t.equal(sourceDetails.stackFrames[0], sourceDetails.sourceFrame);
+    });
+
+    s.test("includes full stack trace for AssertionError if source fram is missing", async (t) => {
+      let error = new AssertionFailedError('foobar');
+      let config = new ReporterConfig({ trackedSourcePaths: ["./foo"] })
+      let sourceDetails = await presentSourceDetails(error, config);
+
+      t.notEqual(sourceDetails.stackFrames.length, 0);
+    });
   });
 });
