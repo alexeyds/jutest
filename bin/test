@@ -11,6 +11,7 @@ require('../lib/jutest').autoRun({
   defaultTestDir: "tests",
   testFilesGlob: "/**/*.test.*",
   reportersConfig: {
-    trackedSourcePaths: ['node_modules', 'lib/assertions', 'lib/test']
+    trackedSourcePaths: ['node_modules', 'lib/assertions', 'lib/test'],
+    jutestRunCommand: 'yarn test',
   }
 });
