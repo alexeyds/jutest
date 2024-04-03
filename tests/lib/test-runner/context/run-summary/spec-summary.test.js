@@ -22,7 +22,7 @@ jutest("SpecSummary", s => {
       t.equal(summary.runTime, 0);
       t.assert(summary.contextId);
       t.assert(summary.definitionLocation);
-      t.same(summary.parentContextIds, []);
+      t.assert(summary.parentContextIds);
       t.refute(summary.executionResult);
     });
 

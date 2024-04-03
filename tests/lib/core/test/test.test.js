@@ -19,9 +19,9 @@ jutest("Test", s => {
       t.assert(test.sourceLocator);
       t.equal(test.ownName, 'foobar');
       t.equal(test.isASuite, false);
-      t.equal(test.contextId, context.id);
+      t.assert(test.contextId);
       t.equal(test.runTime, 0);
-      t.equal(test.parentContextIds, context.parentIds);
+      t.same(test.parentContextIds, [context.id]);
       t.equal(test.skipped, false);
     });
 
@@ -44,6 +44,13 @@ jutest("Test", s => {
 
       t.equal(sourceLocator.sourceFilePath, ownFileName);
       t.assert(sourceLocator.lineNumber);
+    });
+
+    s.test("copies provided context", (t, { context }) => {
+      let test = new Test('foobar', () => {}, { context });
+      context.addName("test");
+
+      t.equal(test.name, 'foobar');
     });
   });
 
@@ -89,16 +96,9 @@ jutest("Test", s => {
   });
 
   s.describe('#name', s => {
-    s.test("returns name with context", (t, { context }) => {
+    s.test("returns own name joined with context's name", (t, { context }) => {
       context.addName("foo");
       let test = new Test('bar', () => {}, { context });
-
-      t.equal(test.name, 'foo bar');
-    });
-
-    s.test("dynamically generates test name", (t, { context }) => {
-      let test = new Test('bar', () => {}, { context });
-      context.addName("foo");
 
       t.equal(test.name, 'foo bar');
     });
