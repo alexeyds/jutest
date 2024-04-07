@@ -2,13 +2,14 @@ import { Jutest } from "core";
 import { TestRunner } from "test-runner";
 
 export class TestRuntime {
-  constructor({ reporter=null, runAsFile=null }={}) {
-    this._reporter = reporter;
+  constructor({ reporterClass=null, reporterConfig=undefined, runAsFile=null }={}) {
+    this._reporterClass = reporterClass;
+    this._reporterConfig = reporterConfig;
     this._runAsFile = runAsFile;
   }
 
-  static runWithReporter(reporter, defineSpecs) {
-    let runtime = new TestRuntime({ reporter });
+  static runWithReporter({ reporterClass, reporterConfig }, defineSpecs) {
+    let runtime = new TestRuntime({ reporterClass, reporterConfig });
     return runtime.defineAndRun(defineSpecs);
   }
 
@@ -20,8 +21,8 @@ export class TestRuntime {
     });
 
     let runner = new TestRunner();
-    this._reporter?.registerListeners?.(runner.eventEmitter);
+    let reporter = this._reporterClass?.startReporting?.(this._reporterConfig, runner.eventEmitter);
     let runSummary = await runner.run(jutestInstance);
-    await this._reporter?.finishReporting?.([runSummary]);
+    await reporter?.finishReporting?.([runSummary]);
   }
 }

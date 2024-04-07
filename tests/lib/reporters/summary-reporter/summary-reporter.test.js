@@ -5,14 +5,14 @@ import { SummaryReporter, ReporterConfig } from "reporters";
 jutest.describe("SummaryReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
-    let config = new ReporterConfig({ stdout });
-    let reporter = new SummaryReporter(config);
+    let reporterConfig = new ReporterConfig({ stdout });
+    let reporterDetails = { reporterClass: SummaryReporter, reporterConfig }
 
-    return { reporter, stdout, outputData: stdout.outputData };
+    return { reporterDetails, stdout, outputData: stdout.outputData };
   });
 
-  s.test("reports the total number of tests", async (t, { reporter, outputData }) => {
-    await TestRuntime.runWithReporter(reporter, s => {
+  s.test("reports the total number of tests", async (t, { reporterDetails, outputData }) => {
+    await TestRuntime.runWithReporter(reporterDetails, s => {
       s.test('foo', () => {});
       s.test('bar', () => {});
     });
@@ -24,8 +24,8 @@ jutest.describe("SummaryReporter", s => {
     t.doesNotMatch(line, /Skipped/);
   });
 
-  s.test("reports the number of failed tests", async (t, { reporter, outputData }) => {
-    await TestRuntime.runWithReporter(reporter, s => {
+  s.test("reports the number of failed tests", async (t, { reporterDetails, outputData }) => {
+    await TestRuntime.runWithReporter(reporterDetails, s => {
       s.test('foo', t => t.assert(false));
       s.test('bar', () => {});
     });
@@ -33,8 +33,8 @@ jutest.describe("SummaryReporter", s => {
     t.match(outputData[0], /Failed: 1/);
   });
 
-  s.test("reports skipped tests", async (t, { reporter, outputData }) => {
-    await TestRuntime.runWithReporter(reporter, s => {
+  s.test("reports skipped tests", async (t, { reporterDetails, outputData }) => {
+    await TestRuntime.runWithReporter(reporterDetails, s => {
       s.xtest('foo', () => {});
       s.test('bar', () => {});
     });
@@ -43,8 +43,8 @@ jutest.describe("SummaryReporter", s => {
     t.match(outputData[0], /\n$/);
   });
 
-  s.test("reports total run time", async (t, { reporter, outputData }) => {
-    await TestRuntime.runWithReporter(reporter, () => {});
+  s.test("reports total run time", async (t, { reporterDetails, outputData }) => {
+    await TestRuntime.runWithReporter(reporterDetails, () => {});
     let line = outputData[0];
 
     t.match(line, /run/i);
