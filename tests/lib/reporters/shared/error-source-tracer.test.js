@@ -32,9 +32,19 @@ jutest("ErrorSourceTracer", s => {
       t.equal(tracer.sourceFrame, undefined);
     });
 
+    s.test("matches start of the file for trackedSourcePaths", (t, { error }) => {
+      let tracer = buildSourceTracer(error, { trackedSourcePaths: ['/jutest'] });
+      t.equal(tracer.sourceFrame, undefined);
+    });
+
     s.test("excludes any sources from ignoredSourcePaths", (t, { error }) => {
       let tracer = buildSourceTracer(error, { ignoredSourcePaths: [process.cwd()] });
       t.equal(tracer.sourceFrame, undefined);
+    });
+
+    s.test("matches start of the file for ignoredSourcePaths", (t, { error }) => {
+      let tracer = buildSourceTracer(error, { ignoredSourcePaths: ['/jutest'] });
+      t.assert(tracer.sourceFrame);
     });
 
     s.test("excludes frames without a file", (t, { error }) => {

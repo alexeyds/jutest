@@ -33,23 +33,13 @@ jutest.describe("SummaryReporter", s => {
     t.match(outputData[0], /Failed: 1/);
   });
 
-  s.test("reports one skipped test", async (t, { reporter, outputData }) => {
+  s.test("reports skipped tests", async (t, { reporter, outputData }) => {
     await TestRuntime.runWithReporter(reporter, s => {
       s.xtest('foo', () => {});
       s.test('bar', () => {});
     });
 
-    t.match(outputData[0], /1 test/);
-    t.match(outputData[0], /\n$/);
-  });
-
-  s.test("reports multiple skipped tests", async (t, { reporter, outputData }) => {
-    await TestRuntime.runWithReporter(reporter, s => {
-      s.xtest('foo', () => {});
-      s.xtest('bar', () => {});
-    });
-
-    t.match(outputData[0], /2 tests/);
+    t.match(outputData[0], /Skipped: 1/);
     t.match(outputData[0], /\n$/);
   });
 
