@@ -1,8 +1,7 @@
 import { jutest } from "jutest";
 import { attachStackFrame } from "tests/support";
 import { AssertionFailedError } from "assertions";
-import { ReporterConfig } from "reporters";
-import { presentErrorMessage, presentSourceDetails, presentTestLocation } from "reporters/failed-tests-reporter/presenter-helpers";
+import { ReporterConfig, presentErrorMessage, presentSourceDetails, presentTestLocation } from "reporters/shared";
 
 jutest("failed-tests-reporter/presenter-helpers", s => {
   s.describe("presentErrorMessage", s => {

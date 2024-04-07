@@ -24,7 +24,7 @@ jutest("utils/time", s => {
 
   s.describe("presentMilliseconds", s => {
     s.test("converts ms to seconds", t => {
-      t.equal(presentMilliseconds(79142), '79.14');
+      t.equal(presentMilliseconds(79142), '79.14s');
     });
   });
 });

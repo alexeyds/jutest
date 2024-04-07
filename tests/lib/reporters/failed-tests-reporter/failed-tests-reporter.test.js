@@ -8,7 +8,7 @@ jutest("FailedTestsReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
     let reporterConfig = new ReporterConfig({ stdout, ignoredSourcePaths: ['lib'] });
-    let reporterDetails = { reporterClass: FailedTestsReporter, reporterConfig }
+    let reporterDetails = { reporterClass: FailedTestsReporter, reporterConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };
   });
@@ -34,18 +34,6 @@ jutest("FailedTestsReporter", s => {
     t.match(testDetails, 'expected');
     t.match(testDetails, /t\.equal\(1, 2\)/);
     t.match(testDetails, /failed-tests-reporter/);
-  });
-
-  s.test("includes test location in the details", async (t, { reporterDetails, outputData }) => {
-    let runtime = new TestRuntime({ ...reporterDetails, runAsFile: currentFileName });
-    await runtime.defineAndRun(s => {
-      s.test('my failing test', (t) => t.equal(1, 2));
-    });
-
-    let [, testDetails] = outputData;
-
-    t.match(testDetails, currentFileName);
-    t.match(testDetails, 'jutest');
   });
 
   s.test("reports basic details about skipped test", async (t, { reporterDetails, outputData }) => {

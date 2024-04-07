@@ -6,7 +6,7 @@ jutest("ProgressReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
     let reporterConfig = new ReporterConfig({ stdout });
-    let reporterDetails = { reporterClass: ProgressReporter, reporterConfig }
+    let reporterDetails = { reporterClass: ProgressReporter, reporterConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };
   });

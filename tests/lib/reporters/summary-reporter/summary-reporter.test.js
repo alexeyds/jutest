@@ -6,7 +6,7 @@ jutest.describe("SummaryReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
     let reporterConfig = new ReporterConfig({ stdout });
-    let reporterDetails = { reporterClass: SummaryReporter, reporterConfig }
+    let reporterDetails = { reporterClass: SummaryReporter, reporterConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };
   });
