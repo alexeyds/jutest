@@ -24,7 +24,7 @@ jutest("EventEmitter", s => {
     });
 
     s.test("validates event is supported", async (t, { emitter }) => {
-      t.async.rejects(emitter.emit('test'), /supported/);
+      await t.async.rejects(emitter.emit('test'), /supported/);
     });
   });
 
