@@ -10,8 +10,11 @@ module.exports = {
   "extends": ["eslint:recommended"],
   "rules": {
     "no-unused-vars": [
-      "error", 
-      { "varsIgnorePattern": "^_" }
+      "error",
+      {
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_",
+      }
     ],
     "indent": [
       "error",
