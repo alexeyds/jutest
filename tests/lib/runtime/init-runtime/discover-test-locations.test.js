@@ -1,6 +1,6 @@
 import { jutest } from "jutest";
 import { RuntimeConfig } from "runtime/config";
-import { discoverTestLocations } from "runtime/utils/discover-test-locations";
+import { discoverTestLocations } from "runtime/init-runtime/discover-test-locations";
 
 let fixturesPath = 'tests/lib/runtime/fixtures';
 

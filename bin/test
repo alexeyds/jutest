@@ -1,17 +1,22 @@
 #!/usr/bin/env node
 
-const tsConfigPaths = require("tsconfig-paths");
+let tsConfigPaths = require("tsconfig-paths");
 tsConfigPaths.register();
 
-const { register } = require('esbuild-register/dist/node');
-const { config } = require('../esbuild-config/esbuild.test');
+let { register } = require('esbuild-register/dist/node');
+let { config } = require('../esbuild-config/esbuild.test');
 register(config);
 
-require('../lib/jutest').autoRun({
-  defaultTestDir: "tests",
-  testFilesGlob: "/**/*.test.*",
+let { initRuntime, initCLI, loadConfigFile } = require('../lib/runtime');
+
+let cliParams = initCLI();
+
+initRuntime({
+  locationsToRun: ['tests'],
   reportersConfig: {
     ignoredSourcePaths: ['node_modules', 'lib/assertions', 'lib/test'],
     jutestRunCommand: 'yarn test',
-  }
-});
+  },
+  ...loadConfigFile(cliParams.configFilePath),
+  ...cliParams.runtimeConfig,
+})
