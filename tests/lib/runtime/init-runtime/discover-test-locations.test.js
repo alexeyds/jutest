@@ -39,6 +39,8 @@ jutest("discoverTestLocations", s => {
     t.equal(locations.length, 2);
     t.match(locations[0].file, 'test-file-2.test.js');
     t.match(locations[1].file, 'test-file.test.js');
+    t.same(locations[0].lineNumbers, []);
+    t.same(locations[1].lineNumbers, []);
   });
 
   s.test("only includes files that match inclusion pattern", t => {
