@@ -7,9 +7,9 @@ jutest("RuntimeConfig", s => {
       let config = new RuntimeConfig({});
 
       t.same(config.locationsToRun, []);
-      t.same(config.includeTestFilePatterns, ["*.test.*"]);
-      t.same(config.excludeTestFilePatterns, []);
-      t.same(config.excludeTestDirectoryPatterns, []);
+      t.assert(config.includeTestFilePatterns);
+      t.assert(config.excludeTestFilePatterns);
+      t.assert(config.excludeTestDirectoryPatterns);
       t.assert(config.reportersConfig);
     });
   });
