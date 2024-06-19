@@ -18,6 +18,8 @@ jutest("assertions", s => {
       t.assert(assertions.assert);
       t.assert(assertions.refute);
       t.assert(assertions.throws);
+      t.assert(assertions.includes);
+      t.assert(assertions.excludes);
 
       t.assert(assertions.async.passesEventually);
       t.assert(assertions.async.rejects);
