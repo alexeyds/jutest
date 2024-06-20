@@ -1,5 +1,6 @@
 import { jutest } from "jutest";
 import { parseArgv } from "runtime/cli/parse-argv";
+import { ORDER_TYPES } from "runtime/config";
 
 jutest("parseArgv", s => {
   function buildArgv(...args) {
@@ -21,5 +22,15 @@ jutest("parseArgv", s => {
   s.test("has --config option", t => {
     let { configFilePath } = parseArgv(buildArgv('--config', 'myconfig.js'));
     t.equal(configFilePath, 'myconfig.js');
+  });
+
+  s.test("has --seed option", t => {
+    let { runtimeConfig } = parseArgv(buildArgv('--seed', '51246'));
+    t.equal(runtimeConfig.seed, 51246);
+  });
+
+  s.test("has --order option", t => {
+    let { runtimeConfig } = parseArgv(buildArgv('--order', 'defined'));
+    t.equal(runtimeConfig.order, ORDER_TYPES.defined);
   });
 });

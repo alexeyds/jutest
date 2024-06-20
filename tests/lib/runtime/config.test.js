@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { RuntimeConfig } from "runtime/config";
+import { RuntimeConfig, ORDER_TYPES } from "runtime/config";
 
 jutest("RuntimeConfig", s => {
   s.describe("constructor", s => {
@@ -10,6 +10,8 @@ jutest("RuntimeConfig", s => {
       t.assert(config.includeTestFilePatterns);
       t.assert(config.excludeTestFilePatterns);
       t.assert(config.excludeTestDirectoryPatterns);
+      t.assert(config.seed)
+      t.equal(config.order, ORDER_TYPES.random);
       t.assert(config.reportersConfig);
     });
   });
