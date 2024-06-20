@@ -39,7 +39,8 @@
     "deep-equal": "^2.2.0",
     "graceful-fs": "^4.2.11",
     "is-plain-object": "^5.0.0",
-    "lodash.pick": "^4.4.0",
+    "lodash.pick": "^4.0.0",
+    "lodash.sortby": "^4.0.0",
     "micromatch": "^4.0.7",
     "yargs": "^17.7.2"
   }
