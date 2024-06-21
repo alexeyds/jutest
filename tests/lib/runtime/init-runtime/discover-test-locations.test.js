@@ -1,11 +1,12 @@
 import { jutest } from "jutest";
+import { join } from "path";
 import { RuntimeConfig } from "runtime/config";
 import { discoverTestLocations } from "runtime/init-runtime/discover-test-locations";
 
 let fixturesPath = 'tests/lib/runtime/fixtures';
 
-function fixtureLocation(filePath) {
-  return `${fixturesPath}/${filePath}`;
+function fixtureLocation(locationPath) {
+  return join(fixturesPath, locationPath);
 }
 
 function discoverLocations(params) {
@@ -66,7 +67,7 @@ jutest("discoverTestLocations", s => {
   s.test("excludes directories that match exclusion pattern", t => {
     let locations = discoverLocations({
       locationsToRun: [ fixturesPath ],
-      excludeTestDirectoryPatterns: [ '/test-dir' ],
+      excludeTestDirectoryPaths: [ fixtureLocation('/test-dir') ],
     });
 
     t.equal(locations.length, 1);
@@ -86,7 +87,7 @@ jutest("discoverTestLocations", s => {
   s.test("does not subject directly specified directory locations to dir exlusion rule", t => {
     let locations = discoverLocations({
       locationsToRun: [ fixtureLocation('test-dir') ],
-      excludeTestDirectoryPatterns: [ 'test-dir' ],
+      excludeTestDirectoryPaths: [ fixtureLocation('/test-dir') ],
     });
 
     t.equal(locations.length, 1);
@@ -96,7 +97,7 @@ jutest("discoverTestLocations", s => {
   s.test("applies dir exclusion rule within provided locations and not globally", t => {
     let locations = discoverLocations({
       locationsToRun: [ fixturesPath ],
-      excludeTestDirectoryPatterns: [ '/fixtures' ],
+      excludeTestDirectoryPaths: [ fixturesPath ],
     });
 
     t.equal(locations.length, 2);

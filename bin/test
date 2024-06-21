@@ -17,4 +17,4 @@ initRuntime({
   jutestRunCommand: 'yarn test',
   ...loadConfigFile(cliParams.configFilePath),
   ...cliParams.runtimeConfig,
-})
+});
