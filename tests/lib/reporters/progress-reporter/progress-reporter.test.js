@@ -1,12 +1,13 @@
 import { jutest } from "jutest";
 import { createStdoutMock, TestRuntime } from "tests/support";
-import { ProgressReporter, ReporterConfig } from "reporters";
+import { ProgressReporter } from "reporters";
+import { RuntimeConfig } from "runtime/config";
 
 jutest("ProgressReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
-    let reporterConfig = new ReporterConfig({ stdout });
-    let reporterDetails = { reporterClass: ProgressReporter, reporterConfig };
+    let runtimeConfig = RuntimeConfig.forReporter({ stdout });
+    let reporterDetails = { reporterClass: ProgressReporter, runtimeConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };
   });

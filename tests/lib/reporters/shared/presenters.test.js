@@ -1,7 +1,8 @@
 import { jutest } from "jutest";
 import { attachStackFrame } from "tests/support";
 import { AssertionFailedError } from "assertions";
-import { ReporterConfig, presentErrorMessage, presentSourceDetails, presentTestLocation } from "reporters/shared";
+import { presentErrorMessage, presentSourceDetails, presentTestLocation } from "reporters/shared";
+import { RuntimeConfig } from "runtime/config";
 
 jutest("failed-tests-reporter/presenter-helpers", s => {
   s.describe("presentErrorMessage", s => {
@@ -42,7 +43,7 @@ jutest("failed-tests-reporter/presenter-helpers", s => {
   s.describe("presentSourceDetails", s => {
     s.setup(() => {
       let error = new Error();
-      let config = new ReporterConfig();
+      let config = new RuntimeConfig();
 
       return { config, error };
     });
@@ -100,7 +101,7 @@ jutest("failed-tests-reporter/presenter-helpers", s => {
 
     s.test("includes full stack trace for AssertionError if source frame is missing", async (t) => {
       let error = new AssertionFailedError('foobar');
-      let config = new ReporterConfig({ trackedSourcePaths: ["./foo"] });
+      let config = RuntimeConfig.forReporter({ trackedSourcePaths: ["./foo"] });
       let sourceDetails = await presentSourceDetails(error, config);
 
       t.assert(sourceDetails.stackFrames.length > 1);

@@ -1,14 +1,15 @@
 import { jutest } from "jutest";
 import { createStdoutMock, TestRuntime } from "tests/support";
-import { RerunnableLocationsReporter, ReporterConfig } from "reporters";
+import { RerunnableLocationsReporter } from "reporters";
+import { RuntimeConfig } from "runtime/config";
 
 let currentFileName = 'rerunnable-locations-reporter.test.js';
 
 jutest("RerunnableLocationsReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
-    let reporterConfig = new ReporterConfig({ stdout });
-    let reporterDetails = { reporterClass: RerunnableLocationsReporter, reporterConfig };
+    let runtimeConfig = RuntimeConfig.forReporter({ stdout });
+    let reporterDetails = { reporterClass: RerunnableLocationsReporter, runtimeConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };
   });

@@ -1,14 +1,15 @@
 import { jutest } from "jutest";
 import { createStdoutMock, TestRuntime } from "tests/support";
-import { FailedTestsReporter, ReporterConfig } from "reporters";
+import { FailedTestsReporter } from "reporters";
+import { RuntimeConfig } from "runtime/config";
 
 let currentFileName = 'failed-tests-reporter.test.js';
 
 jutest("FailedTestsReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
-    let reporterConfig = new ReporterConfig({ stdout, ignoredSourcePaths: ['lib'] });
-    let reporterDetails = { reporterClass: FailedTestsReporter, reporterConfig };
+    let runtimeConfig = RuntimeConfig.forReporter({ stdout, ignoredSourcePaths: ['lib'] });
+    let reporterDetails = { reporterClass: FailedTestsReporter, runtimeConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };
   });

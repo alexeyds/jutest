@@ -1,9 +1,10 @@
 import { jutest } from "jutest";
 import { attachStackFrame } from "tests/support";
-import { ErrorSourceTracer, ReporterConfig } from "reporters/shared";
+import { ErrorSourceTracer } from "reporters/shared";
+import { RuntimeConfig } from "runtime/config";
 
 function buildSourceTracer(error, config) {
-  return new ErrorSourceTracer(error, new ReporterConfig(config));
+  return new ErrorSourceTracer(error, RuntimeConfig.forReporter(config));
 }
 
 jutest("ErrorSourceTracer", s => {
