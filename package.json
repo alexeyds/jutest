@@ -5,7 +5,7 @@
   "exports": {
     ".": "./dist/jutest.js",
     "./reporters": "./dist/reporters.js",
-    "./runtime": "./dist/runtime.js",
+    "./runtime": "./dist/runtime.js"
   },
   "private": false,
   "files": [
