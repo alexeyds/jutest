@@ -6,7 +6,7 @@ import { RuntimeConfig } from "runtime/config";
 jutest.describe("SummaryReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
-    let runtimeConfig = RuntimeConfig.forReporter({ stdout });
+    let runtimeConfig = new RuntimeConfig({ stdout });
     let reporterDetails = { reporterClass: SummaryReporter, runtimeConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };

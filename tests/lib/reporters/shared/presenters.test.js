@@ -101,7 +101,7 @@ jutest("failed-tests-reporter/presenter-helpers", s => {
 
     s.test("includes full stack trace for AssertionError if source frame is missing", async (t) => {
       let error = new AssertionFailedError('foobar');
-      let config = RuntimeConfig.forReporter({ trackedSourcePaths: ["./foo"] });
+      let config = new RuntimeConfig({ trackedSourcePaths: ["./foo"] });
       let sourceDetails = await presentSourceDetails(error, config);
 
       t.assert(sourceDetails.stackFrames.length > 1);

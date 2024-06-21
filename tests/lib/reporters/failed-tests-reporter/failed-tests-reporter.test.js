@@ -8,7 +8,7 @@ let currentFileName = 'failed-tests-reporter.test.js';
 jutest("FailedTestsReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
-    let runtimeConfig = RuntimeConfig.forReporter({ stdout, ignoredSourcePaths: ['lib'] });
+    let runtimeConfig = new RuntimeConfig({ stdout, ignoredSourcePaths: ['lib'] });
     let reporterDetails = { reporterClass: FailedTestsReporter, runtimeConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };

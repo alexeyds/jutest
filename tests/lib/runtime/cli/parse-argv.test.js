@@ -15,8 +15,8 @@ jutest("parseArgv", s => {
   });
 
   s.test("includes test locations in config", t => {
-    let { runtimeConfig } = parseArgv(buildArgv('test.js'))
-    t.same(runtimeConfig.locationsToRun, ['test.js'])
+    let { runtimeConfig } = parseArgv(buildArgv('test.js'));
+    t.same(runtimeConfig.locationsToRun, ['test.js']);
   });
 
   s.test("has --config option", t => {

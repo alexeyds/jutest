@@ -4,7 +4,7 @@ import { ErrorSourceTracer } from "reporters/shared";
 import { RuntimeConfig } from "runtime/config";
 
 function buildSourceTracer(error, config) {
-  return new ErrorSourceTracer(error, RuntimeConfig.forReporter(config));
+  return new ErrorSourceTracer(error, new RuntimeConfig(config));
 }
 
 jutest("ErrorSourceTracer", s => {

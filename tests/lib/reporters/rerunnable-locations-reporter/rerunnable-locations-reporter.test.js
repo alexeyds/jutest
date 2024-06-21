@@ -8,7 +8,7 @@ let currentFileName = 'rerunnable-locations-reporter.test.js';
 jutest("RerunnableLocationsReporter", s => {
   s.setup(() => {
     let stdout = createStdoutMock();
-    let runtimeConfig = RuntimeConfig.forReporter({ stdout });
+    let runtimeConfig = new RuntimeConfig({ stdout });
     let reporterDetails = { reporterClass: RerunnableLocationsReporter, runtimeConfig };
 
     return { reporterDetails, stdout, outputData: stdout.outputData };

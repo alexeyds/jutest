@@ -60,7 +60,7 @@ jutest("utils/file", s => {
   s.describe("mapDirectory", s => {
     s.test("calls map function for each item in the directory and returns the result", t => {
       let result = mapDirectory(fixturePath(''), path => ({ path }));
-      t.same(result, [{ path: fiveLinesFilePath }])
+      t.same(result, [{ path: fiveLinesFilePath }]);
     });
   });
 });

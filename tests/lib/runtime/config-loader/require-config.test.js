@@ -1,5 +1,4 @@
 import { jutest } from "jutest";
-import { spy } from "sinon";
 import { resolveToCwd } from "utils/file";
 import { requireConfig } from "runtime/config-loader/require-config";
 
@@ -27,7 +26,7 @@ jutest("requireConfig", s => {
   });
 
   s.test("re-throws any other errors", t => {
-    let requireFunc = () => { throw '123' };
+    let requireFunc = () => { throw '123'; };
     t.throws(() => requireConfig({ requireFunc }), /123/);
   });
 

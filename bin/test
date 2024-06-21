@@ -13,10 +13,8 @@ let cliParams = initCLI();
 
 initRuntime({
   locationsToRun: ['tests'],
-  reporterConfig: {
-    ignoredSourcePaths: ['node_modules', 'lib/assertions', 'lib/test'],
-    jutestRunCommand: 'yarn test',
-  },
+  ignoredSourcePaths: ['node_modules', 'lib/assertions', 'lib/test'],
+  jutestRunCommand: 'yarn test',
   ...loadConfigFile(cliParams.configFilePath),
   ...cliParams.runtimeConfig,
 })
