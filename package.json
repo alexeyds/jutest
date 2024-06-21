@@ -2,7 +2,11 @@
   "name": "jutest",
   "version": "0.0.2",
   "description": "JavaScript Unit-Testing framework",
-  "main": "dist/jutest.js",
+  "exports": {
+    ".": "./dist/jutest.js",
+    "./reporters": "./dist/reporters.js",
+    "./runtime": "./dist/runtime.js",
+  },
   "private": false,
   "files": [
     "dist",
