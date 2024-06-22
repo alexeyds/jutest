@@ -10,6 +10,8 @@ jutest("TestRunnerContext", s => {
       t.same(context.fileLocations, []);
       t.assert(context.eventEmitter);
       t.assert(context.runSummary);
+      t.equal(context.randomizeOrder, false);
+      t.equal(context.seed, undefined);
     });
 
     s.test("accepts fileLocations param", t => {
@@ -17,6 +19,13 @@ jutest("TestRunnerContext", s => {
       let context = new TestRunnerContext({ fileLocations });
 
       t.same(context.fileLocations, fileLocations);
+    });
+
+    s.test("accepts order params", t => {
+      let context = new TestRunnerContext({ randomizeOrder: true, seed: 123 });
+
+      t.equal(context.randomizeOrder, true);
+      t.equal(context.seed, 123);
     });
   });
 
@@ -38,6 +47,18 @@ jutest("TestRunnerContext", s => {
       let context = TestRunnerContext.forSingleFile('test.js', { requireFunc });
 
       t.equal(context.requireFunc, requireFunc);
+    });
+  });
+
+  s.describe("hasNoLineNumberLocations", s => {
+    s.test("returns true there are no locations with line number", t => {
+      let context = TestRunnerContext.forSingleLocation('foo.test');
+      t.equal(context.hasNoLineNumberLocations, true);
+    });
+
+    s.test("returns false there are some locations with line number", t => {
+      let context = TestRunnerContext.forSingleLocation('foo.test', [15]);
+      t.equal(context.hasNoLineNumberLocations, false);
     });
   });
 

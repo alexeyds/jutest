@@ -62,6 +62,18 @@ jutest("runSpecs", s => {
     t.equal(context.runSummary.testSummaries[0].name, 'test');
   });
 
+  s.test("randomizes test order", async (t, { specsContainer }) => {
+    specsContainer.test('test 1', () => {});
+    specsContainer.test('test 2', () => {});
+    specsContainer.test('test 3', () => {});
+    let context = new TestRunnerContext({ seed: 12345, randomizeOrder: true });
+    await runSpecsFromContainer(specsContainer, context);
+    let { testSummaries } = context.runSummary;
+
+    t.equal(testSummaries[0].name, 'test 2');
+    t.equal(testSummaries[1].name, 'test 3');
+  });
+
   [Events.FileStart, Events.FileEnd].forEach(event => {
     s.test(`emits ${event} event`, async (t, { specsContainer, context }) => {
       let listener = createListener(event, context);
