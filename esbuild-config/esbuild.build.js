@@ -1,12 +1,22 @@
-let { esmSplitCodeToCjs } = require('./plugins');
 let { nodeExternalsPlugin } = require('esbuild-node-externals');
+let { copy } = require('esbuild-plugin-copy');
+let { esmSplitCodeToCjs } = require('./plugins');
 let { sharedConfig } = require("./esbuild.shared");
 
 let config = {
   ...sharedConfig,
   entryPoints: ['./lib/jutest.js', './lib/runtime.js', './lib/reporters.js'],
   bundle: true,
-  plugins: [nodeExternalsPlugin(), esmSplitCodeToCjs],
+  plugins: [
+    nodeExternalsPlugin(),
+    esmSplitCodeToCjs,
+    copy({
+      assets: {
+        from: ['./lib/types/*'],
+        to: ['./types'],
+      }
+    })
+  ],
   outdir: 'dist',
   splitting: true,
   sourcemap: true,

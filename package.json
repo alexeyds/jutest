@@ -5,8 +5,22 @@
   "exports": {
     ".": "./dist/jutest.js",
     "./reporters": "./dist/reporters.js",
-    "./runtime": "./dist/runtime.js"
+    "./runtime": "./dist/runtime.js",
+    "./bin/jutest": "./bin/jutest.js",
+    "./package.json": "./package.json"
   },
+  "types": "./dist/types/jutest.d.ts",
+  "typesVersions": {
+    "*": {
+      "runtime": [
+        "./dist/types/runtime.d.ts"
+      ],
+      "reporters": [
+        "./dist/types/reporters.d.ts"
+      ]
+    }
+  },
+  "bin": "./bin/jutest.js",
   "private": false,
   "files": [
     "dist",
@@ -41,6 +55,7 @@
   "dependencies": {
     "chalk": "^4.0.0",
     "deep-equal": "^2.0.0",
+    "esbuild-plugin-copy": "^2.1.1",
     "graceful-fs": "^4.0.0",
     "is-plain-object": "^5.0.0",
     "lodash.pick": "^4.0.0",
