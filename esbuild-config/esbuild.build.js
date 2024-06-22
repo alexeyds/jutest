@@ -1,7 +1,10 @@
 let { nodeExternalsPlugin } = require('esbuild-node-externals');
 let { copy } = require('esbuild-plugin-copy');
+let { clean } = require('esbuild-plugin-clean');
 let { esmSplitCodeToCjs } = require('./plugins');
 let { sharedConfig } = require("./esbuild.shared");
+
+let outdir = 'dist';
 
 let config = {
   ...sharedConfig,
@@ -15,9 +18,12 @@ let config = {
         from: ['./lib/types/*'],
         to: ['./types'],
       }
-    })
+    }),
+    clean({
+      patterns: [`./${outdir}/*`]
+    }),
   ],
-  outdir: 'dist',
+  outdir,
   splitting: true,
   sourcemap: true,
   metafile: true,

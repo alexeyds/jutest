@@ -9,6 +9,7 @@
     "./bin/jutest": "./bin/jutest.js",
     "./package.json": "./package.json"
   },
+  "bin": "./bin/jutest.js",
   "types": "./dist/types/jutest.d.ts",
   "typesVersions": {
     "*": {
@@ -20,11 +21,11 @@
       ]
     }
   },
-  "bin": "./bin/jutest.js",
   "private": false,
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "bin"
   ],
   "scripts": {
     "test": "./bin/test",
@@ -47,6 +48,8 @@
   "devDependencies": {
     "esbuild": "^0.21.5",
     "esbuild-node-externals": "^1.13.1",
+    "esbuild-plugin-clean": "^1.0.1",
+    "esbuild-plugin-copy": "^2.1.1",
     "esbuild-register": "^3.5.0",
     "eslint": "^9.5.0",
     "sinon": "^18.0.0",
@@ -55,7 +58,6 @@
   "dependencies": {
     "chalk": "^4.0.0",
     "deep-equal": "^2.0.0",
-    "esbuild-plugin-copy": "^2.1.1",
     "graceful-fs": "^4.0.0",
     "is-plain-object": "^5.0.0",
     "lodash.pick": "^4.0.0",
