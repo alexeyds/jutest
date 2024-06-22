@@ -46,12 +46,14 @@
   "author": "Alexey D",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.5.0",
     "esbuild": "^0.21.5",
     "esbuild-node-externals": "^1.13.1",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-register": "^3.5.0",
     "eslint": "^9.5.0",
+    "globals": "^15.6.0",
     "sinon": "^18.0.0",
     "tsconfig-paths": "^4.2.0"
   },
