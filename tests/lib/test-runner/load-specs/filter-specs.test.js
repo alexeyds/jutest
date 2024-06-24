@@ -53,4 +53,20 @@ jutest("filterSpecs", s => {
     t.equal(specs.length, 1);
     t.equal(specs[0].name, 'test test2');
   });
+
+  s.test("includes entire suite if all tests inside of it match the location", async (t, { jutestInstance }) => {
+    await jutestInstance.specsContainer.withSourceFilePath(ownFileName, () => {
+      jutestInstance.api.describe('test', s => {
+        s.test('test1');
+        s.test('test2');
+      });
+    });
+
+    let context = TestRunnerContext.forSingleLocation(ownFileName, [60, 61]);
+    let specsByFile = await filterSpecs(jutestInstance, context);
+    let specs = specsByFile[ownFileName];
+
+    t.equal(specs.length, 1);
+    t.equal(specs[0].name, 'test');
+  });
 });
