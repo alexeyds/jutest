@@ -6,10 +6,39 @@ jutest("TestContext", s => {
     return { context: new TestContext() };
   });
 
-  s.describe('addName', s => {
+  s.describe('#names', s => {
+    s.test("returns empty array by default", (t, { context }) => {
+      t.same(context.names, [])
+    });
+
     s.test('adds name to context', (t, { context }) => {
       context.addName('testing');
       t.same(context.names, ['testing']);
+    });
+  });
+
+  s.describe("#name", s => {
+    s.test("joins context names", (t, { context }) => {
+      context.addName("Foobar");
+      context.addName("Test");
+
+      t.equal(context.name, 'Foobar Test');
+    });
+  });
+
+  s.describe("#tags", s => {
+    s.test("returns empty object by default", (t, { context }) => {
+      t.same(context.tags, {});
+    });
+
+    s.test("allows adding tags", (t, { context }) => {
+      context.addTags({ a: 1 });
+      t.same(context.tags, { a: 1 });
+    });
+
+    s.test("ignores non-objects", (t, { context }) => {
+      context.addTags('asdasd');
+      t.same(context.tags, {});
     });
   });
 
@@ -27,6 +56,15 @@ jutest("TestContext", s => {
       newContext.addName('bar');
 
       t.same(context.names, ['foo']);
+    });
+
+    s.test("copies over tags", (t, { context }) => {
+      context.addTags({ a: 1 });
+      let newContext = context.copy();
+      newContext.addTags({ b: 2 });
+
+      t.same(context.tags, { a: 1 });
+      t.same(newContext.tags, { a: 1, b: 2});
     });
   });
 
@@ -115,15 +153,6 @@ jutest("TestContext", s => {
     });
   });
 
-  s.describe("name", s => {
-    s.test("returns context name", (t, { context }) => {
-      context.addName("Foobar");
-      context.addName("Test");
-
-      t.equal(context.name, 'Foobar Test');
-    });
-  });
-
   s.describe("lock", s => {
     s.test("prevents modifying locked context", (t, { context }) => {
       context.lock('locked');
@@ -140,6 +169,7 @@ jutest("TestContext", s => {
       t.assert(config.assertBeforeTest);
       t.assert(config.assertAfterTest);
       t.assert(config.addName);
+      t.assert(config.addTags);
     });
   });
 
