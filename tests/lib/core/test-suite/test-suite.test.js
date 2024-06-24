@@ -20,6 +20,7 @@ jutest("TestSuite", s => {
       t.equal(suite.testsCount, 0);
       t.assert(suite.contextId);
       t.same(suite.parentContextIds, [specsContainer.context.id]);
+      t.same(suite.tags, {});
     });
 
     s.test("accepts skip attribute", async (t, { specsContainer }) => {
@@ -30,6 +31,21 @@ jutest("TestSuite", s => {
       t.equal(suite.skipped, true);
       let [test] = await suite.composeSpecs();
       t.equal(test.skipped, true);
+    });
+
+    s.test("accepts tags", (t, { specsContainer }) => {
+      let suite = new TestSuite('suite', () => {}, { specsContainer, tags: { a: 1 } });
+      t.same(suite.tags, { a: 1 });
+    });
+
+    s.test("doesn't mutate previous context", (t, { specsContainer }) => {
+      let { context } = specsContainer;
+      context.addName('foobar');
+      context.addTags({ a: 1 });
+      new TestSuite('suite', () => {}, { specsContainer, tags: { b: 2 } });
+
+      t.equal(context.name, 'foobar');
+      t.same(context.tags, { a: 1 });
     });
   });
 
@@ -44,14 +60,6 @@ jutest("TestSuite", s => {
       let suite = new TestSuite('suite', () => {}, { specsContainer });
 
       t.equal(suite.name, 'foobar suite');
-    });
-
-    s.test("doesn't mutate previous context", (t, { specsContainer }) => {
-      let { context } = specsContainer;
-      context.addName('foobar');
-      new TestSuite('suite', () => {}, { specsContainer });
-
-      t.equal(context.name, 'foobar');
     });
   });
 

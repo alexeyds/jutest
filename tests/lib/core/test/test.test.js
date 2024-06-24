@@ -22,6 +22,7 @@ jutest("Test", s => {
       t.assert(test.contextId);
       t.equal(test.runTime, 0);
       t.same(test.parentContextIds, [context.id]);
+      t.same(test.tags, {});
       t.equal(test.skipped, false);
     });
 
@@ -49,8 +50,15 @@ jutest("Test", s => {
     s.test("copies provided context", (t, { context }) => {
       let test = new Test('foobar', () => {}, { context });
       context.addName("test");
+      context.addTags({ a: 1 });
 
       t.equal(test.name, 'foobar');
+      t.same(test.tags, {});
+    });
+
+    s.test("accepts tags", (t, { context }) => {
+      let test = new Test('foobar', () => {}, { context, tags: { a: 1 } });
+      t.same(test.tags, { a: 1 });
     });
   });
 

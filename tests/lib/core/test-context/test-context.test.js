@@ -8,7 +8,7 @@ jutest("TestContext", s => {
 
   s.describe('#names', s => {
     s.test("returns empty array by default", (t, { context }) => {
-      t.same(context.names, [])
+      t.same(context.names, []);
     });
 
     s.test('adds name to context', (t, { context }) => {

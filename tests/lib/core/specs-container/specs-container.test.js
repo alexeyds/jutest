@@ -113,6 +113,14 @@ jutest("SpecsContainer", s => {
 
       t.same(specsContainer.specsByFile['foo.test'], [test]);
     });
+
+    s.test("supports tags", (t, { specsContainer }) => {
+      let test = specsContainer.test('foo', { a: 1 }, () => {});
+
+      t.equal(test.name, 'foo');
+      t.same(test.tags, { a: 1 });
+      t.equal(test.skipped, false);
+    });
   });
 
   s.describe("#xtest", s => {
@@ -152,6 +160,14 @@ jutest("SpecsContainer", s => {
       let suite = specsContainer.describe('bar', () => {});
 
       t.same(specsContainer.specsByFile['foo.test'], [suite]);
+    });
+
+    s.test("supports tags", (t, { specsContainer }) => {
+      let suite = specsContainer.describe('foo', { a: 1 }, () => {});
+
+      t.equal(suite.name, 'foo');
+      t.same(suite.tags, { a: 1 });
+      t.equal(suite.skipped, false);
     });
   });
 
