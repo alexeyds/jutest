@@ -19,6 +19,11 @@ jutest("parseArgv", s => {
     t.same(runtimeConfig.locationsToRun, ['test.js']);
   });
 
+  s.test("returns parsedArgv", t => {
+    let { parsedArgv } = parseArgv(buildArgv());
+    t.assert(parsedArgv['$0']);
+  });
+
   s.test("has --config option", t => {
     let { configFilePath } = parseArgv(buildArgv('--config', 'myconfig.js'));
     t.equal(configFilePath, 'myconfig.js');
@@ -32,5 +37,20 @@ jutest("parseArgv", s => {
   s.test("has --order option", t => {
     let { runtimeConfig } = parseArgv(buildArgv('--order', 'defined'));
     t.equal(runtimeConfig.order, ORDER_TYPES.defined);
+  });
+
+  s.test("has --tags option", t => {
+    let { runtimeConfig } = parseArgv(buildArgv('--tags', 'api'));
+    t.same(runtimeConfig.onlyIncludeTags, { api: true });
+  });
+
+  s.test("supports type=api tag format", t => {
+    let { runtimeConfig } = parseArgv(buildArgv('--tags', 'type=api'));
+    t.same(runtimeConfig.onlyIncludeTags, { type: 'api' });
+  });
+
+  s.test("has --excludeTags option", t => {
+    let { runtimeConfig } = parseArgv(buildArgv('--excludeTags', 'api'));
+    t.same(runtimeConfig.excludeTags, { api: true });
   });
 });
