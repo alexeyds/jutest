@@ -12,6 +12,8 @@ jutest("TestRunnerContext", s => {
       t.assert(context.runSummary);
       t.equal(context.randomizeOrder, false);
       t.equal(context.seed, undefined);
+      t.same(context.onlyIncludeTags, {});
+      t.same(context.excludeTags, {});
     });
 
     s.test("accepts fileLocations param", t => {
@@ -26,6 +28,13 @@ jutest("TestRunnerContext", s => {
 
       t.equal(context.randomizeOrder, true);
       t.equal(context.seed, 123);
+    });
+
+    s.test("accepts tags", t => {
+      let context = new TestRunnerContext({ onlyIncludeTags: { a: 1 }, excludeTags: { b: 2 } });
+
+      t.same(context.onlyIncludeTags, { a: 1 });
+      t.same(context.excludeTags, { b: 2 });
     });
   });
 
@@ -50,15 +59,64 @@ jutest("TestRunnerContext", s => {
     });
   });
 
-  s.describe("hasNoLineNumberLocations", s => {
+  s.describe("hasNoTagFilters", s => {
+    s.test("returns true if context has no tag filters", t => {
+      let context = new TestRunnerContext({});
+      t.equal(context.hasNoTagFilters, true);
+    });
+
+    s.test("returns false if context has inclusion filters", t => {
+      let context = new TestRunnerContext({ onlyIncludeTags: { a: 1 } });
+      t.equal(context.hasNoTagFilters, false);
+    });
+
+    s.test("returns false if context has exclusion filters", t => {
+      let context = new TestRunnerContext({ excludeTags: { a: 1 } });
+      t.equal(context.hasNoTagFilters, false);
+    });
+  });
+
+  s.describe("areTagsRunnable", s => {
+    s.test("returns true if there are no tag filters", t => {
+      let context = new TestRunnerContext();
+      t.equal(context.areTagsRunnable({}), true);
+    });
+
+    s.test("returns false if tags dont match the include filter", t => {
+      let context = new TestRunnerContext({ onlyIncludeTags: { a: 1 } });
+      t.equal(context.areTagsRunnable({}), false);
+    });
+
+    s.test("returns true if one of the tags matches the include filter", t => {
+      let context = new TestRunnerContext({ onlyIncludeTags: { a: 1, b: 2 } });
+      t.equal(context.areTagsRunnable({ b: 2 }), true);
+    });
+
+    s.test("returns true if tags dont match exclusion filter", t => {
+      let context = new TestRunnerContext({ excludeTags: { a: 1, b: 2 } });
+      t.equal(context.areTagsRunnable({}), true);
+    });
+
+    s.test("returns false if some tags match exclusion filter", t => {
+      let context = new TestRunnerContext({ excludeTags: { a: 1, b: 2 } });
+      t.equal(context.areTagsRunnable({ a: 1 }), false);
+    });
+
+    s.test("prefers inclusion over exclusion", t => {
+      let context = new TestRunnerContext({ onlyIncludeTags: { a: 1 }, excludeTags: { a: 1, b: 2 } });
+      t.equal(context.areTagsRunnable({ a: 1 }), true);
+    });
+  });
+
+  s.describe("hasNoLocationFilters", s => {
     s.test("returns true there are no locations with line number", t => {
       let context = TestRunnerContext.forSingleLocation('foo.test');
-      t.equal(context.hasNoLineNumberLocations, true);
+      t.equal(context.hasNoLocationFilters, true);
     });
 
     s.test("returns false there are some locations with line number", t => {
       let context = TestRunnerContext.forSingleLocation('foo.test', [15]);
-      t.equal(context.hasNoLineNumberLocations, false);
+      t.equal(context.hasNoLocationFilters, false);
     });
   });
 

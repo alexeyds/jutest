@@ -1,5 +1,5 @@
 import { jutest } from "jutest";
-import { deepMerge, isPlainObject } from "utils/object";
+import { deepMerge, isPlainObject, isEmpty } from "utils/object";
 
 jutest("utils/object", s => {
   s.describe("deepMerge", s => {
@@ -29,5 +29,15 @@ jutest("utils/object", s => {
       t.equal(isPlainObject(undefined), false);
       t.equal(isPlainObject(''), false);
     }); 
+  });
+
+  s.describe("isEmpty", s => {
+    s.test("returns true if object is empty", t => {
+      t.equal(isEmpty({}), true);
+    });
+
+    s.test("returns false if object is not empty", t => {
+      t.equal(isEmpty({a: 1}), false);
+    });
   });
 });

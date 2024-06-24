@@ -16,6 +16,8 @@ jutest("RuntimeConfig", s => {
       t.match(config.ignoredSourcePaths[0], 'node-modules');
       t.match(config.excludeTestDirectoryPaths[0], 'node-modules');
       t.assert(config.jutestRunCommand);
+      t.same(config.onlyIncludeTags, {});
+      t.same(config.excludeTags, {});
     });
 
     s.test("resolves all paths to current dir", t => {
@@ -29,6 +31,13 @@ jutest("RuntimeConfig", s => {
       t.match(config.trackedSourcePaths[0], process.cwd());
       t.match(config.ignoredSourcePaths[0], process.cwd());
       t.match(config.excludeTestDirectoryPaths[0], process.cwd());
+    });
+
+    s.test("ensures tag options are an object", t => {
+      let config = new RuntimeConfig({ onlyIncludeTags: 123, excludeTags: 321 });
+
+      t.same(config.onlyIncludeTags, {});
+      t.same(config.excludeTags, {});
     });
   });
 });

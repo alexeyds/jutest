@@ -11,7 +11,7 @@ jutest("filterSpecs", s => {
     return { jutestInstance };
   });
 
-  s.test("returns all specs by default", async (t, { jutestInstance }) => {
+  s.test("returns all specs by default", { api: true }, async (t, { jutestInstance }) => {
     jutestInstance.api.test('test1');
     jutestInstance.api.test('test2');
 
@@ -68,5 +68,31 @@ jutest("filterSpecs", s => {
 
     t.equal(specs.length, 1);
     t.equal(specs[0].name, 'test');
+  });
+
+  s.test("only includes tests with matching tags", async (t, { jutestInstance }) => {
+    jutestInstance.api.test('test1');
+    jutestInstance.api.test('test2', { api: true });
+
+    let context = new TestRunnerContext({ onlyIncludeTags: { api: true } });
+    let specsByFile = await filterSpecs(jutestInstance, context);
+    let specs = specsByFile['null'];
+
+    t.equal(specs.length, 1);
+    t.equal(specs[0].name, 'test2');
+  });
+
+  s.test("checks suites for tags on nested tests", async (t, { jutestInstance }) => {
+    jutestInstance.api.describe('test', s => {
+      s.test('test1');
+      s.test('test2', { api: true });
+    });
+
+    let context = new TestRunnerContext({ excludeTags: { api: true } });
+    let specsByFile = await filterSpecs(jutestInstance, context);
+    let specs = specsByFile['null'];
+
+    t.equal(specs.length, 1);
+    t.equal(specs[0].name, 'test test1');
   });
 });
