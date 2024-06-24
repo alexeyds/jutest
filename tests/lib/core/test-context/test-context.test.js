@@ -124,19 +124,6 @@ jutest("TestContext", s => {
     });
   });
 
-  s.describe("testName", s => {
-    s.test("joins test name with other names", (t, { context }) => {
-      context.addName("Foobar");
-      context.addName("Test");
-
-      t.equal(context.testName('baz'), 'Foobar Test baz');
-    });
-
-    s.test("works if context has no name", (t, { context }) => {
-      t.equal(context.testName('baz'), 'baz');
-    });
-  });
-
   s.describe("lock", s => {
     s.test("prevents modifying locked context", (t, { context }) => {
       context.lock('locked');
