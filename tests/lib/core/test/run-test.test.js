@@ -147,4 +147,14 @@ jutest("runTest", s => {
       t.equal(tags.a, 1);
     });
   });
+
+  s.describe("timeout", s => {
+    s.test("timeouts test after specified time", async (t, { context }) => {
+      context.addTags({ timeout: 0 });
+      let result = await runTest(() => new Promise(resolve => setTimeout(resolve, 5)), context);
+
+      t.equal(result.status, ExecutionStatuses.Failed);
+      t.match(result.error, /timed out/);
+    });
+  });
 });
