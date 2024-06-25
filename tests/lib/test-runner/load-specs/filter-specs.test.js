@@ -95,4 +95,15 @@ jutest("filterSpecs", s => {
     t.equal(specs.length, 1);
     t.equal(specs[0].name, 'test test1');
   });
+
+  s.test("does not include files with all specs filtered out", async (t, { jutestInstance }) => {
+    jutestInstance.api.describe('test', s => {
+      s.test('test2', { api: true });
+    });
+
+    let context = new TestRunnerContext({ excludeTags: { api: true } });
+    let specsByFile = await filterSpecs(jutestInstance, context);
+
+    t.same(specsByFile, {});
+  });
 });
