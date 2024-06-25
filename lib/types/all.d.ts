@@ -31,8 +31,8 @@ export interface SuiteBuilderAPI {
 }
 
 export interface TestContextAPI {
-  assertBeforeTest: TestBody;
-  assertAfterTest: TestBody;
+  assertBeforeTest: (body: TestBody) => void;
+  assertAfterTest: (body: TestBody) => void;
   setup: Setup;
   teardown: Teardown;
   addName: (name: string) => void;
@@ -121,14 +121,14 @@ export interface Location {
 }
 
 export interface TestRunnerEventEmitter {
-  on: (event: TestRunnerEvents, listener: TestRunnerEventListener) => void;
-  off: (event: TestRunnerEvents, listener: TestRunnerEventListener) => void;
+  on: TestRunnerOnEvent;
+  off: (event: string, listener: function) => void;
 }
 
-export interface TestRunnerEventListener {
-  (event: 'file-start' | 'file-end', file: string): void;
-  (event: 'suite-start' | 'suite-end', suiteSummary: SuiteSummary): void;
-  (event: 'test-start' | 'test-end' | 'test-skip', testSummary: TestSummary): void;
+export interface TestRunnerOnEvent {
+  (event: 'file-start' | 'file-end', listener: (file: string) => void): void;
+  (event: 'suite-start' | 'suite-end', listener: (suiteSummary: SuiteSummary) => void): void;
+  (event: 'test-start' | 'test-end' | 'test-skip', listener: (testSummary: TestSummary) => void): void;
 }
 
 export interface RunSummary {

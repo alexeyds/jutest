@@ -19,7 +19,7 @@
       "reporters": [
         "./dist/types/reporters.d.ts"
       ],
-      "all": [
+      "types": [
         "./dist/types/all.d.ts"
       ]
     }
