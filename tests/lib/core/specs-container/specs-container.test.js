@@ -118,7 +118,7 @@ jutest("SpecsContainer", s => {
       let test = specsContainer.test('foo', { a: 1 }, () => {});
 
       t.equal(test.name, 'foo');
-      t.same(test.tags, { a: 1 });
+      t.equal(test.tags.a, 1);
       t.equal(test.skipped, false);
     });
   });
@@ -166,7 +166,7 @@ jutest("SpecsContainer", s => {
       let suite = specsContainer.describe('foo', { a: 1 }, () => {});
 
       t.equal(suite.name, 'foo');
-      t.same(suite.tags, { a: 1 });
+      t.equal(suite.tags.a, 1);
       t.equal(suite.skipped, false);
     });
   });

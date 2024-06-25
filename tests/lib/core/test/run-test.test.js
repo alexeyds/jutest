@@ -144,7 +144,7 @@ jutest("runTest", s => {
       context.addTags({ a: 1 });
       await runTest(() => {}, context);
 
-      t.same(tags, { a: 1});
+      t.equal(tags.a, 1);
     });
   });
 });

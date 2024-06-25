@@ -20,7 +20,7 @@ jutest("TestSuite", s => {
       t.equal(suite.testsCount, 0);
       t.assert(suite.contextId);
       t.same(suite.parentContextIds, [specsContainer.context.id]);
-      t.same(suite.tags, {});
+      t.assert(suite.tags);
     });
 
     s.test("accepts skip attribute", async (t, { specsContainer }) => {
@@ -35,7 +35,7 @@ jutest("TestSuite", s => {
 
     s.test("accepts tags", (t, { specsContainer }) => {
       let suite = new TestSuite('suite', () => {}, { specsContainer, tags: { a: 1 } });
-      t.same(suite.tags, { a: 1 });
+      t.equal(suite.tags.a, 1);
     });
 
     s.test("doesn't mutate previous context", (t, { specsContainer }) => {
@@ -45,7 +45,7 @@ jutest("TestSuite", s => {
       new TestSuite('suite', () => {}, { specsContainer, tags: { b: 2 } });
 
       t.equal(context.name, 'foobar');
-      t.same(context.tags, { a: 1 });
+      t.equal(context.tags.a, 1);
     });
   });
 

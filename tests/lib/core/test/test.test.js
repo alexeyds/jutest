@@ -22,7 +22,7 @@ jutest("Test", s => {
       t.assert(test.contextId);
       t.equal(test.runTime, 0);
       t.same(test.parentContextIds, [context.id]);
-      t.same(test.tags, {});
+      t.assert(test.tags);
       t.equal(test.skipped, false);
     });
 
@@ -53,12 +53,12 @@ jutest("Test", s => {
       context.addTags({ a: 1 });
 
       t.equal(test.name, 'foobar');
-      t.same(test.tags, {});
+      t.equal(test.tags.a, undefined);
     });
 
     s.test("accepts tags", (t, { context }) => {
       let test = new Test('foobar', () => {}, { context, tags: { a: 1 } });
-      t.same(test.tags, { a: 1 });
+      t.equal(test.tags.a, 1);
     });
   });
 

@@ -27,18 +27,18 @@ jutest("TestContext", s => {
   });
 
   s.describe("#tags", s => {
-    s.test("returns empty object by default", (t, { context }) => {
-      t.same(context.tags, {});
+    s.test("includes timeout tag by default", (t, { context }) => {
+      t.same(context.tags, { timeout: 5_000 });
     });
 
     s.test("allows adding tags", (t, { context }) => {
       context.addTags({ a: 1 });
-      t.same(context.tags, { a: 1 });
+      t.equal(context.tags.a, 1);
     });
 
     s.test("ignores non-objects", (t, { context }) => {
       context.addTags('asdasd');
-      t.same(context.tags, {});
+      t.equal(context.tags['0'], undefined);
     });
   });
 
@@ -63,8 +63,9 @@ jutest("TestContext", s => {
       let newContext = context.copy();
       newContext.addTags({ b: 2 });
 
-      t.same(context.tags, { a: 1 });
-      t.same(newContext.tags, { a: 1, b: 2});
+      t.equal(context.tags.a, 1);
+      t.equal(newContext.tags.a, 1);
+      t.equal(newContext.tags.b, 2);
     });
   });
 
@@ -111,7 +112,7 @@ jutest("TestContext", s => {
       context.addTags({ a: 1 });
       await context.runSetups();
 
-      t.same(tags, { a: 1 });
+      t.equal(tags.a, 1);
     });
   });
 
