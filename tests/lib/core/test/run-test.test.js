@@ -137,5 +137,14 @@ jutest("runTest", s => {
 
       t.same(assigns, { a: 1});
     });
+
+    s.test("passes tags to teardowns", async (t, { context }) => {
+      let tags;
+      context.teardown((_, t) => tags = t);
+      context.addTags({ a: 1 });
+      await runTest(() => {}, context);
+
+      t.same(tags, { a: 1});
+    });
   });
 });

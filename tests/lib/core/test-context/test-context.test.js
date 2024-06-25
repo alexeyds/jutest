@@ -104,6 +104,15 @@ jutest("TestContext", s => {
 
       t.same(result, {});
     });
+
+    s.test("passes tags to setups", async (t, { context }) => {
+      let tags;
+      context.setup((_, t) => tags = t);
+      context.addTags({ a: 1 });
+      await context.runSetups();
+
+      t.same(tags, { a: 1 });
+    });
   });
 
   s.describe("runTeardowns", s => {
