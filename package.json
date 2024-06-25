@@ -18,6 +18,9 @@
       ],
       "reporters": [
         "./dist/types/reporters.d.ts"
+      ],
+      "all": [
+        "./dist/types/all.d.ts"
       ]
     }
   },
