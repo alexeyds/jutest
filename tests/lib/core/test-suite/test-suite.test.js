@@ -8,7 +8,7 @@ jutest("TestSuite", s => {
     return { specsContainer };
   });
 
-  s.describe("constructor", s => {
+  s.describe("constructor", async s => {
     s.test("sets initial attributes", (t, { specsContainer }) => {
       let suite = new TestSuite('suite', () => {}, { specsContainer });
 
