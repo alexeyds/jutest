@@ -18,8 +18,8 @@ The starting point of any test file. By itself it can be used to create a regula
 import { jutest } from 'jutest';
 
 jutest('a describe block', s => {
-  s.test('checks if 1 === 2', t => {
-    t.equal(1, 2);
+  s.test('checks if 1 === 1', t => {
+    t.equal(1, 1);
   });
 });
 
@@ -37,13 +37,49 @@ jutes.test('a standalone test', t => {
 
 Defines a new test suite with the given `name`.
 
-`fn` will be called with a new `suiteApi` object which can then be used to define tests and suites nested within this one.
+`fn` will be called with `fn(suiteApi)` and `suiteApi` can then be used to define tests and suites nested within this one.
+
+Async suite definitions are also supported and `fn` can return a promise to be awaited upon.
 
 An optional second argument `tags` can be provided to tag all the tests within this suite. See Using tags for a detailed description.
+
+```js
+jutest('SomeCode', s => {
+  s.describe('someMethod', s => {
+    s.test('does something', t => {
+      // ...
+    });
+  });
+
+  s.describe('someOtherMethod', s => {
+    s.test('does something else', t => {
+      // ...
+    });
+  });
+});
+
+```
 
 ## `suiteApi.xdescribe(name, [tags], fn)`
 
 Same as `suiteApi.describe` but all the tests defined within this suite will be marked as skipped.
+
+```js
+jutest('SomeCode', s => {
+  s.describe('a suite', s => {
+    s.test('will be run', t => {
+      // ...
+    });
+  });
+
+  s.xdescribe('a skipped suite', s => {
+    s.test('will not be run', t => {
+      // ...
+    });
+  })
+});
+
+```
 
 ## `suiteApi.test(name, [tags], fn)`
 
@@ -52,19 +88,48 @@ Defines a new test case with the given `name`.
 `fn` represents the test body and will be called with `fn(assertions, assigns)`.\
 See Assertions API for the list of available assertions and `suiteApi.setup` to learn about the `assigns` object.
 
+Async tests are also supported and `fn` can return a promise to be awaited upon.
+
 An optional second argument `tags` can be provided to tag the defined test. See Using tags for a detailed description.
+
+
+```js
+jutest('SomeCode', s => {
+  s.test('does a useless equality check', t => {
+    t.equal('foo', 'foo');
+  });
+
+  s.test('checks assigns', (t, assigns) => {
+    t.same(assigns, {});
+  });
+});
+
+```
 
 ## `suiteApi.xtest(name, [tags], fn)`
 
 Same as `suiteApi.test` but marks the defined test as skipped.
 
+```js
+jutest('SomeCode', s => {
+  s.test('will not be skipped', t => {
+    // ...
+  });
+
+  s.xtest('will be skipped', t => {
+    // ...
+  });
+});
+
+```
+
 ## `suiteApi.setup(fn)`
 
 Defines a setup script that will be run before each test within this suite.
 
-`fn` will be called with `fn(assigns, tags)`.
+`fn` will be called with `fn(assigns, tags)` and can also be async.
 
-`assigns` starts as an empty object but any plain object returned by the setup `fn` will be merged into the current `assigns` and passed down to the test or to the next setup script.
+`assigns` starts as an empty object but any plain object returned by the setup `fn` will be merged into the current `assigns` and passed down to the test or to the next setup function.
 
 ```js
 jutest('ApiClient', s => {
@@ -89,21 +154,50 @@ jutest('ApiClient', s => {
 
 Defines a teardown script that will be run after each test within this suite.
 
-`fn` will be called with `fn(assigns, tags)`.
+`fn` will be called with `fn(assigns, tags)` and can also be async.
+
+```js
+jutest('ApiClient', s => {
+  s.setup(() => {
+    return { mock: prepareMock() };
+  });
+
+  s.teardown(({ mock }) => {
+    mock.reset();
+  });
+
+  s.test('uses the mock', (t, { mock }) => {
+    mock.use();
+  });
+});
+```
 
 ## `suiteApi.assertBeforeTest(fn)`
 
 Defines a set of extra assertions that will be executed before each test in this suite.
 
-`fn` will be called with `fn(assertions, assigns)`.
+`fn` will be called with `fn(assertions, assigns)` and can also be async.
 
 `fn` is treated as an extension of the test's body: if any assertions fail or if `fn` throws an error, the current test will also be marked as failed
+
+
+```js
+jutest('Database', s => {
+  s.assertBeforeTest((t) => {
+    t.equal(globalDatabase.isInCleanState, true);
+  });
+
+  s.test('does something with the database', t => {
+    globalDatabase.fetchRecord();
+  });
+});
+```
 
 ## `suiteApi.assertAfterTest(fn)`
 
 Defines a set of extra assertions that will be executed after test in this suite.
 
-`fn` will be called with `fn(assertions, assigns)`.
+`fn` will be called with `fn(assertions, assigns)` and can also be async.
 
 `fn` is treated as an extension of the test's body: if any assertions fail or if `fn` throws an error, the current test will also be marked as failed
 
@@ -119,8 +213,8 @@ jutest('API mock', s => {
     t.assert(mock.validateMocksConsumed())
   });
 
-  s.test('provides mocks for the test', (t, { mock }) => {
-    // ...
+  s.test('uses the mock', (t, { mock }) => {
+    mock.consume();
   });
 });
 ```
@@ -129,24 +223,52 @@ jutest('API mock', s => {
 
 Adds an extra name to the suite.
 
-The main purpose of this function is to add scope names to new jutest instances created by `jutest.configureNewInstance` but it can also be used within regular suites.
+The main purpose of this function is to assign names to new jutest instances created by `jutest.configureNewInstance` but it can also be used within regular suites.
+
+```js
+// Final suite name will be "Suite with extra stuff"
+jutest('Suite', s => {
+  s.addName('with extra stuff');
+});
+```
 
 ## `suiteApi.addTags(tags)`
 
 Adds extra tags to the suite.
 
-The main purpose of this function is to add tags to new jutest instances created via `jutest.configureNewInstance` but it can also be used within regular suites.
+The main purpose of this function is to assign tags to new jutest instances created via `jutest.configureNewInstance` but it can also be used within regular suites.
+
+```js
+jutest('Tags', s => {
+  s.describe("setting tags via a method", s => {
+    s.addTags({ type: 'api' });
+
+    s.setup((_assigns, tags) => {
+      console.log(tags.type); //=> "api"
+    });
+  });
+
+  s.describe("setting tags via an argument", { type: 'db' }, s => {
+    s.setup((_assigns, tags) => {
+      console.log(tags.type); //=> "db"
+    });
+  });
+});
+
+```
 
 # Using tags
 
 Every test and suite can be tagged by providing an optional `tags` object to the `suiteApi.test` or `suiteApi.describe`.
 
 Tagging a suite will also apply the tags to all the tests and suites nested within it.\
-If nested test/suite has its own tags, two sets of tags will be merged together with own tags given a priority.
+If a nested test/suite has its own tags, two sets of tags will be merged together with own tags given a priority.
 
-Tags serve two primary purposes:
-- Allow filtering tests by type during the test run(see Runtime API)
-- Enable test->setup communication, for example to run different setup scripts based on the test's type:
+Tests can be filtered by tags during the test run:\
+`jutest --tags type=api` will only run tests with `{ type: 'api' }` tag and `jutest --tags api` will only run tests tagged `{ api: true }`.\
+See Runtime API for more details.
+
+Tags also enable test->setup communication, for example you can run different setup scripts based on the test's tag:
 
 ```js
 jutest('Tagged tests', s => {
@@ -175,13 +297,14 @@ jutest('Tagged tests', s => {
 Following tags have special meaning in jutest:
 
 - `timeout` - defines a timeout time (ms) for the given test. 5000 by default.
+- `name` - a name of the current test. This tag cannot be overwritten.
 
 # `jutest.configureNewInstance(fn)`
 
-Creates a new `jutest` instance without modifying the old one.\
+Creates a new `jutest` instance without modifying the current one.\
 Useful for cases when different tests across the project share a certain reusable setup.
 
-`fn` will be called with `fn(jutestBuilder)` where `jutestBuilder` is an object sharing the following properties from the `suiteApi`:
+`fn` will be called with `fn(jutestBuilder)` where `jutestBuilder` is an object the includes the following properties from the `suiteApi`:
 
 - `assertBeforeTest`
 - `assertAfterTest`
@@ -327,7 +450,7 @@ await t.async.rejects(Promise.reject(new Error()), /test/) //=> fails
 ## `t.async.passesEventually(fn, { [timeout]=5000, [interval]=0 })`
 
 Checks if `fn` will stops throwing errors/rejecting after a given `timeout`(ms).\
-A custom `interval` can also be specified to modify how often this function should be called.
+A custom `interval` can also be specified to modify how often `fn` should be called.
 
 This is an async assertion so it must be awaited upon.
 
@@ -339,7 +462,7 @@ await t.async.passesEventually(() => { throw '123' }) //=> fails
 
 ## AssertionFailedError
 
-Jutest assertions are just functions so they're really easy to create: any function that can throw `AssertionFailedError` is an assertion!
+Jutest assertions are just functions so they're really easy to create: any function that can throw `AssertionFailedError` is an assertion.
 
 Here is an example of a creating a custom assertion and adding it to the list of existing assertions.
 
