@@ -28,7 +28,12 @@ jutest("TestContext", s => {
 
   s.describe("#tags", s => {
     s.test("includes timeout tag by default", (t, { context }) => {
-      t.same(context.tags, { timeout: 5_000 });
+      t.equal(context.tags.timeout, 5000);
+    });
+
+    s.test("includes name tag by default", (t, { context }) => {
+      context.addName('my test');
+      t.equal(context.tags.name, 'my test');
     });
 
     s.test("allows adding tags", (t, { context }) => {
@@ -39,6 +44,17 @@ jutest("TestContext", s => {
     s.test("ignores non-objects", (t, { context }) => {
       context.addTags('asdasd');
       t.equal(context.tags['0'], undefined);
+    });
+
+    s.test("disallows overwriting name tag", (t, { context }) => {
+      context.addName('foo');
+      context.addTags({ name: 'bar' });
+      t.equal(context.tags.name, 'foo');
+    });
+
+    s.test("allows overwriting timeout tag", (t, { context }) => {
+      context.addTags({ timeout: 2000 });
+      t.equal(context.tags.timeout, 2000);
     });
   });
 
