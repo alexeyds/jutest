@@ -1,7 +1,6 @@
 import { jutest } from "jutest";
 import { RuntimeConfig, ORDER_TYPES } from "runtime/config";
 
-throw '123'
 jutest("RuntimeConfig", s => {
   s.describe("constructor", s => {
     s.test("builds config with default attrs", t => {
