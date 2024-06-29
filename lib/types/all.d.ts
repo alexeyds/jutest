@@ -88,7 +88,7 @@ export interface CLIInit {
 }
 
 export interface ReporterClass {
-  initializeReporter: (config: RuntimeConfig, eventEmitter: TestRunnerEventEmitter) => Reporter;
+  initializeReporter: (config: RuntimeConfig, eventEmitter: TestRunnerEventEmitter) => Reporter | undefined;
 }
 
 export interface Reporter {
@@ -155,7 +155,7 @@ export interface SuiteSummary extends SpecSummary {
 export interface TestSummary extends SpecSummary {
   type: 'test';
   runTime: number;
-  executionResult: TestResult;
+  executionResult?: TestResult;
 }
 
 export interface TestResult {
