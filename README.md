@@ -154,7 +154,7 @@ To start, create a file to serve as an executable, such as `bin/test`:
 ```js
 #!/usr/bin/env node
 
-const { initRuntime, initCLI, loadConfigFile } = require('../lib/runtime');
+const { initRuntime, initCLI, loadConfigFile } = require('jutest/runtime');
 
 const cliParams = initCLI();
 
