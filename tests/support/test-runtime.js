@@ -23,6 +23,6 @@ export class TestRuntime {
     let runner = new TestRunner();
     let reporter = this._reporterClass?.initializeReporter?.(this._runtimeConfig, runner.eventEmitter);
     let runSummary = await runner.run(jutestInstance);
-    await reporter?.finishReporting?.([runSummary]);
+    await reporter?.finishReporting?.(runSummary);
   }
 }

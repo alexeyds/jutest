@@ -92,7 +92,7 @@ export interface ReporterClass {
 }
 
 export interface Reporter {
-  finishReporting?: (runSummaries: RunSummary[]) => void;
+  finishReporting?: (runSummaries: RunSummary) => void;
 }
 
 export interface RuntimeConfig {
