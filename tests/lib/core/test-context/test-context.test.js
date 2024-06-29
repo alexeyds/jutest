@@ -24,6 +24,14 @@ jutest("TestContext", s => {
 
       t.equal(context.name, 'Foobar Test');
     });
+
+    s.test("joins names without space if the name begins with a special symbol", (t, { context }) => {
+      context.addName("MyClass");
+      context.addName(".myMethod()");
+      context.addName("does something");
+
+      t.equal(context.name, 'MyClass.myMethod() does something');
+    });
   });
 
   s.describe("#tags", s => {
