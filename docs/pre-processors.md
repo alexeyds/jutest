@@ -4,6 +4,6 @@
 
 # Babel
 
-# Typescript
-
 # Esbuild
+
+# Typescript

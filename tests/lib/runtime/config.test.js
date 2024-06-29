@@ -1,6 +1,7 @@
 import { jutest } from "jutest";
 import { RuntimeConfig, ORDER_TYPES } from "runtime/config";
 
+throw '123'
 jutest("RuntimeConfig", s => {
   s.describe("constructor", s => {
     s.test("builds config with default attrs", t => {
@@ -13,8 +14,8 @@ jutest("RuntimeConfig", s => {
       t.equal(config.order, ORDER_TYPES.random);
       t.assert(config.stdout);
       t.assert(config.trackedSourcePaths.length);
-      t.match(config.ignoredSourcePaths[0], 'node-modules');
-      t.match(config.excludeTestDirectoryPaths[0], 'node-modules');
+      t.match(config.ignoredSourcePaths[0], 'node_modules');
+      t.match(config.excludeTestDirectoryPaths[0], 'node_modules');
       t.assert(config.jutestRunCommand);
       t.same(config.onlyIncludeTags, {});
       t.same(config.excludeTags, {});
