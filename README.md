@@ -147,7 +147,7 @@ There are two main ways of configuring jutest's runtime: custom runtime executab
 
 ### Custom runtime executable
 
-Jutest provides Runtime API for creating custom executable scripts. This is the recommended way of running tests as it is the most flexible.
+Jutest provides Runtime API for creating custom executable scripts. This is the recommended way of running tests due to its flexibility.
 
 To start, create a file to serve as an executable, such as `bin/test`:
 
@@ -168,9 +168,10 @@ initRuntime({
 
 ```
 
-Make it executable with `chmod +x bin/test` and you're good to go. Now the custom `bin/test` command can be used in place of `jutest`. This command also supports the entire CLI API of the original.
+Make it executable with `chmod +x bin/test` and you're good to go.\
+Now the custom `bin/test` command can be used in place of `jutest`. This command also supports the entire CLI API of the original.
 
-You can also add a `package.json` script to use `npm test` or `yarn test` instead of `bin/test`:
+You can also add it to the `package.json` to use `npm test` or `yarn test` instead of `bin/test`:
 
 ```json
 {
