@@ -1,5 +1,12 @@
 # Documentation
 
+- [Core API](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md)
+- [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md)
+- [Using Preprocessors](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md)
+- **Reporters API**
+  - [Custom reporters](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md#custom-reporters)
+  - [Existing reporters](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md#existing-reporters)
+
 # Custom reporters
 
 A jutest reporter is any object that has the `initializeReporter(config, eventEmitter)` property. This function can either return nothing or a reporter instance for further use.

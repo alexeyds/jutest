@@ -1,5 +1,16 @@
 # Documentation
 
+- [Core API](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md)
+- **Runtime API**
+  - [Summary](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#summary)
+  - [`initRuntime`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#initruntimeruntimeconfig)
+  - [`initCli`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#initcli)
+  - [`loadConfigFile`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#loadconfigfilefilepath)
+  - [Config params](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#config-params)
+  - [`reporterPresets`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#reporterpresets)
+- [Using Preprocessors](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md)
+- [Reporters API](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md)
+
 # Summary
 
 Runtime API provides the means for setting up custom command-line scripts that can be used in place of the default `jutest` command.

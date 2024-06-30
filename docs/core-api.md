@@ -1,5 +1,14 @@
 # Documentation
 
+- **Core API**
+  - [Suite API](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#suite-api)
+  - [Using tags](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#using-tags)
+  - [`jutest.configureNewInstance`](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#jutestconfigurenewinstancefn)
+  - [Assertions API](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#assertions-api)
+- [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md)
+- [Using Preprocessors](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md)
+- [Reporters API](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md)
+
 # Suite API
 
 Contains everything required to define and control suites, tests and test setups.

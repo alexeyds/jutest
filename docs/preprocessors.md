@@ -1,5 +1,14 @@
 # Documentation
 
+- [Core API](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md)
+- [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md)
+- **Using Preprocessors**
+  - [Summary](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md#summary)
+  - [Babel](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md#babel)
+  - [Esbuild](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md#esbuild)
+  - [Script engines](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md#script-engines)
+- [Reporters API](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md)
+
 # Summary
 
 Jutest does not make any assumptions about your project's code: it simply loads the discovered test files using either `require` or `import` and runs registered tests. This might work fine for some, but most modern JavaScript projects use syntax that the native environment(i.e node) simply does not support, such as TypeScript or JSX.

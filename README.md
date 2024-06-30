@@ -21,12 +21,12 @@ npm install jutest --save-dev
 
 # Defining tests
 
-Jutest's Core API has 4 basic concepts:
+Jutest's [Core API](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md) has 4 basic concepts:
 
-1. test: a named function that can be used to execute a piece of code and run assertions on the results.
-2. suite: (or a "describe" block) used for grouping related tests and setups under a shared name.
-3. setup/teardown: a function that will be executed before/after each test in this suite. Setups also allow building and passing extra data(assigns) to tests or other setups.
-4. tags: while setups can be used to pass data to the test, tags can be used to pass data from the test to the setups. During the test run, tests can also be filtered by their tags.
+1. [test](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#suiteapitestname-tags-fn): a named function that can be used to execute a piece of code and run assertions on the results.
+2. [suite](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#suiteapidescribename-tags-fn): (or a "describe" block) used for grouping related tests and setups under a shared name.
+3. [setup/teardown](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#suiteapisetupfn): a function that will be executed before/after each test in this suite. Setups also allow building and passing extra data(assigns) to tests or other setups.
+4. [tags](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#using-tags): while setups can be used to pass data to the test, tags can be used to pass data from the test to the setups. During the test run, tests can also be filtered by their tags.
 
 Jutest comes with full async support and every suite, test or setup can be defined as an async function.
 
@@ -101,7 +101,7 @@ jutest("tags", s => {
 
 ## Extending jutest
 
-If multiple test files across your project require similar testing setup, you can use `jutest.configureNewInstance` to spawn a new jutest instance encapsulating this setup. This new instance can now be used to define tests exactly like the original `jutest`:
+If multiple test files across your project require similar testing setup, you can use [`jutest.configureNewInstance`](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#jutestconfigurenewinstancefn) to spawn a new jutest instance encapsulating this setup. This new instance can now be used to define tests exactly like the original `jutest`:
 
 ```js
 import { jutest } from "jutest";
@@ -139,7 +139,7 @@ or
 npx jutest tests
 ```
 
-Most modern JavaScript projects rely on the code preprocessors(such as TypeScript or Babel) and likely will not work without them. **By design jutest does not include any preprocessor configuration so setting those up for your code is up to you.** You can consult PreProcessor Configuration section of the docs for examples.
+Most modern JavaScript projects rely on the code preprocessors(such as TypeScript or Babel) and likely will not work without them. **By design jutest does not include any preprocessor configuration so setting those up for your code is up to you.** You can consult [Preprocessor Configuration](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md) section of the docs for examples.
 
 # Configuration
 
@@ -147,7 +147,7 @@ There are two main ways of configuring jutest's runtime: custom runtime executab
 
 ### Custom runtime executable
 
-Jutest provides Runtime API for creating custom executable scripts. This is the recommended way of running tests due to its flexibility.
+Jutest provides [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md) for creating custom executable scripts. This is the recommended way of running tests due to its flexibility.
 
 To start, create a file to serve as an executable, such as `bin/test`:
 
@@ -169,7 +169,7 @@ initRuntime({
 ```
 
 Make it executable with `chmod +x bin/test` and you're good to go.\
-Now the custom `bin/test` command can be used in place of `jutest`. This command also supports the entire CLI API of the original.
+Now the custom `bin/test` command can be used in place of `jutest`. This command also supports the entire [CLI API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#options) of the original.
 
 You can also add it to the `package.json` to use `npm test` or `yarn test` instead of `bin/test`:
 
@@ -201,6 +201,13 @@ TypeScript definitions are included by default for every file and everything els
 ```
 import { RuntimeConfig, RunSummary, ReporterClass, ...etc } from "jutest/types";
 ```
+
+## Documentation
+
+- [Core API](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md)
+- [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md)
+- [Using Preprocessors](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md)
+- [Reporters API](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md)
 
 ## License
 MIT
