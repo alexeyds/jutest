@@ -273,8 +273,10 @@ Every test and suite can be tagged by providing an optional `tags` object to the
 Tagging a suite will also apply the tags to all the tests and suites nested within it.\
 If a nested test/suite has its own tags, two sets of tags will be merged together with own tags given a priority.
 
-Tests can be filtered by tags during the test run:\
-`jutest --tags type=api` will only run tests with `{ type: 'api' }` tag and `jutest --tags api` will only run tests tagged `{ api: true }`.\
+Tests can be filtered by tags during the test run, for example:
+- `jutest --tags type=api` will only run tests with `{ type: 'api' }` tag.
+- `jutest --tags api` will only run tests tagged `{ api: true }`.
+
 See [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#--tags) for more details.
 
 Tags also enable test->setup communication, for example you can run different setup scripts based on the test's tag:
