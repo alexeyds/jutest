@@ -1,5 +1,5 @@
 let sharedConfig = {
-  target: 'node12',
+  target: 'node14',
   platform: 'node',
 };
 
