@@ -11,11 +11,11 @@
 
 # Summary
 
-Jutest does not make any assumptions about your project's code: it simply loads the discovered test files using either `require` or `import` and runs registered tests. This might work fine for some, but most modern JavaScript projects use syntax that the native environment(i.e node) simply does not support, such as TypeScript or JSX.
+Jutest does not make any assumptions about your project's code: it simply loads the discovered test files using a dynamic `import` and runs registered tests. This might work fine for some, but most modern JavaScript projects use syntax that the native environment(i.e node) simply does not support, such as TypeScript or JSX.
 
-To run this non-native code, projects have to utilize preprocessors that convert it into more traditional JavaScript either by going through each file and converting all the code into a separate static bundle or by utilizing `require` hooks that allow converting code on the fly as it's being loaded. For tests you usually want the latter.
+To run this non-native code, projects have to utilize preprocessors that convert it into more traditional JavaScript either by going through each file and converting all the code into a separate static bundle or by utilizing require hooks that allow converting code on the fly as it's being loaded. For tests you usually want the latter.
 
-To do that find the require hook module for your preprocessor(usually called "register") and install it. Then call the register function inside of your [custom jutest exectuable]((https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#summary)) and that's it. Just make sure the register hook is called *before* `initRuntime` call
+First, find the require hook module for your preprocessor(usually called "register") and install it. Then call the register function inside of your [custom jutest exectuable]((https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#summary)) and that's it. Just make sure the register hook is called *before* `initRuntime` call
 
 Below you'll find some examples describing specific preprocessors and their setup.
 

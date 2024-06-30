@@ -167,8 +167,7 @@ initRuntime({
 
 ```
 
-Make it executable with `chmod +x bin/test` and you're good to go.\
-Now the custom `bin/test` command can be used in place of `jutest`. This command also supports the entire [CLI API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#options) of the original.
+Make it executable with `chmod +x bin/test` and you're good to go. Now the custom `bin/test` command can be used in place of `jutest`. This command also supports the entire [CLI API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#options) of the original.
 
 You can also add it to the `package.json` to use `npm test` or `yarn test` instead of `bin/test`:
 
