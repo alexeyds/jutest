@@ -7,14 +7,11 @@ let { register } = require('esbuild-register/dist/node');
 let { config } = require('../esbuild-config/esbuild.test');
 register(config);
 
-let { initRuntime, initCLI, loadConfigFile } = require('../lib/runtime');
-
-let cliParams = initCLI();
+let { initRuntime, initCLI } = require('../lib/runtime');
 
 initRuntime({
   locationsToRun: ['tests'],
   ignoredSourcePaths: ['node_modules', 'lib/assertions', 'lib/test'],
   jutestRunCommand: 'yarn test',
-  ...loadConfigFile(cliParams.configFilePath),
-  ...cliParams.runtimeConfig,
+  ...initCLI().runtimeConfig,
 });

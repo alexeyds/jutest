@@ -8,10 +8,9 @@ jutest("parseArgv", s => {
   }
 
   s.test("returns empty config by default", t => {
-    let { runtimeConfig, configFilePath } = parseArgv(buildArgv());
+    let { runtimeConfig } = parseArgv(buildArgv());
 
     t.same(runtimeConfig, {});
-    t.equal(configFilePath, undefined);
   });
 
   s.test("includes test locations in config", t => {
@@ -22,11 +21,6 @@ jutest("parseArgv", s => {
   s.test("returns parsedArgv", t => {
     let { parsedArgv } = parseArgv(buildArgv());
     t.assert(parsedArgv['$0']);
-  });
-
-  s.test("has --config option", t => {
-    let { configFilePath } = parseArgv(buildArgv('--config', 'myconfig.js'));
-    t.equal(configFilePath, 'myconfig.js');
   });
 
   s.test("has --seed option", t => {
