@@ -21,7 +21,9 @@
     "./bin/jutest": "./bin/jutest.js",
     "./package.json": "./package.json"
   },
-  "bin": "./bin/jutest.js",
+  "bin": {
+    "jutest": "bin/jutest.js"
+  },
   "types": "./dist/types/jutest.d.ts",
   "typesVersions": {
     "*": {
@@ -51,7 +53,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexeyds/jutest.git"
+    "url": "git+https://github.com/alexeyds/jutest.git"
   },
   "bugs": {
     "url": "https://github.com/alexeyds/jutest/issues"
