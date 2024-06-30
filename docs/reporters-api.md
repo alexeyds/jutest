@@ -41,7 +41,7 @@ interface Reporter {
 
 ## `RuntimeConfig`
 
-Has the same attributes as Config params with a few differences:
+Has the same attributes as [Config params](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#config-params) with a few differences:
 
 - All paths such as `trackedSourcePaths` or `ignoredSourcePaths` are converted to absolute paths
 - `locationsToRun` are converted into the list of file locations: `{ file: '/my/tests/foo.test.js', lineNumbers: [] }`.

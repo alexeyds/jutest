@@ -21,7 +21,7 @@ The starting point of any test file. By itself it can be used to create a regula
 - `jutest.xdescribe` - same as `suiteApi.xdescribe`
 - `jutest.test` - same as `suiteApi.test`
 - `jutest.xtest` - same as `suiteApi.xtest`
-- `jutest.configureNewInstance` - spawns a new configurable jutest instance. See `jutest.configureNewInstance` for more info.
+- `jutest.configureNewInstance` - spawns a new configurable jutest instance. See [`jutest.configureNewInstance`](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#jutestconfigurenewinstancefn) for more info.
 
 ```js
 import { jutest } from 'jutest';
@@ -50,7 +50,7 @@ Defines a new test suite with the given `name`.
 
 Async suite definitions are also supported and `fn` can return a promise to be awaited upon.
 
-An optional second argument `tags` can be provided to tag all the tests within this suite. See Using tags for a detailed description.
+An optional second argument `tags` can be provided to tag all the tests within this suite. See [Using tags](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#using-tags) for a detailed description.
 
 ```js
 jutest('SomeCode', s => {
@@ -95,11 +95,11 @@ jutest('SomeCode', s => {
 Defines a new test case with the given `name`.
 
 `fn` represents the test body and will be called with `fn(assertions, assigns)`.\
-See Assertions API for the list of available assertions and `suiteApi.setup` to learn about the `assigns` object.
+See [Assertions API](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#assertions-api) for the list of available assertions and [`suiteApi.setup`](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#suiteapisetupfn) to learn about the `assigns` object.
 
 Async tests are also supported and `fn` can return a promise to be awaited upon.
 
-An optional second argument `tags` can be provided to tag the defined test. See Using tags for a detailed description.
+An optional second argument `tags` can be provided to tag the defined test. See [Using tags](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#using-tags) for a detailed description.
 
 
 ```js
@@ -232,7 +232,7 @@ jutest('API mock', s => {
 
 Adds an extra name to the suite.
 
-The main purpose of this function is to assign names to new jutest instances created by `jutest.configureNewInstance` but it can also be used within regular suites.
+The main purpose of this function is to assign names to new jutest instances created by [`jutest.configureNewInstance`](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#jutestconfigurenewinstancefn) but it can also be used within regular suites.
 
 ```js
 // Final suite name will be "Suite with extra stuff"
@@ -245,7 +245,7 @@ jutest('Suite', s => {
 
 Adds extra tags to the suite.
 
-The main purpose of this function is to assign tags to new jutest instances created via `jutest.configureNewInstance` but it can also be used within regular suites.
+The main purpose of this function is to assign tags to new jutest instances created via [`jutest.configureNewInstance`](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#jutestconfigurenewinstancefn) but it can also be used within regular suites.
 
 ```js
 jutest('Tags', s => {
@@ -275,7 +275,7 @@ If a nested test/suite has its own tags, two sets of tags will be merged togethe
 
 Tests can be filtered by tags during the test run:\
 `jutest --tags type=api` will only run tests with `{ type: 'api' }` tag and `jutest --tags api` will only run tests tagged `{ api: true }`.\
-See Runtime API for more details.
+See [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#--tags) for more details.
 
 Tags also enable test->setup communication, for example you can run different setup scripts based on the test's tag:
 
@@ -373,7 +373,7 @@ An opposite of `t.assert`.
 
 ## `t.equal(actual, expected)`
 
-Checks if `actual` is equal to `expected` using `Object.is` comparison.\
+Checks if `actual` is equal to `expected` using [`Object.is`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is) comparison.\
 To compare object structure, use `t.same`
 
 ```js
@@ -388,7 +388,7 @@ An opposite of `t.equal`
 
 ## `t.same(actual, expected)`
 
-Checks if `actual` structurally matches `expected` using `deepEqual` comparison.
+Checks if `actual` structurally matches `expected` using [`deep-equal`](https://github.com/inspect-js/node-deep-equal) comparison.
 
 ```js
 t.same(1, 1) // => passes
@@ -402,7 +402,7 @@ An opposite of `t.same`
 
 ## `t.match(actual, expected)`
 
-Checks if `actual` string matches `expected` using `RegExp.test` comparison.
+Checks if `actual` string matches `expected` using [`RegExp.test`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test) comparison.
 
 ```js
 t.match('foo', 'fo') // => passes
@@ -446,7 +446,7 @@ Fails the test with the given message.
 
 ## `t.async.rejects(promise, matcher)`
 
-Checks if `promise` will be rejected with an error matching `matcher`. Same matching algorithm is used as in `t.throws`
+Checks if `promise` will be rejected with an error matching `matcher`. Same matching algorithm is used as in [`t.throws`](https://github.com/alexeyds/jutest/blob/master/docs/core-api.md#tthrowsfn-matcher)
 
 This is an async assertion so it must be awaited upon.
 

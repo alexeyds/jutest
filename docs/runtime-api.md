@@ -19,7 +19,7 @@ To get started:
 
 - create a file to serve as an executable(typically `bin/test`)
 - make sure it has correct permissions: `chmod +x bin/test`
-- start with following contents and modify as necessary:
+- start with following contents and modify as necessary(i.e by adding [preprocessor register hooks](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md)):
 
 ```js
 #!/usr/bin/env node
@@ -40,7 +40,7 @@ initRuntime({
 # `initRuntime(runtimeConfig)`
 
 Main function of the Runtime API. This will initiate the jutest runtime, load provided test file locations and run all the tests defined within those files.\
-See Runtime Config for the full list of the available options that this function accepts.
+See [Config params](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#config-params) for the full list of the available options that this function accepts.
 
 ```js
 initRuntime({
@@ -56,8 +56,8 @@ Initiates jutest CLI API and parses current `argv` using yargs parser. This enab
 
 This function returns an object with the following properties:
 
-- `runtimeConfig` - Runtime Config params parsed from the `argv`. This object can be passed directly to `initRuntime`.
-- `configFilePath` - path to custom config file if one was specified via `--config` option. Should be passed to `loadConfigFile`.
+- `runtimeConfig` - Runtime Config params parsed from the `argv`. This object can be passed directly to [`initRuntime`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#initruntimeruntimeconfig).
+- `configFilePath` - path to custom config file if one was specified via `--config` option. Should be passed to [`loadConfigFile`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#loadconfigfilefilepath).
 - `parsedArgv` - an object with every option received in `argv` as parsed by yargs. You can use it to extend the command's behavior.
 
 ```js
@@ -68,7 +68,7 @@ const { runtimeConfig, configFilePath, parsedArgv } = initCLI();
 
 ### `<locations>`
 
-Everything non-option provided to the command is added to the `locationsToRun` array.
+Everything non-option provided to the command is added to the [`locationsToRun`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#locationstorun) array.
 
 ### `--help`
 
@@ -84,15 +84,15 @@ Specifies custom path to the config file.
 
 ### `--seed`
 
-Specifies the seed to use. Same as `seed` config param.
+Specifies the seed to use. Same as [`seed`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#seed) config param.
 
 ### `--order`
 
-Specifies the order in which to run tests. Same as `order` config param.
+Specifies the order in which to run tests. Same as [`order`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#order) config param.
 
 ### `--tags`
 
-Alias: `--onlyIncludeTags`. Only tests matching one of these tags will be included in the run. Same as `onlyIncludeTags` config param.
+Alias: `--onlyIncludeTags`. Only tests matching one of these tags will be included in the run. Same as [`onlyIncludeTags`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#onlyincludetags) config param.
 
 `--tags type=api` is parsed as `{ type: 'api' }`\
 `--tags api` is parsed as `{ api: true }`
@@ -101,7 +101,7 @@ You can also specify multiple tags via `--tags type=api --tags api` which is con
 
 ### `--excludeTags`
 
-Test matching one of those tags are excluded from the run. The exclusion is overridden by `--tags`. Same as `excludeTags` config param.
+Test matching one of those tags are excluded from the run. The exclusion is overridden by `--tags`. Same as [`excludeTags`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#excludetags) config param.
 
 Uses the same parsing logic as `--tags`.
 
@@ -204,7 +204,7 @@ Default: `'jutest'`. Jutest command that you're using to run tests. Needed by so
 
 ## reporters
 
-Default: `reporterPresets.progressReporterPreset`. An array of reporters to use during this run. See Reporter API.
+Default: `reporterPresets.progressReporterPreset`. An array of reporters to use during this run. See [Reporters API](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md).
 
 ## onlyIncludeTags
 
@@ -239,7 +239,7 @@ Specifying `onlyIncludeTags` overrides this option.
 
 # `reporterPresets`
 
-Default reporter presets. See Reporter API for more info on how to use reporters.
+Default reporter presets. See [Reporter API](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md) for more info on how to use reporters.
 
 ```js
 const { initRuntime, reporterPresets } = require('jutest/runtime');
