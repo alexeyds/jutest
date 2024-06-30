@@ -143,18 +143,16 @@ Most modern JavaScript projects rely on the code preprocessors(such as TypeScrip
 
 # Configuration
 
-There are two main ways of configuring jutest's runtime: custom runtime executable and/or a config file.
+You can configure jutest runtime by creating a custom runtime executable and using it in place of the default `jutest` binary.
 
-### Custom runtime executable
-
-Jutest provides [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md) for creating custom executable scripts. This is the recommended way of running tests due to its flexibility.
+Jutest provides [Runtime API](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md) for creating custom executable scripts.
 
 To start, create a file to serve as an executable, such as `bin/test`:
 
 ```js
 #!/usr/bin/env node
 
-const { initRuntime, initCLI, loadConfigFile } = require('jutest/runtime');
+const { initRuntime, initCLI } = require('jutest/runtime');
 
 const cliParams = initCLI();
 
@@ -162,7 +160,8 @@ initRuntime({
   locationsToRun: ['tests'],
   jutestRunCommand: 'bin/test', // make reporters aware of the custom test command we're using
   // ... any other config params to set as defaults for the executable
-  ...loadConfigFile(cliParams.configFilePath),
+
+  // make sure CLI params always overwrite the defaults
   ...cliParams.runtimeConfig,
 });
 
@@ -179,19 +178,6 @@ You can also add it to the `package.json` to use `npm test` or `yarn test` inste
     "test": "./bin/test"
   },
 }
-```
-
-### Config file
-
-Configuration params can also be specified via a jutest config file(`config.jutest.*` by default) with a default export:
-
-```js
-// config.jutest.js
-module.exports = {
-  locationsToRun: ['tests'],
-  includeTestFilePatterns: ["*.test.js"],
-  jutestRunCommand: 'npm test',
-};
 ```
 
 ## Types

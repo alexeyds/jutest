@@ -83,7 +83,6 @@ export interface Assigns {
 // shared
 export interface CLIInit {
   runtimeConfig: RuntimeConfigParams;
-  configFilePath?: string;
   parsedArgv: { [key: string]: any };
 }
 

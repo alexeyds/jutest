@@ -5,7 +5,6 @@
   - [Summary](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#summary)
   - [`initRuntime`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#initruntimeruntimeconfig)
   - [`initCli`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#initcli)
-  - [`loadConfigFile`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#loadconfigfilefilepath)
   - [Config params](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#config-params)
   - [`reporterPresets`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#reporterpresets)
 - [Using Preprocessors](https://github.com/alexeyds/jutest/blob/master/docs/preprocessors.md)
@@ -24,7 +23,7 @@ To get started:
 ```js
 #!/usr/bin/env node
 
-const { initRuntime, initCLI, loadConfigFile } = require('jutest/runtime');
+const { initRuntime, initCLI } = require('jutest/runtime');
 
 const cliParams = initCLI();
 
@@ -32,9 +31,11 @@ initRuntime({
   locationsToRun: ['tests'],
   jutestRunCommand: 'bin/test', // make reporters aware of the custom test command we're using
   // ... any other config params to set as defaults for the executable
-  ...loadConfigFile(cliParams.configFilePath),
+
+  // make sure CLI params always overwrite the defaults
   ...cliParams.runtimeConfig,
 });
+
 ```
 
 # `initRuntime(runtimeConfig)`
@@ -57,11 +58,10 @@ Initiates jutest CLI API and parses current `argv` using yargs parser. This enab
 This function returns an object with the following properties:
 
 - `runtimeConfig` - Runtime Config params parsed from the `argv`. This object can be passed directly to [`initRuntime`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#initruntimeruntimeconfig).
-- `configFilePath` - path to custom config file if one was specified via `--config` option. Should be passed to [`loadConfigFile`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#loadconfigfilefilepath).
 - `parsedArgv` - an object with every option received in `argv` as parsed by yargs. You can use it to extend the command's behavior.
 
 ```js
-const { runtimeConfig, configFilePath, parsedArgv } = initCLI();
+const { runtimeConfig, parsedArgv } = initCLI();
 ```
 
 ## Options
@@ -77,10 +77,6 @@ Alias: `-h`. Prints out the description for each supported option.
 ### `--version`
 
 Alias: `-v`. Prints jutest's current version.
-
-### `--config`
-
-Specifies custom path to the config file.
 
 ### `--seed`
 
@@ -104,10 +100,6 @@ You can also specify multiple tags via `--tags type=api --tags api` which is con
 Test matching one of those tags are excluded from the run. The exclusion is overridden by `--tags`. Same as [`excludeTags`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#excludetags) config param.
 
 Uses the same parsing logic as `--tags`.
-
-# `loadConfigFile(filePath)`
-
-Loads jutest config file(`jutest.config.*` by default) and returns its default export. Returns an empty object if the default config file doesn't exist.
 
 # Config params
 

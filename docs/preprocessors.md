@@ -13,12 +13,9 @@
 
 Jutest does not make any assumptions about your project's code: it simply loads the discovered test files using either `require` or `import` and runs registered tests. This might work fine for some, but most modern JavaScript projects use syntax that the native environment(i.e node) simply does not support, such as TypeScript or JSX.
 
-To run this non-native code, projects have to utilize preprocessors that convert it into more traditional JavaScript either by going through each file and converting all the code into a separate static bundle or by utilizing `require` hooks that allow converting code on the fly as it's being loaded. For tests you usually want the latter and this is the approach that this page describes.
+To run this non-native code, projects have to utilize preprocessors that convert it into more traditional JavaScript either by going through each file and converting all the code into a separate static bundle or by utilizing `require` hooks that allow converting code on the fly as it's being loaded. For tests you usually want the latter.
 
-Every modern JavaScript preprocessors provides a require hook that you can register before requiring any of the project's code. In jutest you can set it up using one of the two approaches:
-
-1. (Recommended) By registering the hook in your custom runtime executable(make sure the hook is registered before the [`initRuntime`](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#summary) call)
-2. By creating a [`config.jutest.js`](https://github.com/alexeyds/jutest/tree/master?tab=readme-ov-file#config-file) file in your project's root directory and registering the hook there. This file is be loaded by jutest before any of your project's code.
+To do that find the require hook module for your preprocessor(usually called "register") and install it. Then call the register function inside of your [custom jutest exectuable]((https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#summary)) and that's it. Just make sure the register hook is called *before* `initRuntime` call
 
 Below you'll find some examples describing specific preprocessors and their setup.
 
@@ -35,8 +32,8 @@ require('@babel/register')({
   extensions: [".ts", ".tsx", ".js", ".jsx", ".es", ".es6", ".mjs"]
 });
 
-const { initRuntime, initCLI, loadConfigFile } = require('jutest/runtime');
-//... init jutest runtime
+const { initRuntime, initCLI } = require('jutest/runtime');
+initRuntime(initCLI().runtimeConfig);
 
 ```
 
@@ -51,8 +48,8 @@ const { register } = require('esbuild-register/dist/node');
 const { config } = require('path-to-my-esbuild-config');
 register(config);
 
-const { initRuntime, initCLI, loadConfigFile } = require('jutest/runtime');
-//... init jutest runtime
+const { initRuntime, initCLI } = require('jutest/runtime');
+initRuntime(initCLI().runtimeConfig);
 
 ```
 
@@ -63,7 +60,7 @@ Another benefit of creating a custom runtime executable is that instead of node 
 ```js
 #!/usr/bin/env ts-node
 
-const { initRuntime, initCLI, loadConfigFile } = require('jutest/runtime');
-//... init jutest runtime
+const { initRuntime, initCLI } = require('jutest/runtime');
+initRuntime(initCLI().runtimeConfig);
 
 ```
