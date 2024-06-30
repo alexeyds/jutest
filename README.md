@@ -139,7 +139,7 @@ or
 npx jutest tests
 ```
 
-Most modern JavaScript projects rely on the code pre-processors(such as TypeScript or Babel) and likely will not work without them. **By design jutest does not include any pre-processor configuration so setting those up for your code is up to you.** You can consult Pre-Processor Configuration section of the docs for examples.
+Most modern JavaScript projects rely on the code preprocessors(such as TypeScript or Babel) and likely will not work without them. **By design jutest does not include any preprocessor configuration so setting those up for your code is up to you.** You can consult PreProcessor Configuration section of the docs for examples.
 
 # Configuration
 
