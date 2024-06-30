@@ -62,6 +62,13 @@ jutest("parseStack", s => {
       t.equal(file, undefined);
       t.equal(lineNumber, undefined);
     });
+
+    s.test("works with file:// stack frames", t => {
+      let { file, lineNumber } = parseStackFrame('at baz (file:///test/filename.js:10:15)');
+
+      t.equal(file, '/test/filename.js');
+      t.same(lineNumber, 10);
+    });
   });
 
   s.describe("internal frames detection", s => {

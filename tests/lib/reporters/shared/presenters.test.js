@@ -106,6 +106,14 @@ jutest("failed-tests-reporter/presenter-helpers", s => {
 
       t.assert(sourceDetails.stackFrames.length > 1);
     });
+
+    s.test("removes file:// from frame", async (t, { config, error }) => {
+      attachStackFrame(error, [`at file:///root/tests/lib/esm-calc.test.js:8:9`]);
+      let sourceDetails = await presentSourceDetails(error, config);
+
+      t.doesNotMatch(sourceDetails.stackFrames[0].stackFrame, 'file://');
+    });
+
   });
 
   s.describe("presentTestLocation", s => {
