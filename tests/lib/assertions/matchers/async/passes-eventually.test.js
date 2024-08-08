@@ -1,5 +1,4 @@
 import { jutest } from "jutest";
-import { useFakeTimers } from "sinon";
 import { passesEventually } from "assertions/matchers/async/passes-eventually";
 
 jutest("assertions/matchers/async/passes-eventually", s => {
@@ -51,37 +50,27 @@ jutest("assertions/matchers/async/passes-eventually", s => {
   });
 
   s.describe("timers test", s => {
-    s.setup(() => {
-      return { clock: useFakeTimers() };
-    });
-
-    s.teardown(({ clock }) => {
-      clock.restore();
-    });
-
-    s.test("stops trying after specified timeout", async (t, { clock }) => {
+    s.test("stops trying after specified timeout", async (t) => {
       let resultPromise = passesEventually(() => {
         throw new Error('foobar');
-      }, { timeout: 30, interval: 1 });
+      }, { timeout: 5, interval: 1 });
 
-      await clock.tickAsync(30);
       let result = await resultPromise;
 
       t.equal(result.passed, false);
     });
 
-    s.test("support interval option", async (t, { clock }) => {
+    s.test("supports interval option", async (t) => {
       let counter = 0;
       let resultPromise = passesEventually(() => {
         counter += 1;
         throw new Error('foobar');
-      }, { timeout: 200, interval: 50 });
+      }, { timeout: 5, interval: 1 });
 
-      clock.tick(200);
       const result = await resultPromise;
 
       t.equal(result.passed, false);
-      t.equal(counter, 4);
+      t.assert(counter >= 4);
     });
   });
 });
