@@ -146,6 +146,29 @@ jutest("runTest", s => {
 
       t.equal(tags.a, 1);
     });
+
+    s.test("runs teardows when the test has failed", async (t, { context }) => {
+      let teardown = spy();
+      context.teardown(teardown);
+      await runTest(() => { throw '123'; }, context);
+
+      t.equal(teardown.callCount, 1);
+    });
+
+    s.test("correctly handles teardown errors", async (t, { context }) => {
+      context.teardown(() => { throw '123'; });
+      let result = await runTest(() => {}, context);
+
+      t.equal(result.status, ExecutionStatuses.Failed);
+      t.match(result.error, /123/);
+    });
+
+    s.test("does not overwrite test error with teardown error", async (t, { context }) => {
+      context.teardown(() => { throw '123'; });
+      let result = await runTest(() => { throw '321'; }, context);
+
+      t.match(result.error, /321/);
+    });
   });
 
   s.describe("timeout", s => {
