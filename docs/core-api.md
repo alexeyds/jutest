@@ -496,3 +496,12 @@ jutest("looselyEqual", s => {
   });
 });
 ```
+
+Notice that because this custom assertion is now located at the top of your project's source tree, the [FailedTestsReporter](https://github.com/alexeyds/jutest/blob/master/docs/reporters-api.md#failedtestsreporter) will start unhelpfully displaying it as the main source line for all the tests that fail it. To fix this behaviour, extract your custom assertions into a separate file, i.e `tests/custom-assertions.js` and add that file to [ignoredSourcePaths](https://github.com/alexeyds/jutest/blob/master/docs/runtime-api.md#ignoredsourcepaths):
+
+```
+initRuntime({
+  ignoredSourcePaths: ['tests/custom-assertions.js', 'node_modules'],
+});
+
+```
