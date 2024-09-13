@@ -1,6 +1,6 @@
 {
   "name": "jutest",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "JavaScript Unit-Testing library",
   "exports": {
     ".": {

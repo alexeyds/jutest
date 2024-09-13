@@ -84,6 +84,14 @@ jutest("SpecsContainer", s => {
       let copy = specsContainer.copyWithSharedSpecs({ skip: true });
       t.equal(copy.skip, true);
     });
+
+    s.test("copies sourceFilePath by reference", t => {
+      let specsContainer = new SpecsContainer({ sourceFilePath: 'foo.test.js' });
+      let copy = specsContainer.copyWithSharedSpecs();
+      specsContainer.sourceFilePath = 'bar.test.js';
+
+      t.equal(copy.sourceFilePath, 'bar.test.js');
+    });
   });
 
   s.describe("#test", s => {
@@ -269,6 +277,20 @@ jutest("SpecsContainer", s => {
       let [test] = specsContainer.specs;
 
       t.equal(test.sourceLocator.sourceFilePath, 'foo.test.js');
+    });
+
+    s.test("restores sourceFilePath in containers copied inside the function", async t => {
+      let specsContainer1 = new SpecsContainer({ sourceFilePath: 'foo.test.js' });
+      let specsContainer2;
+      let specsContainer3;
+
+      await specsContainer1.withSourceFilePath('specs-container.test.js', () => {
+        specsContainer2 = specsContainer1.copyWithSharedSpecs();
+        specsContainer3 = specsContainer2.copyWithSharedSpecs();
+      })
+
+      t.equal(specsContainer2.sourceFilePath, 'foo.test.js');
+      t.equal(specsContainer3.sourceFilePath, 'foo.test.js');
     });
   });
 });
