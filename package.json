@@ -1,6 +1,6 @@
 {
   "name": "jutest",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "JavaScript Unit-Testing library",
   "exports": {
     ".": {
@@ -63,25 +63,25 @@
   "author": "Alexey D",
   "license": "MIT",
   "devDependencies": {
-    "@eslint/js": "^9.5.0",
-    "esbuild": "^0.21.5",
-    "esbuild-node-externals": "^1.13.1",
+    "@eslint/js": "^9.11.1",
+    "esbuild": "^0.24.0",
+    "esbuild-node-externals": "^1.15.0",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
-    "esbuild-register": "^3.5.0",
-    "eslint": "^9.5.0",
-    "globals": "^15.6.0",
-    "sinon": "^18.0.0",
+    "esbuild-register": "^3.6.0",
+    "eslint": "^9.11.1",
+    "globals": "^15.10.0",
+    "sinon": "^19.0.2",
     "tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
     "chalk": "^4.0.0",
-    "deep-equal": "^2.0.0",
-    "graceful-fs": "^4.0.0",
+    "deep-equal": "^2.2.3",
+    "graceful-fs": "^4.2.11",
     "is-plain-object": "^5.0.0",
-    "lodash.pick": "^4.0.0",
-    "lodash.sortby": "^4.0.0",
-    "micromatch": "^4.0.0",
-    "yargs": "^17.0.0"
+    "lodash.pick": "^4.4.0",
+    "lodash.sortby": "^4.7.0",
+    "micromatch": "^4.0.8",
+    "yargs": "^17.7.2"
   }
 }
