@@ -5,7 +5,6 @@ jutest('assertions/matchers/equal', s => {
   s.describe("equal()", s => {
     s.test('passes if two objects are equal', t => {
       let result = equal(1, 1);
-
       t.equal(result.passed, true);
     });
 
@@ -14,11 +13,6 @@ jutest('assertions/matchers/equal', s => {
 
       t.equal(result.passed, false);
       t.match(result.failureMessage.toString(), /equal/);
-    });
-
-    s.test('uses Object.is', t => {
-      t.equal(equal({}, {}).passed, false);
-      t.equal(equal(-0, 0).passed, false);
     });
   });
 

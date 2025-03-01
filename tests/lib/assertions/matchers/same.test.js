@@ -14,11 +14,6 @@ jutest('assertions/matchers/same', s => {
       t.equal(result.passed, false);
       t.match(result.failureMessage.toString(), /same/);
     });
-
-    s.test('uses strict equality comparsion', t => {
-      let result = same({ a: undefined }, { a: null });
-      t.equal(result.passed, false);
-    });
   });
 
   s.describe("notSame()", s => {

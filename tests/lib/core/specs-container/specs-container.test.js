@@ -287,7 +287,7 @@ jutest("SpecsContainer", s => {
       await specsContainer1.withSourceFilePath('specs-container.test.js', () => {
         specsContainer2 = specsContainer1.copyWithSharedSpecs();
         specsContainer3 = specsContainer2.copyWithSharedSpecs();
-      })
+      });
 
       t.equal(specsContainer2.sourceFilePath, 'foo.test.js');
       t.equal(specsContainer3.sourceFilePath, 'foo.test.js');

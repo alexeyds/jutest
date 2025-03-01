@@ -20,6 +20,10 @@ jutest("assertions", s => {
       t.assert(assertions.throws);
       t.assert(assertions.includes);
       t.assert(assertions.excludes);
+      t.assert(assertions.approxEqual);
+      t.assert(assertions.notApproxEqual);
+      t.assert(assertions.approxSame);
+      t.assert(assertions.notApproxSame);
 
       t.assert(assertions.async.passesEventually);
       t.assert(assertions.async.rejects);
