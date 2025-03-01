@@ -1,6 +1,6 @@
 {
   "name": "jutest",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "JavaScript Unit-Testing library",
   "exports": {
     ".": {
@@ -63,14 +63,14 @@
   "author": "Alexey D",
   "license": "MIT",
   "devDependencies": {
-    "@eslint/js": "^9.11.1",
-    "esbuild": "^0.24.0",
-    "esbuild-node-externals": "^1.15.0",
+    "@eslint/js": "^9.21.0",
+    "esbuild": "^0.25.0",
+    "esbuild-node-externals": "^1.18.0",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-register": "^3.6.0",
-    "eslint": "^9.11.1",
-    "globals": "^15.10.0",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
     "sinon": "^19.0.2",
     "tsconfig-paths": "^4.2.0"
   },

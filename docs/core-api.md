@@ -401,6 +401,33 @@ t.same({ a: 1 }, { a: 2 }) // => fails
 ## `t.notSame(actual, expected)`
 
 An opposite of `t.same`
+ 
+## `t.approxEqual(actual, expected, { tolerance=0.00001 })`
+
+Checks if `actual` is approximately equal to `expected`. If both values are numbers then they are check for approximate equality, i.e that the absolute difference between them is lower than the `tolerance` value. For non-numerical values, same comparison logic is used as in `t.equal`.
+
+```js
+t.equal(1.000000005, 1) //=> passes
+t.equal(1.0001, 1) //=> fails
+```
+
+## `t.notApproxEqual(actual, expected, { tolerance=0.00001 })`
+
+An opposite of `t.approxEqual`
+
+## `t.approxSame(actual, expected, { tolerance=0.00001 })`
+
+Checks if `actual` structurally matches `expected` with approximate equality `t.approxEqual` check for individual members. This assertion was written with simple object/array comparisons in mind and the algorithm used is different from the one used in `t.same` so those two assertions are not expected to be used interchangeably.
+
+```js
+t.same([1.0000005], [1]) // => passes
+t.same({ a: 1.0001 }, { a: 1 }) // => fails
+```
+
+## `t.notApproxSame(actual, expected, { tolerance=0.00001 })`
+
+An opposite of `t.approxSame`
+
 
 ## `t.match(actual, expected)`
 
